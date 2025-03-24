@@ -22,5 +22,12 @@
       <guid>https://leebrownhill.github.io/posts/post1/</guid>
       <description>&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus auctor elit leo, ut pulvinar felis varius et. Ut lacus eros, efficitur vel convallis sit amet, ornare ultrices dui. Suspendisse vulputate vehicula odio, vel vulputate enim malesuada varius. Pellentesque volutpat nibh vitae ex efficitur dictum vel et lectus. Morbi ornare ut sem et vestibulum. Cras pretium varius dui, quis faucibus arcu commodo ut. Nam viverra nunc dictum sapien lacinia rutrum. Pellentesque feugiat purus nibh, vitae tempus eros ornare vel.&lt;/p&gt;</description>
     </item>
+    <item>
+      <title></title>
+      <link>https://leebrownhill.github.io/about/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://leebrownhill.github.io/about/about/</guid>
+      <description>&lt;p&gt;This will be my about page&lt;/p&gt;</description>
+    </item>
   </channel>
 </rss>
