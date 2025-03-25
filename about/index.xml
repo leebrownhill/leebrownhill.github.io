@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>About on Lee Brownhill&#39;s Blog</title>
-    <link>http://localhost:1313/about/</link>
+    <link>https://leebrownhill.github.io/about/</link>
     <description>Recent content in About on Lee Brownhill&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <atom:link href="http://localhost:1313/about/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://leebrownhill.github.io/about/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title></title>
-      <link>http://localhost:1313/about/about/</link>
+      <link>https://leebrownhill.github.io/about/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/about/about/</guid>
+      <guid>https://leebrownhill.github.io/about/about/</guid>
       <description>&lt;p&gt;Lee Brownhill is a SQL Server DBA with more years of experience than he cares to admit.&#xA;Currently, he works as a Principal Cloud DBA at Cloud Rede, helping clients optimise their SQL workloads in both Azure and AWS. His passion lies in optimisation and automation within SQL Server, and he confesses that he will never tire of making things run faster.&lt;/p&gt;&#xA;&lt;p&gt;His journey in IT began many moons ago in IT support, where he quickly became fascinated with his organisation’s SQL Server.&#xA;It didn&amp;rsquo;t take long to realise that he wanted to work with SQL Server and so, eventually started his journey as a Production DBA at a SaaS financial company. Realising he had a knack for making systems more efficient, he transitioned to a Developer DBA role, bridging the gap between Infrastructure DBAs and developers.&lt;/p&gt;</description>
     </item>
   </channel>
