@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Lee Brownhills Blog!</title>
+    <title>Posts on Lee Brownhill&#39;s Blog</title>
     <link>https://leebrownhill.github.io/posts/</link>
-    <description>Recent content in Posts on Lee Brownhills Blog!</description>
+    <description>Recent content in Posts on Lee Brownhill&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 30 Mar 2025 19:19:03 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 24 Mar 2025 05:41:19 +0000</lastBuildDate>
     <atom:link href="https://leebrownhill.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Post1</title>
-      <link>https://leebrownhill.github.io/posts/post1/</link>
-      <pubDate>Sun, 30 Mar 2025 19:19:03 +0100</pubDate>
-      <guid>https://leebrownhill.github.io/posts/post1/</guid>
-      <description>&lt;p&gt;This is some content&lt;/p&gt;</description>
+      <title>Post2</title>
+      <link>https://leebrownhill.github.io/posts/post2/</link>
+      <pubDate>Mon, 24 Mar 2025 05:41:19 +0000</pubDate>
+      <guid>https://leebrownhill.github.io/posts/post2/</guid>
+      <description>&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus auctor elit leo, ut pulvinar felis varius et. Ut lacus eros, efficitur vel convallis sit amet, ornare ultrices dui. Suspendisse vulputate vehicula odio, vel vulputate enim malesuada varius. Pellentesque volutpat nibh vitae ex efficitur dictum vel et lectus. Morbi ornare ut sem et vestibulum. Cras pretium varius dui, quis faucibus arcu commodo ut. Nam viverra nunc dictum sapien lacinia rutrum. Pellentesque feugiat purus nibh, vitae tempus eros ornare vel.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

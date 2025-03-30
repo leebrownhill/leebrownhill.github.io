@@ -1,19 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Lee Brownhills Blog!</title>
+    <title>Lee Brownhill&#39;s Blog</title>
     <link>https://leebrownhill.github.io/</link>
-    <description>Recent content on Lee Brownhills Blog!</description>
+    <description>Recent content on Lee Brownhill&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 30 Mar 2025 19:19:03 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 24 Mar 2025 05:41:19 +0000</lastBuildDate>
     <atom:link href="https://leebrownhill.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Post1</title>
-      <link>https://leebrownhill.github.io/posts/post1/</link>
-      <pubDate>Sun, 30 Mar 2025 19:19:03 +0100</pubDate>
-      <guid>https://leebrownhill.github.io/posts/post1/</guid>
-      <description>&lt;p&gt;This is some content&lt;/p&gt;</description>
+      <title>Post2</title>
+      <link>https://leebrownhill.github.io/posts/post2/</link>
+      <pubDate>Mon, 24 Mar 2025 05:41:19 +0000</pubDate>
+      <guid>https://leebrownhill.github.io/posts/post2/</guid>
+      <description>&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus auctor elit leo, ut pulvinar felis varius et. Ut lacus eros, efficitur vel convallis sit amet, ornare ultrices dui. Suspendisse vulputate vehicula odio, vel vulputate enim malesuada varius. Pellentesque volutpat nibh vitae ex efficitur dictum vel et lectus. Morbi ornare ut sem et vestibulum. Cras pretium varius dui, quis faucibus arcu commodo ut. Nam viverra nunc dictum sapien lacinia rutrum. Pellentesque feugiat purus nibh, vitae tempus eros ornare vel.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>About</title>
+      <link>https://leebrownhill.github.io/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://leebrownhill.github.io/about/</guid>
+      <description>&lt;p&gt;Lee Brownhill is a SQL Server DBA with more years of experience than he cares to admit.&#xA;Currently, he works as a Principal Cloud DBA at &lt;a href=&#34;https://cloudrede.com/&#34;&gt;Cloud Rede&lt;/a&gt;, helping clients optimise their SQL workloads in both Azure and AWS. His passion lies in optimisation and automation within SQL Server, and he confesses that he will never tire of making things run faster.&lt;/p&gt;&#xA;&lt;p&gt;His journey in IT began many moons ago in IT support, where he quickly became fascinated with his organisation’s SQL Server.&#xA;It didn&amp;rsquo;t take long to realise that he wanted to work with SQL Server and so, eventually started his journey as a Production DBA at a SaaS financial company. Realising he had a knack for making systems more efficient, he transitioned to a Developer DBA role, bridging the gap between Infrastructure DBAs and developers.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Contact</title>
+      <link>https://leebrownhill.github.io/contact/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://leebrownhill.github.io/contact/</guid>
+      <description>&lt;p&gt;The best way to contact me is via LinkedIn, as im quite active over there&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;LinkedIn: &lt;a href=&#34;https://www.linkedin.com/in/leebrownhill/&#34;&gt;https://www.linkedin.com/in/leebrownhill/&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;Email: lbrownhill [at] live.co.uk&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title>Projects</title>
+      <link>https://leebrownhill.github.io/projects/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://leebrownhill.github.io/projects/</guid>
+      <description></description>
     </item>
   </channel>
 </rss>
