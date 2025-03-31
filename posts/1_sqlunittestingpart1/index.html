@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
-<head>
-	<meta name="generator" content="Hugo 0.145.0">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Lee Brownhill&#39;s Blog</title>
+	<title>SQL Unit Testing Using tSQLt: Part 1 - Lee Brownhill&#39;s Blog</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="Lee Brownhill&#39;s Blog about mostly SQL Server">
+	<meta name="description" content="">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="dns-prefetch" href="//fonts.googleapis.com">
 	<link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -14,10 +13,8 @@
 
 	<link rel="stylesheet" href="/css/style.css">
 	
-	<link rel="alternate" type="application/rss+xml" href="/index.xml" title="Lee Brownhill's Blog">
 
 	<link rel="shortcut icon" href="/favicon.ico">
-		
 		
 </head>
 <body class="body">
@@ -77,27 +74,57 @@
 		<div class="wrapper flex">
 			<div class="primary">
 			
-<main class="main list" role="main">
-	<article class="list__item post">
-	
-	<figure class="list__thumbnail thumbnail">
-		<a class="thumbnail__link" href="/posts/post2/">
-		<img class="thumbnail__image" src="/img/featured/tsqlt_logo.png" alt="Post2">
-		</a>
-	</figure>
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/posts/post2/" rel="bookmark">
-			Post2
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus auctor elit leo, ut pulvinar felis varius et. Ut lacus eros, efficitur vel convallis sit amet, ornare ultrices dui. Suspendisse vulputate vehicula odio, vel vulputate enim malesuada varius. Pellentesque volutpat nibh vitae ex efficitur dictum vel et lectus. Morbi ornare ut sem et vestibulum. Cras pretium varius dui, quis faucibus arcu commodo ut. Nam viverra nunc dictum sapien lacinia rutrum. Pellentesque feugiat purus nibh, vitae tempus eros ornare vel.</p>
-	</div>
-</article>
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">SQL Unit Testing Using tSQLt: Part 1</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<br>
+<h3 id="unitwhat-now">Unit&hellip;what now?</h3>
+<p>Other practitioners of code slinging, such as .net folks, have been unit testing their code for many moons now. Us SQL folks however rarely seem to do this from what I have seen.</p>
+<p>A few job roles ago now, I had to use unit testing on a daily basis. It was heavily integrated into our work flow via the CI/CD pipelines we used. Ultimately, if you checked some code in, you made sure you had the associated unit tests written for it.
+As with many things of this nature, initially, it felt like a chore; an unnecessary extra that needed thinking about all of sudden.
+One day however, a unit test caught an error in one of my procedures (dear reader, I was as shocked as you probably are). The unit test caught an edge case bug in my code, one which would never have found with basic smoke testing.
+From that day, I have been a passionate advocate for unit testing.</p>
+<p>Better egg on ones face, than omelettes in production</p>
+<br>
+<h3 id="unit-testing-defined">Unit Testing Defined</h3>
+<p>While it may seem obvious to some, a loose definition of &lsquo;unit testing&rsquo; would be:</p>
+<blockquote>
+<p><em>Testing the smallest part (unit) of one’s application code. Providing some standard inputs and preempting its &gt;output(s) to validate the unit’s functionality</em></p></blockquote>
+<p><a href="https://www.geeksforgeeks.org">GeeksforGeeks</a> have a comprehensive guide <a href="https://www.geeksforgeeks.org/unit-testing-software-testing/#what-is-unit-testing">here</a> regarding what unit testing is actually comprised of.</p>
+<br>
+<h3 id="so-what-is-tsqlt">So what is tSQLt?</h3>
+<p><a href="https://tsqlt.org/">tSQLt</a> is an open-source framework used for the purposes of unit testing SQL Server code. APIs are also available making it possible to integrate nicely into CI (Continuous Integration) services such as TFS and Azure DevOps.
+Some key features and benefits:</p>
+<ul>
+<li>Write tests in T-SQL – an obvious benefit. No need to learn additional or external tools</li>
+<li>Tests are all run within transactions keeping your test independent (and idempotent) thus minimizing clean up work</li>
+<li>Create unit tests directly by Schema – create dedicated tests for specific areas of your product/code base and run those independently</li>
+<li>Provides the functionality of being able to ‘mock’ tables and stored procedures allowing for easier testing of code functionality</li>
+<li>Totally free to use</li>
+<li>Completely customizable</li>
+</ul>
+<br>
+<h3 id="great-but-how-can-it-help-me">Great! But how can it help me?</h3>
+<p>The main benefit tSQLt has given me is assurance in stored procedure changes I have made.
+Its enabled me to have confidence that the core functionality of a procedure has remained the same after i have made changes to it.
+The ability to totally isolate the stored procedure&rsquo;s functionality and verify it, has been a huge support for me over the years. Paired with the great Redgate tool <a href="https://www.red-gate.com/products/sql-test/">SQL Test</a>, its the ultimate comfort blanket for code noodlers™.</p>
+<br>
+<h3 id="looking-forward">Looking Forward</h3>
+<p>I am once again working in an environment where I know tSQLt is going to help me. I currently have several projects on the go where I can see the need for unit testing.
+So with that said, i&rsquo;m dusting off the cobwebs of my tSQLt install to get to know my old friend again. I do hope you come along for the journey.</p>
+<p>In the next post, we shall go through a full demo using the bare mechanics of the framework.
+I plan to publish a few posts regarding tSQLt covering a number of its functions and features as we go.</p>
+<p>Thanks for reading!</p>
+
+		</div>
+	</article>
 </main>
+
+
 
 
 			</div>
@@ -105,7 +132,7 @@
 	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
 		<input class="widget-search__field" type="search" placeholder="Search…" value="" name="q" aria-label="Search…">
 		<input class="widget-search__submit" type="submit" value="Search">
-		<input type="hidden" name="sitesearch" value="https://leebrownhill.github.io/">
+		<input type="hidden" name="sitesearch" value="http://localhost:1313/">
 	</form>
 </div>
 <div class="widget-recent widget">
@@ -113,6 +140,7 @@
 	<div class="widget__content">
 		<ul class="widget__list">
 			<li class="widget__item"><a class="widget__link" href="/posts/post2/">Post2</a></li>
+			<li class="widget__item"><a class="widget__link" href="/posts/1_sqlunittestingpart1/">SQL Unit Testing Using tSQLt: Part 1</a></li>
 		</ul>
 	</div>
 </div>
