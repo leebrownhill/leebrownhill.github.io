@@ -20,6 +20,23 @@
 <body class="body">
 	<div class="container container--outer">
 		<header class="header">
+  		
+  		
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
+
 	<div class="container header__container">
 		
 	<div class="logo logo--mixed">
@@ -82,10 +99,12 @@
 		</header>
 		<div class="content post__content clearfix">
 			<br>
-<h3 id="unitwhat-now">Unit&hellip;what now?</h3>
+<!--
+### Unit...what now?
+-->
 <p>Other practitioners of code slinging, such as .net folks, have been unit testing their code for many moons now. Us SQL folks however rarely seem to do this, at least in my experience.</p>
-<p>Several job roles ago, I had to use unit testing on a daily basis. It was heavily integrated into our work flow via the CI/CD pipelines we used. Ultimately, if you checked some code in, you made sure you had the associated unit tests written for it.
-As with many things of this nature, initially, it felt like a chore; an unnecessary extra that needed thinking about all of sudden.
+<p>Several job roles ago, I had to use unit testing on a daily basis. It was heavily integrated into our work flow via the CI/CD pipelines we used. Ultimately, if you checked some code in, you made sure you had the associated unit tests written for it.</p>
+<p>As with many things of this nature, initially, it felt like a chore; an unnecessary extra that needed thinking about all of sudden.
 One day however, a unit test caught an error in one of my procedures (Dear reader, I was just as shocked as you might be.) The unit test caught an edge case bug in my code, something that basic smoke testing would never have found.
 From that day onward, I have been a passionate advocate for unit testing.</p>
 <p>Better egg on one&rsquo;s face, than omelettes in production</p>
@@ -119,7 +138,6 @@ So with that said, i&rsquo;m dusting off the cobwebs of my tSQLt install to get 
 <p>In the next post, we shall go through a full demo using the bare mechanics of the framework.
 I plan to publish a few posts regarding tSQLt covering a number of its functions and features as we go.</p>
 <p>Thanks for reading!</p>
-
 		</div>
 	</article>
 </main>
