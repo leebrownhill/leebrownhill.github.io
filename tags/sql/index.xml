@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Lee Brownhill&#39;s Blog</title>
-    <link>https://leebrownhill.github.io/posts/</link>
-    <description>Recent content in Posts on Lee Brownhill&#39;s Blog</description>
+    <title>Sql on Lee Brownhill&#39;s Blog</title>
+    <link>https://leebrownhill.github.io/tags/sql/</link>
+    <description>Recent content in Sql on Lee Brownhill&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 09 Apr 2025 06:00:00 +0000</lastBuildDate>
-    <atom:link href="https://leebrownhill.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://leebrownhill.github.io/tags/sql/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>SQL Unit Testing Using tSQLt: Part 1</title>
       <link>https://leebrownhill.github.io/posts/1_sqlunittestingpart1/</link>

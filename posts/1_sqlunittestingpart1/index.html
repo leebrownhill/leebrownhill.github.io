@@ -117,12 +117,15 @@
 <!--
 ### Unit...what now?
 -->
-<p>Unit&hellip;what now? Other practitioners of code slinging, such as .net folks, have been unit testing their code for many moons now. Us SQL folks however rarely seem to do this, at least in my experience.</p>
-<p>Several job roles ago, I had to use unit testing on a daily basis. It was heavily integrated into our work flow via the CI/CD pipelines we used. Ultimately, if you checked some code in, you made sure you had the associated unit tests written for it.</p>
-<p>As with many things of this nature, initially, it felt like a chore; an unnecessary extra that needed thinking about all of sudden.
-One day however, a unit test caught an error in one of my procedures (Dear reader, I was just as shocked as you might be.) The unit test caught an edge case bug in my code, something that basic smoke testing would never have found.
+<p>Unit&hellip;what now?</p>
+<p>Other practitioners of code-slinging, such as .NET folks, have been unit testing their code for many moons now. We SQL folks, however, rarely seem to do this, at least in my experience.</p>
+<p>Several job roles ago, I had to use unit testing on a daily basis. It was heavily integrated into our workflow via the CI/CD pipelines we used</p>
+<p>Ultimately, if you checked some code in, you made sure you had the associated unit tests written for it.
+As with many things of this nature, initially, it felt like a chore; an unnecessary extra that needed thinking about all of a sudden.</p>
+<p>One day, however, a unit test caught an error in one of my procedures (<em>Dear reader, I was just as shocked as you might be.</em>) The unit test caught an edge-case bug in my code, something that basic smoke testing would never have found.
+<br>
 From that day onward, I have been a passionate advocate for unit testing.</p>
-<p>Better egg on one&rsquo;s face, than omelettes in production</p>
+<p>Better egg on one’s face than omelettes in production.</p>
 <br>
 <h3 id="unit-testing-defined">Unit Testing Defined</h3>
 <p>While it may seem obvious to some, a loose definition of &lsquo;unit testing&rsquo; would be:</p>
@@ -131,29 +134,49 @@ From that day onward, I have been a passionate advocate for unit testing.</p>
 <p><a href="https://www.geeksforgeeks.org">GeeksforGeeks</a> have a comprehensive guide <a href="https://www.geeksforgeeks.org/unit-testing-software-testing/#what-is-unit-testing">here</a> regarding what unit testing is actually comprised of.</p>
 <br>
 <h3 id="so-what-is-tsqlt">So what is tSQLt?</h3>
-<p><a href="https://tsqlt.org/">tSQLt</a> is an open-source framework used for the purposes of unit testing SQL Server code. APIs are also available making it possible to integrate nicely into CI (Continuous Integration) services such as TFS and Azure DevOps.
-Some key features and benefits:</p>
+<p><a href="https://tsqlt.org/">tSQLt</a> is an open-source framework used for the purpose of unit testing SQL Server code. APIs are also available, making it possible to integrate nicely into CI (Continuous Integration) services such as TFS and Azure DevOps.</p>
+<p>Some key features and benefits:</p>
 <ul>
-<li>Write tests in T-SQL – an obvious benefit. No need to learn additional or external tools</li>
-<li>Tests are all run within transactions keeping your test independent (and idempotent) thus minimizing clean up work</li>
-<li>Create unit tests directly by Schema – create dedicated tests for specific areas of your product/code base and run those independently</li>
-<li>Provides the functionality of being able to ‘mock’ tables and stored procedures allowing for easier testing of code functionality</li>
-<li>Totally free to use</li>
-<li>Completely customizable</li>
+<li>Write tests in T-SQL – an obvious benefit. No need to learn additional or external tools.</li>
+<li>Tests are all run within transactions, keeping your tests independent (and idempotent), thus minimizing cleanup work.</li>
+<li>Create unit tests directly by schema – create dedicated tests for specific areas of your product/code base and run those independently.</li>
+<li>Provides the functionality of being able to ‘mock’ tables and stored procedures, allowing for easier testing of code functionality.</li>
+<li>Totally free to use.</li>
+<li>Completely customizable.</li>
 </ul>
 <br>
 <h3 id="great-but-how-can-it-help-me">Great! But how can it help me?</h3>
-<p>The main benefit tSQLt has given me is assurance in stored procedure changes I have made.
-Its enabled me to have confidence that the core functionality of a procedure has remained the same after i have made changes to it.
-The ability to totally isolate the stored procedure&rsquo;s functionality and verify it, has been a huge support for me over the years. Paired with the great Redgate tool <a href="https://www.red-gate.com/products/sql-test/">SQL Test</a>, its the ultimate comfort blanket for code noodlers™.</p>
+<p>The main benefit tSQLt has given me is assurance in stored procedure changes I have made.</p>
+<p>It&rsquo;s enabled me to have confidence that the core functionality of a procedure has remained the same after I have made changes to it.
+The ability to totally isolate the stored procedure&rsquo;s functionality and verify it has been a huge support for me over the years. Paired with the great Redgate tool <a href="https://www.red-gate.com/products/sql-test/">SQL Test</a>, it&rsquo;s the ultimate comfort blanket for code noodlers™.</p>
 <br>
 <h3 id="looking-forward">Looking Forward</h3>
-<p>I am once again working in an environment where I know tSQLt is going to help me. I currently have several projects on the go where I can see the need for unit testing.
-So with that said, i&rsquo;m dusting off the cobwebs of my tSQLt install to get to know my old friend again. I do hope you come along for the journey.</p>
+<p>I am once again working in an environment where I know tSQLt is going to help me.</p>
+<p>I currently have several projects on the go where I can see the need for unit testing.
+So, with that said, I&rsquo;m dusting off the cobwebs of my tSQLt install to get to know my old friend again. I do hope you come along for the journey.</p>
 <p>In the next post, we shall go through a full demo using the bare mechanics of the framework.
-I plan to publish a few posts regarding tSQLt covering a number of its functions and features as we go.</p>
-<p>Thanks for reading!</p>
+I plan to publish a few posts regarding tSQLt, covering a number of its functions and features as we go.</p>
+<p>Thanks for reading!
+<br>
+<br></p>
 		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M4 0h8s2 0 4 2l15 15s2 2 0 4L21 31s-2 2-4 0L2 16s-2-2-2-4V3s0-3 4-3m3 10a3 3 0 0 0 0-6 3 3 0 0 0 0 6"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/sql/" rel="tag">sql</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/tsql/" rel="tag">tsql</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/unit-testing/" rel="tag">unit testing</a>
+		</li>
+	</ul>
+</div>
+		</footer>
 	</article>
 </main>
 
@@ -173,7 +196,6 @@ I plan to publish a few posts regarding tSQLt covering a number of its functions
 	<div class="widget__content">
 		<ul class="widget__list">
 			<li class="widget__item"><a class="widget__link" href="/posts/1_sqlunittestingpart1/">SQL Unit Testing Using tSQLt: Part 1</a></li>
-			<li class="widget__item"><a class="widget__link" href="/posts/post2/">Post2</a></li>
 		</ul>
 	</div>
 </div>
@@ -200,6 +222,14 @@ I plan to publish a few posts regarding tSQLt covering a number of its functions
 		</div>
 
 		
+	</div>
+</div>
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/sql/" title="Sql">Sql</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tsql/" title="Tsql">Tsql</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/unit-testing/" title="Unit Testing">Unit Testing</a>
 	</div>
 </div>
 </aside>

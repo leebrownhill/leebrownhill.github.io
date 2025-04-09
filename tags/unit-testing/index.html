@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Post2 - Lee Brownhill&#39;s Blog</title>
+	<title>Unit Testing - Lee Brownhill&#39;s Blog</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,9 +13,25 @@
 
 	<link rel="stylesheet" href="/css/style.css">
 	
+	<link rel="alternate" type="application/rss+xml" href="/tags/unit-testing/index.xml" title="Lee Brownhill's Blog">
 
 	<link rel="shortcut icon" href="/favicon.ico">
 		
+		
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
 </head>
 <body class="body">
 	<div class="container container--outer">
@@ -91,28 +107,44 @@
 		<div class="wrapper flex">
 			<div class="primary">
 			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">Post2</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus auctor elit leo, ut pulvinar felis varius et. Ut lacus eros, efficitur vel convallis sit amet, ornare ultrices dui. Suspendisse vulputate vehicula odio, vel vulputate enim malesuada varius. Pellentesque volutpat nibh vitae</p>
-<p>ex efficitur dictum vel et lectus. Morbi ornare ut sem et vestibulum. Cras pretium varius dui, quis faucibus arcu commodo ut. Nam viverra nunc dictum sapien lacinia rutrum. Pellentesque feugiat purus nibh, vitae tempus eros ornare vel .</p>
-		</div>
-	</article>
+<main class="main list" role="main">
+	<header class="main__header">
+		<h1 class="main__title">Unit Testing</h1>
+	</header><article class="list__item post">
+	
+	<figure class="list__thumbnail thumbnail">
+		<a class="thumbnail__link" href="/posts/1_sqlunittestingpart1/">
+		<img class="thumbnail__image" src="/img/featured/post_logo.png" alt="SQL Unit Testing Using tSQLt: Part 1">
+		</a>
+	</figure>
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/1_sqlunittestingpart1/" rel="bookmark">
+			SQL Unit Testing Using tSQLt: Part 1
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<br>
+<!--
+### Unit...what now?
+-->
+<p>Unit&hellip;what now?</p>
+<p>Other practitioners of code-slinging, such as .NET folks, have been unit testing their code for many moons now. We SQL folks, however, rarely seem to do this, at least in my experience.</p>
+<p>Several job roles ago, I had to use unit testing on a daily basis. It was heavily integrated into our workflow via the CI/CD pipelines we used</p>
+	</div>
+</article>
 </main>
 
 
-
-
 			</div>
-			<aside class="sidebar"><div class="widget-search widget">
+			
+<aside class="sidebar"><div class="widget-search widget">
 	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
 		<input class="widget-search__field" type="search" placeholder="Search…" value="" name="q" aria-label="Search…">
 		<input class="widget-search__submit" type="submit" value="Search">
-		<input type="hidden" name="sitesearch" value="http://localhost:1313/">
+		<input type="hidden" name="sitesearch" value="https://leebrownhill.github.io/">
 	</form>
 </div>
 <div class="widget-recent widget">
@@ -120,7 +152,6 @@
 	<div class="widget__content">
 		<ul class="widget__list">
 			<li class="widget__item"><a class="widget__link" href="/posts/1_sqlunittestingpart1/">SQL Unit Testing Using tSQLt: Part 1</a></li>
-			<li class="widget__item"><a class="widget__link" href="/posts/post2/">Post2</a></li>
 		</ul>
 	</div>
 </div>
@@ -147,6 +178,14 @@
 		</div>
 
 		
+	</div>
+</div>
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/sql/" title="Sql">Sql</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tsql/" title="Tsql">Tsql</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/unit-testing/" title="Unit Testing">Unit Testing</a>
 	</div>
 </div>
 </aside>
