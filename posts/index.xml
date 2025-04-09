@@ -6,8 +6,15 @@
     <description>Recent content in Posts on Lee Brownhill&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 24 Mar 2025 05:41:19 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 09 Apr 2025 06:00:00 +0000</lastBuildDate>
     <atom:link href="https://leebrownhill.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SQL Unit Testing Using tSQLt: Part 1</title>
+      <link>https://leebrownhill.github.io/posts/1_sqlunittestingpart1/</link>
+      <pubDate>Wed, 09 Apr 2025 06:00:00 +0000</pubDate>
+      <guid>https://leebrownhill.github.io/posts/1_sqlunittestingpart1/</guid>
+      <description>&lt;br&gt;&#xA;&lt;!--&#xA;### Unit...what now?&#xA;--&gt;&#xA;&lt;p&gt;Other practitioners of code slinging, such as .net folks, have been unit testing their code for many moons now. Us SQL folks however rarely seem to do this, at least in my experience.&lt;/p&gt;&#xA;&lt;p&gt;Several job roles ago, I had to use unit testing on a daily basis. It was heavily integrated into our work flow via the CI/CD pipelines we used. Ultimately, if you checked some code in, you made sure you had the associated unit tests written for it.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Post2</title>
       <link>https://leebrownhill.github.io/posts/post2/</link>
