@@ -13,7 +13,7 @@
       <link>https://leebrownhill.github.io/posts/1_sqlunittestingpart1/</link>
       <pubDate>Wed, 09 Apr 2025 06:00:00 +0000</pubDate>
       <guid>https://leebrownhill.github.io/posts/1_sqlunittestingpart1/</guid>
-      <description>&lt;br&gt;&#xA;&lt;!--&#xA;### Unit...what now?&#xA;--&gt;&#xA;&lt;p&gt;Unit&amp;hellip;what now?&lt;/p&gt;&#xA;&lt;p&gt;Other practitioners of code-slinging, such as .NET folks, have been unit testing their code for many moons now. We SQL folks, however, rarely seem to do this, at least in my experience.&lt;/p&gt;&#xA;&lt;p&gt;Several job roles ago, I had to use unit testing on a daily basis. It was heavily integrated into our workflow via the CI/CD pipelines we used&lt;/p&gt;</description>
+      <description>&lt;br&gt;&#xA;&lt;!--&#xA;### Unit...what now?&#xA;--&gt;&#xA;&lt;p&gt;Unit&amp;hellip;what now?&lt;/p&gt;&#xA;&lt;p&gt;Other practitioners of code-slinging, such as .NET folks, have been unit testing their code for many moons now. We SQL folks, however, rarely seem to do this, at least in my experience.&#xA;Several job roles ago, I had to use unit testing on a daily basis. It was heavily integrated into our workflow via the CI/CD pipelines we used&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
