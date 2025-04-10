@@ -190,7 +190,7 @@ Of course, you have studied that post diligently and now we&rsquo;re all unit te
 <p>We then insert some static, dummy data into our shiny new faked table which will enable the functionality of the tested stored procedure to be validated. We essentially need to supply the procedure in question with suitable data for it to be tested.</p>
 <p>For example, our sample data should render 3 regarding the comment count of this user:</p>
 <p>[IMAGE]
-<img src="post_images\tsqlt_0.png" alt="tsqlt"></p>
+<img src="\post_images\tsqlt_0.png" alt="tsqlt"></p>
 <p>In the last part of the Assemble stage, we&rsquo;re now going to create two tables that will be used in the final comparison. An &rsquo;expected&rsquo; and &lsquo;actual&rsquo; table will hold their respective datasets:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> dbo.Expected
 </span></span><span style="display:flex;"><span>(DisplayName NVARCHAR(<span style="color:#ae81ff">100</span>), <span style="color:#66d9ef">Location</span> NVARCHAR(<span style="color:#ae81ff">200</span>),Reputation INT, CommentCount INT)
