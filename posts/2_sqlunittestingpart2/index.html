@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>SQL Unit Testing Using tSQLt: Part 2 - Lee Brownhill&#39;s Blog</title>
@@ -16,6 +16,21 @@
 
 	<link rel="shortcut icon" href="/favicon.ico">
 		
+		
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
 </head>
 <body class="body">
 	<div class="container container--outer">
@@ -104,6 +119,7 @@
 <p>In the <a href="https://www.leebrownhill.com/posts/1_sqlunittestingpart1/">last post</a>, we went through what unit testing is, at least when discussing it in the context of SQL Server. In addition to that, we discussed what benefits using the open-source framework <a href="https://tsqlt.org/">tSQLt</a> can bring.
 Of course, you have studied that post diligently and now we&rsquo;re all unit testing experts, right? hello?</p>
 <p>In this post, I would like to demonstrate how to create a very basic unit test using a tSQLt to verify a simple stored procedure.</p>
+<br>
 <h3 id="the-setup">The Setup</h3>
 <p>I&rsquo;m not going to cover how to get tSQLt installed within this post (its quite straightforward), there are plenty of guides on how to do that already. These should have you more than covered:</p>
 <ul>
