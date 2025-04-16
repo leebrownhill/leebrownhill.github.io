@@ -6,8 +6,15 @@
     <description>Recent content in Sql on Lee Brownhill&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 09 Apr 2025 06:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 16 Apr 2025 06:00:00 +0000</lastBuildDate>
     <atom:link href="https://leebrownhill.github.io/tags/sql/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SQL Unit Testing Using tSQLt: Part 2</title>
+      <link>https://leebrownhill.github.io/posts/2_sqlunittestingpart2/</link>
+      <pubDate>Wed, 16 Apr 2025 06:00:00 +0000</pubDate>
+      <guid>https://leebrownhill.github.io/posts/2_sqlunittestingpart2/</guid>
+      <description>&lt;br&gt;&#xA;&lt;p&gt;Unit Testing Experts!&lt;/p&gt;&#xA;&lt;p&gt;In the &lt;a href=&#34;https://www.leebrownhill.com/posts/1_sqlunittestingpart1/&#34;&gt;last post&lt;/a&gt;, we went through what unit testing is, at least when discussing it in the context of SQL Server. In addition to that, we discussed what benefits using the open-source framework &lt;a href=&#34;https://tsqlt.org/&#34;&gt;tSQLt&lt;/a&gt; can bring.&#xA;Of course, you have studied that post diligently and now we&amp;rsquo;re all unit testing experts, right? &amp;hellip; hello?&lt;/p&gt;</description>
+    </item>
     <item>
       <title>SQL Unit Testing Using tSQLt: Part 1</title>
       <link>https://leebrownhill.github.io/posts/1_sqlunittestingpart1/</link>
