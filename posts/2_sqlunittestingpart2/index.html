@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>SQL Unit Testing Using tSQLt: Part 2 - Lee Brownhill&#39;s Blog</title>
@@ -16,21 +16,6 @@
 
 	<link rel="shortcut icon" href="/favicon.ico">
 		
-		
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
-      <script>
-        var doNotTrack = false;
-        if ( false ) {
-          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-          var doNotTrack = (dnt == "1" || dnt == "yes");
-        }
-        if (!doNotTrack) {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-7983PDFMXQ');
-        }
-      </script>
 </head>
 <body class="body">
 	<div class="container container--outer">
@@ -114,23 +99,23 @@
 		</header>
 		<div class="content post__content clearfix">
 			<br>
-<p>Unit Testing Experts</p>
-<br>
+<p>Unit Testing Experts!</p>
 <p>In the <a href="https://www.leebrownhill.com/posts/1_sqlunittestingpart1/">last post</a>, we went through what unit testing is, at least when discussing it in the context of SQL Server. In addition to that, we discussed what benefits using the open-source framework <a href="https://tsqlt.org/">tSQLt</a> can bring.
-Of course, you have studied that post diligently and now we&rsquo;re all unit testing experts, right? hello?</p>
+Of course, you have studied that post diligently and now we&rsquo;re all unit testing experts, right? &hellip; hello?</p>
 <p>In this post, I would like to demonstrate how to create a very basic unit test using a tSQLt to verify a simple stored procedure.</p>
 <br>
 <h3 id="the-setup">The Setup</h3>
 <p>I&rsquo;m not going to cover how to get tSQLt installed within this post (its quite straightforward), there are plenty of guides on how to do that already. These should have you more than covered:</p>
 <ul>
-<li>tSQLt Download - Get the framework download directly from tSQLt.org</li>
-<li>SQL Server Central - An install guide from the fine folks over at SQL Server Central</li>
-<li>Redgate Simple Talk - Another install guide from the good people at Redgate Simple Talk</li>
+<li><a href="https://tsqlt.org/downloads/">tSQLt Download</a> - Get the framework download directly from tSQLt.org</li>
+<li><a href="https://www.sqlservercentral.com/blogs/how-to-install-the-tsqlt-unit-test-framework-to-start-unit-testing-your-database-code">SQL Server Central</a> - An install guide from the fine folks over at SQL Server Central</li>
+<li><a href="https://www.red-gate.com/simple-talk/databases/sql-server/t-sql-programming-sql-server/getting-started-testing-databases-with-tsqlt/">Redgate Simple Talk</a> - Another install guide from the good people at Redgate Simple Talk</li>
 </ul>
+<br>
 <br>
 <h3 id="a-demo">A Demo</h3>
 <h4 id="1---the-three-stages">1 - The Three Stages</h4>
-<p>Not to be mistaken with The Three Stooges, there are typically three core stages that the unit test is composed of:</p>
+<p>Not to be mistaken with <em>The Three Stooges</em>, these stages are typically the three core steps that the unit test is composed of:</p>
 <ol>
 <li>Assemble - In this stage, we will &lsquo;assemble&rsquo; our tables and data within those tables</li>
 <li>Act - In this stage, we will execute or run our intended procedure</li>
@@ -140,7 +125,7 @@ Of course, you have studied that post diligently and now we&rsquo;re all unit te
 <br>
 <h4 id="2---our-procedure-to-be-tested">2 - Our Procedure to be tested</h4>
 <p>Using the StackOverflow2010 database (I was feeling retro), we have a very simple stored procedure to use for our demo.</p>
-<p>The procedure, simply takes in one parameter for DisplayName. It will then return general information the comment count for that user:</p>
+<p>The procedure, simply takes in one parameter for DisplayName. It will then return general information along with the comment count for that user:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">OR</span> <span style="color:#66d9ef">ALTER</span>   <span style="color:#66d9ef">PROCEDURE</span> [dbo].[GetUserDetail]
 </span></span><span style="display:flex;"><span>	<span style="color:#f92672">@</span>DisplayName NVARCHAR(<span style="color:#ae81ff">100</span>)
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">AS</span>
@@ -165,8 +150,8 @@ Of course, you have studied that post diligently and now we&rsquo;re all unit te
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">DECLARE</span> <span style="color:#f92672">@</span>UserName NVARCHAR(<span style="color:#ae81ff">100</span>)	<span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Jon Skeet&#39;</span>
 </span></span></code></pre></div><p>As you can see, we are using a custom schema for this called [tests] which will enable us to group our tests together later.</p>
-<p>Additionally, its important that our unit test name begins with the word &rsquo;test&rsquo;. So in our example, the unit test will be called [tests].[test GetUserCommentCount]. All tSQLt unit tests must adhere to this naming convention.</p>
-<p>Finally, we are declaring our input parameter that is to be used - @DisplayName. As you can see, we are setting this as &lsquo;Jon Skeet directly within the code.  (Something which i had to learn when starting with tSQLt was the fact that it&rsquo;s not about the data specifically, its about ensuring a repeatable process that validates the functionality. )</p>
+<p>Additionally, <strong>its important that our unit test name begins with the word &rsquo;test&rsquo;</strong>. So in our example, the unit test will be called [tests].[test GetUserCommentCount]. All tSQLt unit tests must adhere to this naming convention.</p>
+<p>Finally, we are declaring our input parameter that is to be used - @DisplayName. As you can see, we are setting this as &lsquo;Jon Skeet&rsquo; directly within the code.  (Something which i had to learn when starting with tSQLt was the fact that it&rsquo;s not about the data specifically, its about ensuring a repeatable process that validates the functionality. )</p>
 <p>Next up, we begin our Assemble stage. Were going to start setting up our tables and putting some test data into them:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXEC</span> tSQLt.FakeTable <span style="color:#e6db74">&#39;dbo.Users&#39;</span>
 </span></span><span style="display:flex;"><span>
@@ -174,8 +159,8 @@ Of course, you have studied that post diligently and now we&rsquo;re all unit te
 </span></span><span style="display:flex;"><span>(Id,DisplayName, <span style="color:#66d9ef">Location</span>, Reputation)
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">VALUES</span>
 </span></span><span style="display:flex;"><span>	(<span style="color:#ae81ff">22656</span>,	<span style="color:#e6db74">&#39;Jon Skeet&#39;</span>	,	<span style="color:#e6db74">&#39;Reading, United Kingdom&#39;</span>	,	<span style="color:#ae81ff">1047863</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#ae81ff">22661</span>,	<span style="color:#e6db74">&#39;Virne&#39;</span>		,	<span style="color:#e6db74">&#39;Finland&#39;</span>			,	<span style="color:#ae81ff">1076</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#ae81ff">22668</span>,	<span style="color:#e6db74">&#39;Dickon Reed&#39;</span>	,	<span style="color:#e6db74">&#39;Cambridge, United Kingdom&#39;</span>	,	<span style="color:#ae81ff">2237</span>)
+</span></span><span style="display:flex;"><span>	(<span style="color:#ae81ff">22661</span>,	<span style="color:#e6db74">&#39;Virne&#39;</span>		,	<span style="color:#e6db74">&#39;Finland&#39;</span>					,	<span style="color:#ae81ff">1076</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#ae81ff">22668</span>,	<span style="color:#e6db74">&#39;Dickon Reed&#39;</span>,	<span style="color:#e6db74">&#39;Cambridge, United Kingdom&#39;</span>	,	<span style="color:#ae81ff">2237</span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">EXEC</span> tSQLt.FakeTable <span style="color:#e6db74">&#39;dbo.Comments&#39;</span>
@@ -188,10 +173,13 @@ Of course, you have studied that post diligently and now we&rsquo;re all unit te
 </span></span><span style="display:flex;"><span>	(<span style="color:#ae81ff">37585</span>	, <span style="color:#ae81ff">22656</span>),
 </span></span><span style="display:flex;"><span>	(<span style="color:#ae81ff">436275</span>	, <span style="color:#ae81ff">22661</span>),
 </span></span><span style="display:flex;"><span>	(<span style="color:#ae81ff">197827</span>	, <span style="color:#ae81ff">22668</span>)
-</span></span></code></pre></div><p>The first item we need to discussed here is the user of the tSQLt Fake Table Function [link]. This allows us to generate a unit test that has zero dependencies outside of context its running in. The Fake table function will allow us to write a test in isolation from any constrains which may exist on the table. Any work we do against the table from here on will be a &lsquo;faked&rsquo; version of the original table giving us more freedom than normal. Nice!</p>
+</span></span></code></pre></div><p>The first item we need to discuss here is the use of the tSQLt <a href="https://tsqlt.org/user-guide/isolating-dependencies/faketable/"><strong>Fake Table Function</strong></a>. This allows us to generate a unit test that has zero dependencies outside of context its running in. The Fake table function will allow us to write a test in isolation from any constrainsts which may exist on the table. Any work we do against the table from here on will be a &lsquo;faked&rsquo; version of the original table giving us more freedom than normal. Nice!</p>
 <p>We then insert some static, dummy data into our shiny new faked table which will enable the functionality of the tested stored procedure to be validated. We essentially need to supply the procedure in question with suitable data for it to be tested.</p>
 <p>For example, our sample data should render 3 regarding the comment count of this user:</p>
 <img src="/posts/post_images/tsqlt_0.png" alt="tsqlt">
+<br>
+<br>
+<br>
 <p>In the last part of the Assemble stage, we&rsquo;re now going to create two tables that will be used in the final comparison. An &rsquo;expected&rsquo; and &lsquo;actual&rsquo; table will hold their respective datasets:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> dbo.Expected
 </span></span><span style="display:flex;"><span>(DisplayName NVARCHAR(<span style="color:#ae81ff">100</span>), <span style="color:#66d9ef">Location</span> NVARCHAR(<span style="color:#ae81ff">200</span>),Reputation INT, CommentCount INT)
@@ -206,7 +194,7 @@ Of course, you have studied that post diligently and now we&rsquo;re all unit te
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">VALUES</span>
 </span></span><span style="display:flex;"><span>	(<span style="color:#e6db74">&#39;Jon Skeet&#39;</span>,	<span style="color:#e6db74">&#39;Reading, United Kingdom&#39;</span>,	<span style="color:#ae81ff">1047863</span>,	<span style="color:#ae81ff">3</span>)
 </span></span></code></pre></div><p><em>As you can see above, within our &rsquo;expected&rsquo; table, we are saying that we expect a 3 for the comment count, for this particular user.</em></p>
-<p>Finally, we will add one record to the Expected table. As you can see, we are adding the information we expect to retrieve back should we use the @DisplayName of &lsquo;Jon Skeet&rsquo;. We are inserting these values based on the functionality of the tested stored procedure as it stands &rsquo;now&rsquo;. This allows us to capture the functionality, not specifically the data. This is a strong mechanism to employ when trying to negate future bugs.</p>
+<p>Finally, we will add one record to the Expected table. We are adding the information we expect to retrieve back should we use the @DisplayName of &lsquo;Jon Skeet&rsquo;. We are inserting these values based on the functionality of the tested stored procedure as it stands &rsquo;now&rsquo;. This allows us to capture the functionality, not specifically the data. This is a strong mechanism to employ when trying to negate future bugs.</p>
 <br>
 <h4 id="4---our-unit-test-act-stage">4 - Our Unit Test: Act Stage</h4>
 <p>Moving onto the Act stage</p>
@@ -217,20 +205,20 @@ Of course, you have studied that post diligently and now we&rsquo;re all unit te
 </span></span></code></pre></div><p><em>Here, we are executing our stored procedure and inserting the output into our newly created &lsquo;actual&rsquo; table. Simple huh?</em></p>
 <br>
 <h4 id="5---our-unit-test-assert-stage">5 - Our Unit Test: Assert Stage</h4>
-<p>Now we&rsquo;re ready to do some comparison within the Assert stage. There are several forms of assertion [link] using the tSQLt framework. Today we will be using the tSQLt.AssertEqualsTable feature as we&rsquo;re going to be comparing&hellip;erm, tables:</p>
+<p>Now we&rsquo;re ready to do some comparison within the Assert stage. There are several <a href="https://tsqlt.org/user-guide/assertions/">forms of assertion</a> using the tSQLt framework. Today we will be using the <a href="https://tsqlt.org/user-guide/assertions/assertequalstable/">tSQLt.AssertEqualsTable</a> feature as we&rsquo;re going to be comparing &hellip;erm, tables:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">EXEC</span> tSQLt.AssertEqualsTable
 </span></span><span style="display:flex;"><span>	<span style="color:#f92672">@</span>Expected	<span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;dbo.Expected&#39;</span>,
 </span></span><span style="display:flex;"><span>	<span style="color:#f92672">@</span>Actual		<span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;dbo.Actual&#39;</span>,
 </span></span><span style="display:flex;"><span>	<span style="color:#f92672">@</span>FailMsg	<span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Our test failed!&#39;</span>
-</span></span></code></pre></div><p>As you can see above, the AssertEqualsTable stored procedure accepts a few input parameters, some are mandatory, some are not:</p>
+</span></span></code></pre></div><p>As shown above, the AssertEqualsTable stored procedure accepts a few input parameters, some are mandatory, some are not:</p>
 <ul>
 <li>@Expected - As you will have probably guessed, we&rsquo;re going to supply our expected dataset here</li>
 <li>@Actual - Here we will supply our Actual dataset (ie. the one rendered by the stored procedure)</li>
-<li>@FailMsg - This is an optional parameter that allows us to supply some test to be returned, should our test fail</li>
+<li>@FailMsg - This is an optional parameter that allows us to supply some text to be returned, should our test fail</li>
 </ul>
 <br>
 <h4 id="6---our-unit-test-all-together-now">6 - Our Unit Test: All Together Now</h4>
-<p>Now we have our complete tSQLt unit test. Behold it in all its glory:</p>
+<p>Now we have our completed tSQLt unit test, each of the three stages have been highlighted with a comment. Behold it in all its glory:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">OR</span> <span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">PROCEDURE</span> [tests].[test GetUserCommentCount]
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">AS</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">BEGIN</span>
@@ -261,7 +249,6 @@ Of course, you have studied that post diligently and now we&rsquo;re all unit te
 </span></span><span style="display:flex;"><span>	(<span style="color:#ae81ff">37585</span>	, <span style="color:#ae81ff">22656</span>),
 </span></span><span style="display:flex;"><span>	(<span style="color:#ae81ff">436275</span>	, <span style="color:#ae81ff">22661</span>),
 </span></span><span style="display:flex;"><span>	(<span style="color:#ae81ff">197827</span>	, <span style="color:#ae81ff">22668</span>)
-</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> dbo.Expected
@@ -303,7 +290,9 @@ Of course, you have studied that post diligently and now we&rsquo;re all unit te
 </span></span></code></pre></div><p>Using the tSQLt.Run procedure, we can initiate the test run. Using this mechanism will allow tSQLt to run the test in isolation (behind the scenes its running everything within a transaction).</p>
 <p>Once run, we should &lsquo;hopefully&rsquo; get the following output:</p>
 <img src="/posts/post_images/messages_0.png" alt="messages">
-<p>As we can see above, our test passed! This indicated that the Expected and Actual were exact matches. We can now be confident that our stored procedure (dbo.GetUserDetail) is functioning as anticipated.</p>
+<br>
+<br>
+<p>As we can see above, our test passed! This indicates that the Expected and Actual were exact matches. We can now be confident that our stored procedure (dbo.GetUserDetail) is functioning as anticipated.</p>
 <br>
 <h4 id="8---when-things-go-wrong">8 - When Things Go Wrong</h4>
 <p>So far, we have shown what things look like when the test passes and everything is right with the world. What about when things go wrong?
@@ -315,26 +304,31 @@ To achieve a failure, let us assume one of our developers makes a change to the 
 </span></span><span style="display:flex;"><span>    u.Reputation,
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">COUNT</span>(<span style="color:#66d9ef">c</span>.Id) <span style="color:#66d9ef">AS</span> CommentCount
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span> dbo.Users u
-</span></span></code></pre></div><p>Let us assume dear reader, that a developer makes a change and feels like doing a good deed to all users by adding an extra 100 points to everyone&rsquo;s reputation:</p>
+</span></span></code></pre></div><p>Let us assume, that a developer makes a change and accidently does everyone a good deed by adding an extra 100 points to everyone&rsquo;s reputation:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span>
 </span></span><span style="display:flex;"><span>    u.DisplayName,
 </span></span><span style="display:flex;"><span>    u.<span style="color:#66d9ef">Location</span>,
 </span></span><span style="display:flex;"><span>    u.Reputation <span style="color:#f92672">+</span> <span style="color:#ae81ff">100</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">COUNT</span>(<span style="color:#66d9ef">c</span>.Id) <span style="color:#66d9ef">AS</span> CommentCount
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span> dbo.Users u
-</span></span></code></pre></div><p><em>Obviously an error, no developer is this friendly</em></p>
+</span></span></code></pre></div><p><em>Obviously an error, no developer is this friendly</em> 😙</p>
+<br>
 <p>So, what happens when our unit test runs next time?</p>
 <img src="/posts/post_images/results_0.png" alt="messages">
+<br>
+<br>
+<br>
 <p>Well, we have test failure, but for once thats a good thing! Our unit test has detected that now, the Expected and Actual outputs no longer match (ie. The functionality of the underlying procedure is not as expected and so the outputs are out of alignment).</p>
-<p>As shown above, we get some useful information in regards to &lsquo;why&rsquo; the test failed. tSQLt will highlight to use the records which have mismatched. We can clearly see the difference in the Reputation value. We expected 1047863 to be returned, but due to our &lsquo;bug&rsquo;, we actually returned 1047963 because of the the functional change made within our procedure. Cool!</p>
+<p>As shown above, we get some useful information in regards to &lsquo;why&rsquo; the test failed. tSQLt will highlight the records which have been mismatched. We can clearly see the difference in the Reputation value. We expected <strong>1047863</strong> to be returned, but due to our &lsquo;bug&rsquo;, we actually returned <strong>1047963</strong> because of the the functional change made within our procedure. Cool!</p>
 <br>
 <h4 id="closing-thoughts">Closing Thoughts</h4>
-<p>In this post, we went through a basic demo to highlight the basics of using tSQLt to verify the core functionality of our stored procedure.
+<p>In this post, we went through a simple demo to highlight the fundementals of using tSQLt to verify the functionality of our stored procedure.
 During the demo, we highlighted the differences between the three main stages of our unit test (Assemble, Act and Assert).</p>
-<p>We then ran a test that generated a pass. We also then introduced a &lsquo;bug&rsquo; into our underlying procedure were able to see how tSQLt reacts.</p>
+<p>We then ran a test that generated a pass. We also then introduced a &lsquo;bug&rsquo; into our underlying procedure so that we could see how tSQLt reacts.</p>
 <p>Unit testing using tSQLt is a vast topic. In the next post in this series, we will dive a bit deeper into some of the powerful features offered by tSQLt for more complex scenarios than the one we looked at today.
-In addition to that, we will look at some of the third part tooling available to accelerate the scale at which tSQLt can be used.</p>
+In addition to that, we will look at some of the third party tooling available to accelerate the scale at which tSQLt can be used.</p>
 <p>Until next time!</p>
+<br>
 		</div>
 		<footer class="post__footer">
 			
