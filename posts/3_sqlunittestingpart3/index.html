@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>SQL Unit Testing Using tSQLt: Part 3 - Lee Brownhill&#39;s Blog</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+		
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+  		
+  		
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
+
+	<div class="container header__container">
+		
+	<div class="logo logo--mixed">
+		<a class="logo__link" href="/" title="Lee Brownhill&#39;s Blog" rel="home">
+			<div class="logo__item logo__imagebox">
+					<img class="logo__img" src="/img/avatar.png">
+				</div><div class="logo__item logo__text">
+					<div class="logo__title">Lee Brownhill&#39;s Blog</div>
+					<div class="logo__tagline">A blog about SQL Server, mostly</div>
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">blog</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/projects">
+				
+				<span class="menu__text">projects</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about">
+				
+				<span class="menu__text">about</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/contact">
+				
+				<span class="menu__text">contact</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">SQL Unit Testing Using tSQLt: Part 3</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<br>
+<p>The Journey Continues!</p>
+<p>Welcome back to the <a href="https://www.leebrownhill.com/tags/tsql/">tSQLt series</a>, where we are covering the fundementals of Unit Testing within SQL Server by using the tSQLt Framework.</p>
+<p>Today we are progressing onward by discussing some of the useful features within tSQLt to ensure our tests are accurate, reliable and repeatable.</p>
+<p>In the <a href="https://www.leebrownhill.com/posts/2_sqlunittestingpart2/">last post</a>, we went through the process of creating a basic tSQLt test.  We covered the basic constructs of generating a unit test by implementing the three stages of a test:</p>
+<ol>
+<li>Assemble</li>
+<li>Act</li>
+<li>Assert</li>
+</ol>
+<p>Within the Assemble stage, with made use of the <a href="https://tsqlt.org/user-guide/isolating-dependencies/faketable/">Fake Table</a> function, which allowed us to create a &lsquo;faked&rsquo; version of a table. Such functionality is a core pillar of unit testing with tSQLt. Our unit tests should be isolated and idempotent mechanisms.</p>
+<p>The Fake Table function is just one of the many tools in our arsenal when using tSQLt and I wanted to take some time in this post to cover another feature which will be useful to us - the Fake Function function.
+More official documentation about it here - <a href="https://tsqlt.org/user-guide/isolating-dependencies/fakefunction/">Fake Function</a></p>
+<p>From <a href="https://tsqlt.org/user-guide/isolating-dependencies/fakefunction/">tSQLt.org</a>:</p>
+<blockquote>
+<p><em>Code that calls a function can be difficult to test if that function performs significant logic. We want to isolate the code we are testing from the logic buried in the functions that it calls. To create independent tests, we can replace a called function with a fake function. The fake function will perform much simpler logic that supports the purpose of our test. Often, the fake function will simply return a hard-coded value.</em></p></blockquote>
+<br>
+<p>In this post, were going to walk through a demo to illustrate the following:</p>
+<ul>
+<li>The underlying procedure being tested</li>
+<li>The Unit Test which will test the underlying procedure</li>
+<li>The implementation of the Fake Function feature</li>
+</ul>
+<br>
+<h3 id="setting-the-scene---the-procedure-to-be-tested">Setting the Scene - The procedure to be tested</h3>
+<p>We have a newer updated procedure, from our last post,  called - GetUserDetail_LastYear</p>
+<p>The key things this procedure does:</p>
+<ul>
+<li>Takes in one input parameter called @DisplayName</li>
+<li>Retrieves information about the passed in user, for the past one year, based on the time the procedure is run (take note of this trusted reader)</li>
+<li>Logs some data at time of execution such as the procedure name, who ran the procedure and the date/time the procedure was executed</li>
+</ul>
+<p>Once again, were going to be using the <a href="https://www.brentozar.com/archive/2015/10/how-to-download-the-stack-overflow-database-via-bittorrent/">Stack Overflow database</a>. Here is the full procedure:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">OR</span> <span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">PROCEDURE</span> <span style="color:#56b6c2">[</span>dbo<span style="color:#56b6c2">].[</span>GetUserDetail_LastYear<span style="color:#56b6c2">]</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>	<span style="color:#bc74c4">@</span>DisplayName NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#56b6c2">100</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#7fbaf5">AS</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span><span style="color:#7fbaf5">BEGIN</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    <span style="color:#7fbaf5">DECLARE</span> <span style="color:#bc74c4">@</span>Now            DATETIME
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>    <span style="color:#7fbaf5">DECLARE</span> <span style="color:#bc74c4">@</span>OneYearAgo     DATETIME
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>    <span style="color:#7fbaf5">SET</span> <span style="color:#bc74c4">@</span>Now                <span style="color:#bc74c4">=</span> dbo<span style="color:#56b6c2">.</span>DateTimeNow<span style="color:#56b6c2">()</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>    <span style="color:#7fbaf5">SET</span> <span style="color:#bc74c4">@</span>OneYearAgo         <span style="color:#bc74c4">=</span> DATEADD<span style="color:#56b6c2">(</span><span style="color:#7fbaf5">YEAR</span><span style="color:#56b6c2">,</span> <span style="color:#bc74c4">-</span><span style="color:#56b6c2">1</span><span style="color:#56b6c2">,</span> <span style="color:#bc74c4">@</span>Now<span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>    <span style="color:#7fbaf5">SELECT</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>        u<span style="color:#56b6c2">.</span>DisplayName<span style="color:#56b6c2">,</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>        u<span style="color:#56b6c2">.</span><span style="color:#7fbaf5">Location</span><span style="color:#56b6c2">,</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>        u<span style="color:#56b6c2">.</span>Reputation<span style="color:#56b6c2">,</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>        <span style="color:#7fbaf5">COUNT</span><span style="color:#56b6c2">(</span><span style="color:#7fbaf5">c</span><span style="color:#56b6c2">.</span>Id<span style="color:#56b6c2">)</span> <span style="color:#7fbaf5">AS</span> CommentCount
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>    <span style="color:#7fbaf5">FROM</span> dbo<span style="color:#56b6c2">.</span>Users u
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>    <span style="color:#7fbaf5">INNER</span> <span style="color:#7fbaf5">JOIN</span> dbo<span style="color:#56b6c2">.</span>Comments <span style="color:#7fbaf5">c</span> <span style="color:#7fbaf5">ON</span> u<span style="color:#56b6c2">.</span>Id <span style="color:#bc74c4">=</span> <span style="color:#7fbaf5">c</span><span style="color:#56b6c2">.</span>UserId
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>    <span style="color:#7fbaf5">WHERE</span> 
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>        u<span style="color:#56b6c2">.</span>DisplayName <span style="color:#bc74c4">=</span> <span style="color:#bc74c4">@</span>DisplayName
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>        <span style="color:#7fbaf5">AND</span> <span style="color:#7fbaf5">c</span><span style="color:#56b6c2">.</span>CreationDate <span style="color:#7fbaf5">BETWEEN</span> <span style="color:#bc74c4">@</span>OneYearAgo <span style="color:#7fbaf5">AND</span> <span style="color:#bc74c4">@</span>Now
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>    <span style="color:#7fbaf5">GROUP</span> <span style="color:#7fbaf5">BY</span> u<span style="color:#56b6c2">.</span>DisplayName<span style="color:#56b6c2">,</span> u<span style="color:#56b6c2">.</span><span style="color:#7fbaf5">Location</span><span style="color:#56b6c2">,</span> u<span style="color:#56b6c2">.</span>Reputation
+</span></span></code></pre></div><p>Calling the procedure for a particular user, renders the following detail:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> dbo<span style="color:#56b6c2">.</span>GetUserDetail_LastYear <span style="color:#bc74c4">@</span>DisplayName <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;Jon Skeet&#39;</span>
+</span></span></code></pre></div><br>
+<img src="/posts/post_images/results_1.png" alt="tsqlt">
+<br>
+<br>
+<br>
+<br>
+<h3 id="setting-the-scene---the-unit-test">Setting the Scene - The Unit Test</h3>
+<p>Following the same methodology used in the last post, we have created a unit test for dbo.GetUserDetail_LastYear.</p>
+<p>Here is the full unit test, we will discuss it in more detail later:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">OR</span> <span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">PROCEDURE</span> <span style="color:#56b6c2">[</span>tests<span style="color:#56b6c2">].[</span>test GetUserDetail_LastYear<span style="color:#56b6c2">]</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#7fbaf5">AS</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#7fbaf5">BEGIN</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span><span style="color:#7fbaf5">DECLARE</span> 
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>	<span style="color:#bc74c4">@</span>UserName NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#56b6c2">100</span><span style="color:#56b6c2">)</span>	<span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;Jon Skeet&#39;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span><span style="color:#3e4460">/* ASSEMBLE STAGE */</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span><span style="color:#7fbaf5">EXEC</span> tSQLt<span style="color:#56b6c2">.</span>FakeTable <span style="color:#82cc6a">&#39;dbo.Users&#39;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span><span style="color:#7fbaf5">INSERT</span> <span style="color:#7fbaf5">INTO</span> dbo<span style="color:#56b6c2">.</span>Users
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span><span style="color:#56b6c2">(</span>Id<span style="color:#56b6c2">,</span>DisplayName<span style="color:#56b6c2">,</span> <span style="color:#7fbaf5">Location</span><span style="color:#56b6c2">,</span> Reputation<span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span><span style="color:#7fbaf5">VALUES</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">22656</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;Jon Skeet&#39;</span>	<span style="color:#56b6c2">,</span><span style="color:#82cc6a">&#39;Reading, United Kingdom&#39;</span>	<span style="color:#56b6c2">,</span><span style="color:#56b6c2">1047863</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">22661</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;Virne&#39;</span>		<span style="color:#56b6c2">,</span><span style="color:#82cc6a">&#39;Finland&#39;</span>			<span style="color:#56b6c2">,</span><span style="color:#56b6c2">1076</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">22668</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;Dickon Reed&#39;</span>	<span style="color:#56b6c2">,</span><span style="color:#82cc6a">&#39;Cambridge, United Kingdom&#39;</span>	<span style="color:#56b6c2">,</span><span style="color:#56b6c2">2237</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span><span style="color:#7fbaf5">EXEC</span> tSQLt<span style="color:#56b6c2">.</span>FakeTable <span style="color:#82cc6a">&#39;dbo.Comments&#39;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span><span style="color:#7fbaf5">INSERT</span> <span style="color:#7fbaf5">INTO</span> dbo<span style="color:#56b6c2">.</span>Comments
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span><span style="color:#56b6c2">(</span>Id<span style="color:#56b6c2">,</span> UserId<span style="color:#56b6c2">,</span>CreationDate<span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span><span style="color:#7fbaf5">VALUES</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">436275</span>	<span style="color:#56b6c2">,</span> <span style="color:#56b6c2">22661</span> <span style="color:#56b6c2">,</span> <span style="color:#82cc6a">&#39;2020-05-01 09:39:00.000&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">197827</span>	<span style="color:#56b6c2">,</span> <span style="color:#56b6c2">22668</span> <span style="color:#56b6c2">,</span> <span style="color:#82cc6a">&#39;2024-09-26 16:35:51.177&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">37360</span>	<span style="color:#56b6c2">,</span> <span style="color:#56b6c2">22656</span>	<span style="color:#56b6c2">,</span> <span style="color:#82cc6a">&#39;2024-09-26 16:35:51.177&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">37585</span>	<span style="color:#56b6c2">,</span> <span style="color:#56b6c2">22656</span>	<span style="color:#56b6c2">,</span> <span style="color:#82cc6a">&#39;2025-01-26 16:35:17.310&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">36000</span>	<span style="color:#56b6c2">,</span> <span style="color:#56b6c2">22656</span>	<span style="color:#56b6c2">,</span> <span style="color:#82cc6a">&#39;2022-08-26 19:21:42.357&#39;</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">TABLE</span> dbo<span style="color:#56b6c2">.</span>Expected
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span><span style="color:#56b6c2">(</span>DisplayName NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#56b6c2">100</span><span style="color:#56b6c2">),</span> <span style="color:#7fbaf5">Location</span> NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#56b6c2">200</span><span style="color:#56b6c2">),</span>Reputation <span style="color:#7fbaf5">INT</span><span style="color:#56b6c2">,</span> CommentCount <span style="color:#7fbaf5">INT</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">TABLE</span> dbo<span style="color:#56b6c2">.</span>Actual
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span><span style="color:#56b6c2">(</span>DisplayName NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#56b6c2">100</span><span style="color:#56b6c2">),</span> <span style="color:#7fbaf5">Location</span> NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#56b6c2">200</span><span style="color:#56b6c2">),</span>Reputation <span style="color:#7fbaf5">INT</span><span style="color:#56b6c2">,</span> CommentCount <span style="color:#7fbaf5">INT</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span><span style="color:#7fbaf5">INSERT</span> <span style="color:#7fbaf5">INTO</span> dbo<span style="color:#56b6c2">.</span>Expected
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span><span style="color:#56b6c2">(</span>DisplayName<span style="color:#56b6c2">,</span><span style="color:#7fbaf5">Location</span><span style="color:#56b6c2">,</span> Reputation<span style="color:#56b6c2">,</span> CommentCount<span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span><span style="color:#7fbaf5">VALUES</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span>	<span style="color:#56b6c2">(</span><span style="color:#82cc6a">&#39;Jon Skeet&#39;</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;Reading, United Kingdom&#39;</span><span style="color:#56b6c2">,</span>	<span style="color:#56b6c2">1047863</span><span style="color:#56b6c2">,</span>	<span style="color:#56b6c2">2</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span><span><span style="color:#3e4460">/* ACT STAGE */</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span><span><span style="color:#7fbaf5">INSERT</span> <span style="color:#7fbaf5">INTO</span> dbo<span style="color:#56b6c2">.</span>Actual
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span><span><span style="color:#7fbaf5">EXEC</span> <span style="color:#56b6c2">[</span>dbo<span style="color:#56b6c2">].[</span>GetUserDetail_LastYear<span style="color:#56b6c2">]</span> 
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span><span>	<span style="color:#bc74c4">@</span>DisplayName	<span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;Jon Skeet&#39;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span><span><span style="color:#3e4460">/* ASSERT STAGE */</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span><span><span style="color:#7fbaf5">EXEC</span> tSQLt<span style="color:#56b6c2">.</span>AssertEqualsTable
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span><span>	<span style="color:#bc74c4">@</span>Expected	<span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;dbo.Expected&#39;</span><span style="color:#56b6c2">,</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span><span>	<span style="color:#bc74c4">@</span>Actual		<span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;dbo.Actual&#39;</span><span style="color:#56b6c2">,</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span><span>	<span style="color:#bc74c4">@</span>FailMsg	<span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;Our test failed!&#39;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span><span><span style="color:#7fbaf5">END</span>
+</span></span></code></pre></div><p>So we now have our underlying stored procedure, we also have our associated unit test. If we call our test:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> tSQLt<span style="color:#56b6c2">.</span>Run <span style="color:#bc74c4">@</span>TestName <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;[tests].[test GetUserDetail_LastYear]&#39;</span>
+</span></span></code></pre></div><p>The test passes, as expected:</p>
+<img src="/posts/post_images/messages_1.png" alt="tsqlt">
+<br>
+<br>
+<p>All is well, the test passes and our work here is done. Right?</p>
+<br>
+<img src="/posts/post_images/meme_1.png" alt="cavill_meme" style="width:350px; height:auto;">
+<br>
+<br>
+<p>WRONG</p>
+<br>
+<br>
+<h3 id="issue-1-the-date-function-used">Issue 1: The Date Function Used</h3>
+<p>Currently, if we run our new unit test it runs without issue, for &lsquo;<strong>today</strong>&rsquo;. The eagle eyed readers may have noticed something within our stored main procedure.</p>
+<p>Within our stored procedure, we have following function being used:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">SET</span> <span style="color:#bc74c4">@</span>Now <span style="color:#bc74c4">=</span> dbo<span style="color:#56b6c2">.</span>DateTimeNow<span style="color:#56b6c2">()</span>
+</span></span></code></pre></div><p>This function is calculating the date and time of when the procedure is executed.
+We have written our unit test to calculate the results to accommodate this, for &rsquo;today&rsquo;. But what happens if we run it tomorrow? Next week? You guessed it, our test will fail because the date will be obviously be different, and so will our date range thats being used as a filter.
+We are currently expecting a comment count of 2 to come back, based on the date the test is executed (today). This will obviously change over time and so, we cannot be sure that our unit test will continue to pass.</p>
+<p>Thankfully, the good folks over at tSQLt have thought of this and have a useful function for us to handle these scenarios. That function is the <a href="https://tsqlt.org/user-guide/isolating-dependencies/fakefunction/">Fake Function</a>.</p>
+<br>
+<h3 id="solution-1-the-fake-function">Solution 1: The Fake Function</h3>
+<p>The Fake Function option allows us to tell tSQLt that whenever it encounters a particular function, it should ignore it and use something else.
+The &lsquo;something else&rsquo; is where we can step in and become empowered to handle this scenario.</p>
+<p>We will add the following to our unit test code, within the &lsquo;Assemble&rsquo; section:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> tSQLt<span style="color:#56b6c2">.</span>FakeFunction <span style="color:#bc74c4">@</span>FunctionName <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;dbo.DateTimeNow&#39;</span><span style="color:#56b6c2">,</span> <span style="color:#bc74c4">@</span>FakeFunctionName <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;Fake.DateTimeNow&#39;</span>
+</span></span></code></pre></div><p>As above, we are calling the Fake Function option to say, whenever we encounter the function dbo.DateTimeNow, that we should actually use the function &lsquo;Fake.DateTimeNow&rsquo; instead.</p>
+<p>This allows us to use a &lsquo;dummy&rsquo; version of the function. Here is our dummy version:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">OR</span> <span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">FUNCTION</span> <span style="color:#56b6c2">[</span>Fake<span style="color:#56b6c2">].[</span>DateTimeNow<span style="color:#56b6c2">]()</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>	<span style="color:#7fbaf5">RETURNS</span> DATETIME
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#7fbaf5">AS</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#7fbaf5">BEGIN</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>	<span style="color:#7fbaf5">RETURN</span> <span style="color:#82cc6a">&#39;2025-04-11 00:00:00.000&#39;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span><span style="color:#7fbaf5">END</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span><span style="color:#7fbaf5">GO</span>
+</span></span></code></pre></div><p>This version simply returns a &lsquo;static&rsquo; date / time which is perfect for us to be able to generate repeatable data to use when running our unit test.</p>
+<p>This is great, because we don&rsquo;t want to test (at this point) the underlying functionality of the function dbo.DateTimeNow.
+We are only concerned with the isolated test of the stored procedure dbo.GetUserDetail_LastYear. We can now be confident that whenever our unit test is executed, its always going to use the same date to interrogate the data.</p>
+<p>Should we need to, we can create a dedicated unit test for the actual function at a later date, in isolation.</p>
+<p>Our updated unit test, now begins like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">OR</span> <span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">PROCEDURE</span> <span style="color:#56b6c2">[</span>tests<span style="color:#56b6c2">].[</span>test GetUserDetail_LastYear<span style="color:#56b6c2">]</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#7fbaf5">AS</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#7fbaf5">BEGIN</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span><span style="color:#7fbaf5">DECLARE</span> 
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>	<span style="color:#bc74c4">@</span>UserName NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#56b6c2">100</span><span style="color:#56b6c2">)</span>	<span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;Jon Skeet&#39;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span><span style="color:#3e4460">/* ASSEMBLE STAGE */</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span><span style="color:#7fbaf5">EXEC</span> tSQLt<span style="color:#56b6c2">.</span>FakeFunction <span style="color:#bc74c4">@</span>FunctionName <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;dbo.DateTimeNow&#39;</span><span style="color:#56b6c2">,</span> <span style="color:#bc74c4">@</span>FakeFunctionName <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;Fake.DateTimeNow&#39;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span><span style="color:#7fbaf5">EXEC</span> tSQLt<span style="color:#56b6c2">.</span>FakeTable <span style="color:#82cc6a">&#39;dbo.Users&#39;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span><span style="color:#7fbaf5">INSERT</span> <span style="color:#7fbaf5">INTO</span> dbo<span style="color:#56b6c2">.</span>Users
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span><span style="color:#56b6c2">(</span>Id<span style="color:#56b6c2">,</span>DisplayName<span style="color:#56b6c2">,</span> <span style="color:#7fbaf5">Location</span><span style="color:#56b6c2">,</span> Reputation<span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span><span style="color:#7fbaf5">VALUES</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">22656</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;Jon Skeet&#39;</span>	<span style="color:#56b6c2">,</span><span style="color:#82cc6a">&#39;Reading, United Kingdom&#39;</span>	<span style="color:#56b6c2">,</span><span style="color:#56b6c2">1047863</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">22661</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;Virne&#39;</span>		<span style="color:#56b6c2">,</span><span style="color:#82cc6a">&#39;Finland&#39;</span>			<span style="color:#56b6c2">,</span><span style="color:#56b6c2">1076</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">22668</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;Dickon Reed&#39;</span>	<span style="color:#56b6c2">,</span><span style="color:#82cc6a">&#39;Cambridge, United Kingdom&#39;</span>	<span style="color:#56b6c2">,</span><span style="color:#56b6c2">2237</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span><span style="color:#56b6c2">...</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span><span style="color:#3e4460">/* TRUNCATED FOR BREVITY */</span>
+</span></span></code></pre></div><br>
+<p>I hope you enjoyed this post that covered the Fake Function option of tSQLt. Once again, this is just one of many very useful tools we can access when using the tSQLt framework. There are many more, which we will continue to cover in the next post in the series.
+Speaking of which, next up we will cover &lsquo;Spy Procedure&rsquo; feature of tSQLt. I hope to see you there.</p>
+<p>Thanks for reading.</p>
+<br>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M4 0h8s2 0 4 2l15 15s2 2 0 4L21 31s-2 2-4 0L2 16s-2-2-2-4V3s0-3 4-3m3 10a3 3 0 0 0 0-6 3 3 0 0 0 0 6"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/sql/" rel="tag">sql</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/tsql/" rel="tag">tsql</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/unit-testing/" rel="tag">unit testing</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2025 Lee Brownhill.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>
