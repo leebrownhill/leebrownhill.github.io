@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>SQL Unit Testing Using tSQLt: Part 3 - Lee Brownhill&#39;s Blog</title>
@@ -16,6 +16,21 @@
 
 	<link rel="shortcut icon" href="/favicon.ico">
 		
+		
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
 </head>
 <body class="body">
 	<div class="container container--outer">
@@ -264,7 +279,7 @@ The &lsquo;something else&rsquo; is where we can step in and become empowered to
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>	<span style="color:#7fbaf5">RETURN</span> <span style="color:#82cc6a">&#39;2025-04-11 00:00:00.000&#39;</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span><span style="color:#7fbaf5">END</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span><span style="color:#7fbaf5">GO</span>
-</span></span></code></pre></div><p>This version simply returns a &lsquo;static&rsquo; datetime which is perfect for us to be able to generate a repeatable method for interrogating the data when running our unit test.</p>
+</span></span></code></pre></div><p>This version simply returns a static datetime which is perfect for us to be able to generate a repeatable method for interrogating the data when running our unit test.</p>
 <p>This is ideal, as our focus isn&rsquo;t on testing the underlying functionality of the dbo.DateTimeNow function at this stage.
 We are only concerned with the isolated test of the stored procedure dbo.GetUserDetail_LastYear. We can now be confident that whenever our unit test is executed, it&rsquo;s always going to use the same date to interrogate the data.</p>
 <p>Should we need to, we can create a dedicated unit test for the actual function at a later date, in isolation.</p>
