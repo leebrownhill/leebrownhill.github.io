@@ -100,36 +100,36 @@
 		<div class="content post__content clearfix">
 			<br>
 <p>The Journey Continues!</p>
-<p>Welcome back to the <a href="https://www.leebrownhill.com/tags/tsql/">tSQLt series</a>, where we are covering the fundementals of Unit Testing within SQL Server by using the tSQLt Framework.</p>
-<p>Today we are progressing onward by discussing some of the useful features within tSQLt to ensure our tests are accurate, reliable and repeatable.</p>
+<p>Welcome back to the <a href="https://www.leebrownhill.com/tags/tsql/">tSQLt series</a>, where we are covering the fundamentals of Unit Testing within SQL Server by using the tSQLt Framework.</p>
+<p>Today we are progressing onward by discussing some of the useful features within tSQLt to ensure our tests are accurate, reliable, and repeatable.</p>
 <p>In the <a href="https://www.leebrownhill.com/posts/2_sqlunittestingpart2/">last post</a>, we went through the process of creating a basic tSQLt test.  We covered the basic constructs of generating a unit test by implementing the three stages of a test:</p>
 <ol>
 <li>Assemble</li>
 <li>Act</li>
 <li>Assert</li>
 </ol>
-<p>Within the Assemble stage, with made use of the <a href="https://tsqlt.org/user-guide/isolating-dependencies/faketable/">Fake Table</a> function, which allowed us to create a &lsquo;faked&rsquo; version of a table. Such functionality is a core pillar of unit testing with tSQLt. Our unit tests should be isolated and idempotent mechanisms.</p>
-<p>The Fake Table function is just one of the many tools in our arsenal when using tSQLt and I wanted to take some time in this post to cover another feature which will be useful to us - the <strong>Fake Function</strong> function.
+<p>Within the Assemble stage, we made use of the <a href="https://tsqlt.org/user-guide/isolating-dependencies/faketable/">Fake Table</a> function, which allowed us to create a &lsquo;faked&rsquo; version of a table. Such functionality is a core pillar of unit testing with tSQLt. Our unit tests should be isolated and idempotent mechanisms.</p>
+<p>The Fake Table function is just one of the many tools in our arsenal when using tSQLt, and I wanted to take some time in this post to cover another feature which will be useful to us - the <strong>Fake Function</strong> function.
 More official documentation about it here - <a href="https://tsqlt.org/user-guide/isolating-dependencies/fakefunction/">Fake Function</a></p>
 <p>From <a href="https://tsqlt.org/user-guide/isolating-dependencies/fakefunction/">tSQLt.org</a>:</p>
 <blockquote>
 <p><em>Code that calls a function can be difficult to test if that function performs significant logic. We want to isolate the code we are testing from the logic buried in the functions that it calls. To create independent tests, we can replace a called function with a fake function. The fake function will perform much simpler logic that supports the purpose of our test. Often, the fake function will simply return a hard-coded value.</em></p></blockquote>
 <br>
-<p>In this post, were going to walk through a demo to illustrate the following:</p>
+<p>In this post, we&rsquo;re going to walk through a demo to illustrate the following:</p>
 <ul>
 <li>The underlying procedure being tested</li>
-<li>The Unit Test which will test the underlying procedure</li>
+<li>The Unit Test, which will test the underlying procedure</li>
 <li>The implementation of the Fake Function feature</li>
 </ul>
 <br>
 <h3 id="setting-the-scene---the-procedure-to-be-tested">Setting the Scene - The procedure to be tested</h3>
-<p>We have a newer updated procedure, from our last post,  called - GetUserDetail_LastYear</p>
+<p>We have an updated procedure, from our last post,  called - GetUserDetail_LastYear</p>
 <p>The key things this procedure does:</p>
 <ul>
 <li>Takes in one input parameter called @DisplayName</li>
-<li>Retrieves information about the passed in user, for the past one year, based on the time the procedure is run (<em>take note of this trusted reader</em>)</li>
+<li>Retrieves information about the passed-in user, for the past year, based on the time the procedure is run (<em>take note of this, trusted reader</em>)</li>
 </ul>
-<p>Once again, were going to be using the <a href="https://www.brentozar.com/archive/2015/10/how-to-download-the-stack-overflow-database-via-bittorrent/">Stack Overflow database</a>. Here is the full procedure:</p>
+<p>Once again, we&rsquo;re going to be using the <a href="https://www.brentozar.com/archive/2015/10/how-to-download-the-stack-overflow-database-via-bittorrent/">Stack Overflow database</a>. Here is the full procedure:</p>
 <div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">OR</span> <span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">PROCEDURE</span> <span style="color:#56b6c2">[</span>dbo<span style="color:#56b6c2">].[</span>GetUserDetail_LastYear<span style="color:#56b6c2">]</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>	<span style="color:#bc74c4">@</span>DisplayName NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#56b6c2">100</span><span style="color:#56b6c2">)</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#7fbaf5">AS</span>
@@ -152,7 +152,8 @@ More official documentation about it here - <a href="https://tsqlt.org/user-guid
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>        u<span style="color:#56b6c2">.</span>DisplayName <span style="color:#bc74c4">=</span> <span style="color:#bc74c4">@</span>DisplayName <span style="color:#7fbaf5">AND</span> 
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>		<span style="color:#7fbaf5">c</span><span style="color:#56b6c2">.</span>CreationDate <span style="color:#7fbaf5">BETWEEN</span> <span style="color:#bc74c4">@</span>OneYearAgo <span style="color:#7fbaf5">AND</span> <span style="color:#bc74c4">@</span>Now
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>    <span style="color:#7fbaf5">GROUP</span> <span style="color:#7fbaf5">BY</span> u<span style="color:#56b6c2">.</span>DisplayName<span style="color:#56b6c2">,</span> u<span style="color:#56b6c2">.</span><span style="color:#7fbaf5">Location</span><span style="color:#56b6c2">,</span> u<span style="color:#56b6c2">.</span>Reputation
-</span></span></code></pre></div><p>Calling the procedure for a particular user, renders the following detail:</p>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span><span style="color:#7fbaf5">END</span>
+</span></span></code></pre></div><p>Calling the procedure for a particular user renders the following detail:</p>
 <div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> dbo<span style="color:#56b6c2">.</span>GetUserDetail_LastYear <span style="color:#bc74c4">@</span>DisplayName <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;Jon Skeet&#39;</span>
 </span></span></code></pre></div><br>
 <img src="/posts/post_images/results_1.png" alt="tsqlt">
@@ -240,22 +241,22 @@ More official documentation about it here - <a href="https://tsqlt.org/user-guid
 <br>
 <br>
 <h3 id="issue-1-the-date-function-used">Issue 1: The Date Function Used</h3>
-<p>Currently, if we run our new unit test it runs without issue, for &lsquo;<strong>today</strong>&rsquo;. The eagle eyed readers may have noticed something within our stored main procedure.</p>
-<p>Within our stored procedure, we have following function being used:</p>
+<p>Currently, if we run our new unit test, it runs without issue, for &lsquo;<strong>today</strong>&rsquo;. The eagle-eyed readers may have noticed something within our main stored procedure.</p>
+<p>Within our stored procedure, we have the following function being used:</p>
 <div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">SET</span> <span style="color:#bc74c4">@</span>Now <span style="color:#bc74c4">=</span> dbo<span style="color:#56b6c2">.</span>DateTimeNow<span style="color:#56b6c2">()</span>
-</span></span></code></pre></div><p>This function is calculating the date and time of when the procedure is executed.
+</span></span></code></pre></div><p>This function is calculating the date and time when the procedure is executed.
 We have written our unit test to calculate the results to accommodate this, for &rsquo;today&rsquo;.
-<br>But what happens if we run it tomorrow? Next week? You guessed it, our test will fail because the date will be obviously be different, and so will our date range thats being used as a filter.
-We are currently expecting a comment count of 2 to come back, based on the date the test is executed (today). This will obviously change over time and so, we cannot be sure that our unit test will continue to pass.</p>
+<br>But what happens if we run it tomorrow? Next week? You guessed it, our test will fail because the date will obviously be different, and so will our date range that&rsquo;s being used as a filter.
+We are currently expecting a comment count of 2 to come back, based on the date the test is executed (today). This will obviously change over time and so, cannot be sure that our unit test will continue to pass.</p>
 <p>Thankfully, the good folks over at tSQLt have thought of this and have a useful function for us to handle these scenarios. That function is the <a href="https://tsqlt.org/user-guide/isolating-dependencies/fakefunction/">Fake Function</a>.</p>
 <br>
 <h3 id="solution-1-the-fake-function">Solution 1: The Fake Function</h3>
 <p>The Fake Function option allows us to tell tSQLt that whenever it encounters a particular function, it should ignore it and use something else.
 The &lsquo;something else&rsquo; is where we can step in and become empowered to handle this scenario.</p>
-<p>We will add the following to our unit test code, within the &lsquo;Assemble&rsquo; section:</p>
+<p>We will add the following to our unit test code, within the &ldquo;Assemble&rdquo; section:</p>
 <div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> tSQLt<span style="color:#56b6c2">.</span>FakeFunction <span style="color:#bc74c4">@</span>FunctionName <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;dbo.DateTimeNow&#39;</span><span style="color:#56b6c2">,</span> <span style="color:#bc74c4">@</span>FakeFunctionName <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;Fake.DateTimeNow&#39;</span>
-</span></span></code></pre></div><p>As above, we are calling the Fake Function option to say, whenever we encounter the function dbo.DateTimeNow, that we should actually use the function &lsquo;Fake.DateTimeNow&rsquo; instead.</p>
-<p>This allows us to use a &lsquo;dummy&rsquo; version of the function. Here is our dummy version:</p>
+</span></span></code></pre></div><p>As above, we are calling the Fake Function option to say whenever we encounter the function dbo.DateTimeNow, that we should actually use the function &lsquo;Fake.DateTimeNow&rsquo; instead.</p>
+<p>This allows us to use a &lsquo;faked&rsquo; version of the function. Here is our faked version:</p>
 <div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">OR</span> <span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">FUNCTION</span> <span style="color:#56b6c2">[</span>Fake<span style="color:#56b6c2">].[</span>DateTimeNow<span style="color:#56b6c2">]()</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>	<span style="color:#7fbaf5">RETURNS</span> DATETIME
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#7fbaf5">AS</span>
@@ -263,9 +264,9 @@ The &lsquo;something else&rsquo; is where we can step in and become empowered to
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>	<span style="color:#7fbaf5">RETURN</span> <span style="color:#82cc6a">&#39;2025-04-11 00:00:00.000&#39;</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span><span style="color:#7fbaf5">END</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span><span style="color:#7fbaf5">GO</span>
-</span></span></code></pre></div><p>This version simply returns a &lsquo;static&rsquo; date / time which is perfect for us to be able to generate a repeatable method for interogating the data when running our unit test.</p>
+</span></span></code></pre></div><p>This version simply returns a &lsquo;static&rsquo; datetime which is perfect for us to be able to generate a repeatable method for interrogating the data when running our unit test.</p>
 <p>This is ideal, as our focus isn&rsquo;t on testing the underlying functionality of the dbo.DateTimeNow function at this stage.
-We are only concerned with the isolated test of the stored procedure dbo.GetUserDetail_LastYear. We can now be confident that whenever our unit test is executed, its always going to use the same date to interrogate the data.</p>
+We are only concerned with the isolated test of the stored procedure dbo.GetUserDetail_LastYear. We can now be confident that whenever our unit test is executed, it&rsquo;s always going to use the same date to interrogate the data.</p>
 <p>Should we need to, we can create a dedicated unit test for the actual function at a later date, in isolation.</p>
 <p>Our updated unit test, now begins like this:</p>
 <div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">OR</span> <span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">PROCEDURE</span> <span style="color:#56b6c2">[</span>tests<span style="color:#56b6c2">].[</span>test GetUserDetail_LastYear<span style="color:#56b6c2">]</span>
@@ -294,8 +295,8 @@ We are only concerned with the isolated test of the stored procedure dbo.GetUser
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span><span style="color:#3e4460">/* TRUNCATED FOR BREVITY */</span>
 </span></span></code></pre></div><br>
-<p>I hope you enjoyed this post that covered the Fake Function option of tSQLt. Once again, this is just one of many very useful tools we can access when using the tSQLt framework. There are many more, which we will continue to cover in the next post in the series.
-Speaking of which, next up we will cover &lsquo;Spy Procedure&rsquo; feature of tSQLt. I hope to see you there.</p>
+<p>I hope you enjoyed this post that covered the Fake Function option of tSQLt. Once again, this is just one of many useful tools we can access when using the tSQLt framework. There are many more which we will continue to cover in the next post in the series.
+Speaking of which, next up, we will cover &lsquo;Spy Procedure&rsquo; feature of tSQLt. I hope to see you there.</p>
 <p>Thanks for reading.</p>
 <br>
 		</div>
