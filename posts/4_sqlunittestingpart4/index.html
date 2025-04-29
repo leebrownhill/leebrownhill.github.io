@@ -99,9 +99,9 @@
 		</header>
 		<div class="content post__content clearfix">
 			<br>
-<p>We&rsquo;re back once again, with another instalment of the tSQLt series. I hope you&rsquo;ve been enjoying it so far. Personally, i&rsquo;ve had a blast getting back into this topic.
+<p>We&rsquo;re back once again, with another instalment of the tSQLt series. I hope you&rsquo;ve been enjoying it so far. Personally, I&rsquo;ve had a blast getting back into this topic.
 In the last post, we covered one of the many useful features of tSQLt, the Fake Function option.</p>
-<p>Taking this further, In today&rsquo;s post, I want to cover the <a href="https://tsqlt.org/user-guide/isolating-dependencies/spyprocedure/">Spy Procedure</a> option.</p>
+<p>Taking this further, in today&rsquo;s post, I want to cover the <a href="https://tsqlt.org/user-guide/isolating-dependencies/spyprocedure/">Spy Procedure</a> option.</p>
 <br>
 <br>
 <h3 id="the-setup---our-stored-procedure">The Setup - Our Stored Procedure</h3>
@@ -140,21 +140,21 @@ In the last post, we covered one of the many useful features of tSQLt, the Fake 
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span>    <span style="color:#7fbaf5">EXEC</span> dbo<span style="color:#56b6c2">.</span>AddToAuditLog <span style="color:#bc74c4">@</span>Proc<span style="color:#56b6c2">,</span><span style="color:#bc74c4">@</span>Who<span style="color:#56b6c2">,</span><span style="color:#bc74c4">@</span><span style="color:#7fbaf5">When</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span><span style="color:#7fbaf5">END</span>
-</span></span></code></pre></div><p>The only addition made to the procedure, since our last post, is the addition of a call to another stored procedure, dbo.AddToAuditLog. This procedure simply captures some metadata about the procedure&rsquo;s execution, such as the procedure name, user and time.</p>
+</span></span></code></pre></div><p>The only addition made to the procedure, since our last post, is the addition of a call to another stored procedure, dbo.AddToAuditLog. This procedure simply captures some metadata about the procedure&rsquo;s execution, such as the procedure name, user, and time.</p>
 <p>When we execute our procedure like this:</p>
 <div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> dbo<span style="color:#56b6c2">.</span>GetUserDetail_LastYear <span style="color:#bc74c4">@</span>DisplayName <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;Jon Skeet&#39;</span>
 </span></span></code></pre></div><p>We get the following results:</p>
 <img src="/posts/post_images/results_2.png" alt="tsqlt" style="width:538px; height:auto;">
 <br>
 <br>
-<p>However, this time, we are also logging information into an &lsquo;audit&rsquo; table, via the use of our embedded procedure - dbo.AddToAuditLog:</p>
+<p>However, this time, we are also logging information into an &lsquo;audit&rsquo; table, via our use of our embedded procedure - dbo.AddToAuditLog:</p>
 <img src="/posts/post_images/results_3.png" alt="tsqlt" style="width:538px; height:auto;">
 <br>
 <br>
 <br>
 <br>
 <h3 id="the-setup---our-unit-test">The Setup - Our Unit Test</h3>
-<p>Our unit test currently, is identical to how we finished up on the last post. The latest addition to it was the introduction of the Fake Function option.
+<p>Our unit test currently is identical to how we finished up on the last post. The latest addition to it was the introduction of the Fake Function option.
 Here is the full procedure as it currently stands:</p>
 <div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">OR</span> <span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">PROCEDURE</span> <span style="color:#56b6c2">[</span>tests<span style="color:#56b6c2">].[</span>test GetUserDetail_LastYear<span style="color:#56b6c2">]</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#7fbaf5">AS</span>
@@ -225,10 +225,10 @@ Here is the full procedure as it currently stands:</p>
 <br>
 <h3 id="the-importance-of-unit-test-isolation">The importance of Unit Test isolation</h3>
 <p>So we have our updated procedure, which now contains that additional call to the procedure dbo.AddToAuditLog.
-We also have our unit test, to test the main procedure dbo.GetUserDetail_LastYear. Everyone keeping up? Goodo.</p>
-<p>Currently, everything runs well, and we are validating the functionality of our main stored procedure, each time we run our unit test. Great. However, there is still an issue and i&rsquo;ll show you why.</p>
-<p>Lets say that one day, somebody introduces a bug into our embedded procedure dbo.AddToAuditLog. (Zero changes are made to our main procedure)</p>
-<p>Lets simulate that &lsquo;bug&rsquo; now within our embedded procedure. As shown below, we will simply add a RAISERROR to the procedure:</p>
+We also have our unit test to test the main procedure dbo.GetUserDetail_LastYear. Everyone keeping up? Goodo.</p>
+<p>Currently, everything runs well, and we are validating the functionality of our main stored procedure, each time we run our unit test. Great. However, there is still a potential issue and I&rsquo;ll show you why.</p>
+<p>Let&rsquo;s say that one day, somebody introduces a bug into our embedded procedure dbo.AddToAuditLog. (Zero changes are made to our main procedure)</p>
+<p>Let us simulate that &lsquo;bug&rsquo; now within our embedded procedure. As shown below, we will simply add a RAISERROR to the procedure, dbo.AddToAuditLog:</p>
 <div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">OR</span> <span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">PROCEDURE</span> <span style="color:#56b6c2">[</span>dbo<span style="color:#56b6c2">].[</span>AddToAuditLog<span style="color:#56b6c2">]</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>	<span style="color:#bc74c4">@</span>ProcName		NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#56b6c2">100</span><span style="color:#56b6c2">),</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>	<span style="color:#bc74c4">@</span>Who			NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#56b6c2">300</span><span style="color:#56b6c2">),</span>
@@ -242,35 +242,39 @@ We also have our unit test, to test the main procedure dbo.GetUserDetail_LastYea
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>	<span style="color:#3e4460">-- Our Fake Bug Here
 </span></span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span><span style="color:#3e4460"></span>	RAISERROR<span style="color:#56b6c2">(</span><span style="color:#82cc6a">&#39;Fake Bug&#39;</span><span style="color:#56b6c2">,</span> <span style="color:#56b6c2">16</span><span style="color:#56b6c2">,</span> <span style="color:#56b6c2">1</span><span style="color:#56b6c2">)</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span><span style="color:#7fbaf5">END</span>
-</span></span></code></pre></div><p>The next time we run our unsuspecting unit test <strong>[tests].[test GetUserDetail_LastYear]</strong>, we will see this:</p>
+</span></span></code></pre></div><br>
+<p>The next time we run our unsuspecting unit test, <strong>[tests].[test GetUserDetail_LastYear]</strong>, we will see this:</p>
 <img src="/posts/post_images/messages_2.png" alt="tsqlt">
-sad trombone
+<p><em>Bug&rsquo;s Life</em></p>
 <br>
-<br>
-<p>So our unit test failed and the reason is due to our &lsquo;fake bug&rsquo; within the embedded stored procedure. So even though, zero changes have been made to our main stored procedure, our unit test is now failing.
-Of course, this is less than ideal. Image our main stored procedure has numerous calls to numerous different stored procedures. Differing development teams could be making daily changes to these &rsquo;external&rsquo; objects and at any moment, could cause our unit test to fail, despite the fact the main underlying procedure has not changed.</p>
+<p>Our unit test has failed, and the culprit is our ‘fake bug’ within the embedded stored procedure.
+Despite no changes being made to our main stored procedure or unit test, the test is now failing.
+Naturally, this is far from ideal.
+Consider a scenario where our main stored procedure interacts with numerous other stored procedures. With different development teams making frequent changes to these external dependencies, our unit test could break at any moment — despite the fact that the underlying procedure itself remains unchanged.</p>
 <br>
 <br>
 <h3 id="the-spy-procedure">The Spy Procedure</h3>
-<p>As we have shown, having unhandled dependencies to other objects is risky. Even though our main stored procedure and unit test have not changed, the unit test is now failing due to an &rsquo;external&rsquo; dependency on another stored procedure.</p>
+<p>As we have shown, having unhandled dependencies to other objects is risky. Even though our main stored procedure and unit test remained the same, the unit test is now failing due to an &rsquo;external&rsquo; dependency on another stored procedure.</p>
 <p>Thankfully the folks at tSQLt have a way to handle this. Enter the <a href="https://tsqlt.org/user-guide/isolating-dependencies/spyprocedure/">Spy Procedure</a>.</p>
-<p>Spy Procedure enables the creation of tests for a procedure while keeping it independent from the procedures it invokes.</p>
+<p>The Spy Procedure enables the creation of tests for a procedure while keeping it independent from the procedures it invokes.</p>
+<br>
 <p>From tSQLt.org</p>
 <blockquote>
 <p>To create independent tests, we can replace the functionality of a stored procedure with a spy. The spy will record the parameters that were passed to it.</p></blockquote>
 <br>
-<p>At its very basic functionality, Spy Procedure allows us to simply &lsquo;ignore&rsquo; a particular procedure call, and thats how we&rsquo;re going to utilise it today.</p>
+<p>At its very basic functionality, Spy Procedure allows us to simply &lsquo;ignore&rsquo; a particular procedure call, and that&rsquo;s how we&rsquo;re going to utilise it today.</p>
 <p>So, we&rsquo;re going to add the following line of code:</p>
 <div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> tSQLt<span style="color:#56b6c2">.</span>SpyProcedure <span style="color:#bc74c4">@</span>ProcedureName <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;dbo.AddToAuditLog&#39;</span>
-</span></span></code></pre></div><p>This tells tSQLt, to simply ignore any references (or calls), to our audit log procedure. As you can see below, we have added the Spy Procedure call within our Assemble stage:</p>
+</span></span></code></pre></div><p>This tells tSQLt to simply ignore any references (or calls), to our audit log procedure. As you can see below, we have added the Spy Procedure call within our Assemble stage:</p>
 <img src="/posts/post_images/tsqlt_1.png" alt="tsqlt">
 <br>
 <br>
-<p>The next time we execute our Unit Test, everything once again, passes:</p>
+<br>
+<p>The next time we execute our Unit Test, everything, once again, passes:</p>
 <img src="/posts/post_images/tsqlt_2.png" alt="tsqlt">
 <br>
 <br>
-<p>Spy Procedure has additional features, which include the ability to capture the parameter values passed into the intended procedure at the time. However, for our use case today, simply ignoring any calls to dbo.AddToAuditLog achieves what is needed. We are now confident that our unit test and stored procedure have been sufficiently isolated and have zero dependancies to external objects.</p>
+<p>Spy Procedure has additional features, which include the ability to capture the parameter values passed into the intended procedure at the time. However, for our use case today, simply ignoring any calls to dbo.AddToAuditLog achieves what is needed. We are now confident that our unit test and stored procedure have been sufficiently isolated and have zero dependencies to external objects.</p>
 <br>
 <br>
 <h3 id="recap">Recap</h3>
@@ -308,7 +312,7 @@ Of course, this is less than ideal. Image our main stored procedure has numerous
 		<img alt="Lee Brownhill avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
 	</figure>
 	<div class="authorbox__header">
-		<span class="authorbox__name">About Lee Brownhill</span>
+		<span class="authorbox__name">Author: Lee Brownhill</span>
 	</div>
 	<div class="authorbox__description">
 		Lee Brownhill is a SQL Server Professional. He enjoys making SQL Server go faster
