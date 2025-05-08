@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>SQL Unit Testing Using tSQLt: Part 5 - Lee Brownhill&#39;s Blog</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+		
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+  		
+  		
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
+
+	<div class="container header__container">
+		
+	<div class="logo logo--mixed">
+		<a class="logo__link" href="/" title="Lee Brownhill&#39;s Blog" rel="home">
+			<div class="logo__item logo__imagebox">
+					<img class="logo__img" src="/img/avatar.png">
+				</div><div class="logo__item logo__text">
+					<div class="logo__title">Lee Brownhill&#39;s Blog</div>
+					<div class="logo__tagline">A blog about SQL Server, mostly</div>
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">blog</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/projects">
+				
+				<span class="menu__text">projects</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about">
+				
+				<span class="menu__text">about</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/contact">
+				
+				<span class="menu__text">contact</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">SQL Unit Testing Using tSQLt: Part 5</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<br>
+<p>Welcome back friends!</p>
+<p>During the past <a href="https://www.leebrownhill.com/tags/tsql/">four posts</a>, we have covered the fundamental concepts regarding tSQLt, look at how far we&rsquo;ve come!.
+So far, everything we have done has been within SSMS using the open source framework that is tSQLt.
+In this post, we&rsquo;re going to take a look at some third party tooling available, harnessing the power of tSQLt.</p>
+<br>
+<h3 id="redgate-sql-test">Redgate SQL Test</h3>
+<p>I&rsquo;ve been a strong advocate for Redgate tools for years. They have simplified and enhanced the life of many a DBA over the years, including myself. <a href="https://www.red-gate.com/products/sql-test/">Redgate SQL Test</a> is no exception.</p>
+<p>Redgate SQL Test provides a nice, integrated <a href="https://en.wikipedia.org/wiki/Graphical_user_interface">GUI</a> into SSMS for all things unit testing. Some of the key features include:</p>
+<ul>
+<li>Uses the tSQLt Framework</li>
+<li>Comes with built-in, pre-written COP tests to check for general best practices</li>
+<li>Enables one-click execution of unit tests at varying levels (database, schema, unit test)</li>
+<li>Integrates with SQL Cover [link] to provide code coverage analysis</li>
+<li>Provides a graphical view of test classes and procedures</li>
+</ul>
+<p>Installing Redgate SQL Test is very easy to do and can be downloaded here:
+<a href="https://www.red-gate.com/products/sql-test/">https://www.red-gate.com/products/sql-test/</a> <br>
+A free 28 day trial is available, and I highly recommend giving it a try.</p>
+<br>
+<h3 id="todays-agenda">Today&rsquo;s Agenda</h3>
+<p>In today&rsquo;s post, we&rsquo;ll explore key features of Redgate SQL Test and how they can enhance SQL unit testing.
+You guessed it, we’re diving into a demo.</p>
+<br>
+<h3 id="setup---the-procedure">Setup - The Procedure</h3>
+<p>Once again, we will be using the StackOverflow2010 database and we have a new procedure for today&rsquo;s demo, called dbo.GetUsersWithMostBadges.</p>
+<p>An overview of what it does:</p>
+<ul>
+<li>Identifies the top three users by badges earned using a CTE</li>
+<li>Joins the CTE to the users table to retrieve their Display Names</li>
+<li>Checks the @featureflag variable and creates a temporary table when necessary</li>
+</ul>
+<p>Here is the code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">OR</span> <span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">PROCEDURE</span> <span style="color:#56b6c2">[</span>dbo<span style="color:#56b6c2">].[</span>GetUsersWithMostBadges<span style="color:#56b6c2">]</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>	<span style="color:#bc74c4">@</span>featureflag <span style="color:#7fbaf5">BIT</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#7fbaf5">AS</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span><span style="color:#7fbaf5">BEGIN</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span><span style="color:#56b6c2">;</span><span style="color:#7fbaf5">WITH</span> GetTop3 <span style="color:#7fbaf5">AS</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span><span style="color:#56b6c2">(</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>	<span style="color:#7fbaf5">SELECT</span> TOP <span style="color:#56b6c2">(</span><span style="color:#56b6c2">3</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>		b<span style="color:#56b6c2">.</span>UserId<span style="color:#56b6c2">,</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>		<span style="color:#7fbaf5">COUNT</span><span style="color:#56b6c2">(</span>b<span style="color:#56b6c2">.</span>Name<span style="color:#56b6c2">)</span> <span style="color:#7fbaf5">AS</span> <span style="color:#56b6c2">[</span>NumberOfBadges<span style="color:#56b6c2">]</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>	<span style="color:#7fbaf5">FROM</span> dbo<span style="color:#56b6c2">.</span>Badges b
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>	<span style="color:#7fbaf5">GROUP</span> <span style="color:#7fbaf5">BY</span> b<span style="color:#56b6c2">.</span>UserId
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>	<span style="color:#7fbaf5">ORDER</span> <span style="color:#7fbaf5">BY</span> <span style="color:#7fbaf5">COUNT</span><span style="color:#56b6c2">(</span>b<span style="color:#56b6c2">.</span>Name<span style="color:#56b6c2">)</span> <span style="color:#7fbaf5">DESC</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span><span style="color:#7fbaf5">SELECT</span> 
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>	u<span style="color:#56b6c2">.</span>DisplayName<span style="color:#56b6c2">,</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>	t<span style="color:#56b6c2">.</span>NumberOfBadges
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span><span style="color:#7fbaf5">FROM</span> GetTop3 t
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span><span style="color:#7fbaf5">INNER</span> <span style="color:#7fbaf5">JOIN</span> dbo<span style="color:#56b6c2">.</span>Users u <span style="color:#7fbaf5">ON</span> t<span style="color:#56b6c2">.</span>UserID <span style="color:#bc74c4">=</span> u<span style="color:#56b6c2">.</span>Id
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span><span style="color:#7fbaf5">IF</span> <span style="color:#bc74c4">@</span>featureflag	<span style="color:#bc74c4">=</span> <span style="color:#56b6c2">1</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span><span style="color:#7fbaf5">BEGIN</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>	<span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">TABLE</span> <span style="color:#bc74c4">#</span>logging <span style="color:#56b6c2">(</span>id <span style="color:#7fbaf5">INT</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span><span style="color:#7fbaf5">END</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span><span style="color:#7fbaf5">END</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span><span style="color:#7fbaf5">GO</span>
+</span></span></code></pre></div><br>
+<h3 id="setup---the-unit-test">Setup - The Unit Test</h3>
+<p>For the accompanying unit test, we have [tests].[test GetUsersWithMostBadges]. This test verifies that the stored procedure returns the top three users based on badge count correctly:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">OR</span> <span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">PROCEDURE</span> <span style="color:#56b6c2">[</span>tests<span style="color:#56b6c2">].[</span>test GetUsersWithMostBadges<span style="color:#56b6c2">]</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#7fbaf5">AS</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#7fbaf5">BEGIN</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span><span style="color:#3e4460">/* ASSEMBLE STAGE */</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span><span style="color:#7fbaf5">EXEC</span> tSQLt<span style="color:#56b6c2">.</span>FakeTable <span style="color:#82cc6a">&#39;dbo.Badges&#39;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span><span style="color:#7fbaf5">INSERT</span> <span style="color:#7fbaf5">INTO</span> dbo<span style="color:#56b6c2">.</span>Badges
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>	<span style="color:#56b6c2">(</span>UserId<span style="color:#56b6c2">,</span> Name<span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span><span style="color:#7fbaf5">VALUES</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">10</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;Nice Answer&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">8</span><span style="color:#56b6c2">,</span>		<span style="color:#82cc6a">&#39;Nice Answer&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">10</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;Guru&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">10</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;Nice Answer&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">10</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;Nice Answer&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">10</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;.net&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">10</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;Good Answer&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">8</span><span style="color:#56b6c2">,</span>		<span style="color:#82cc6a">&#39;c#&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">8</span><span style="color:#56b6c2">,</span>		<span style="color:#82cc6a">&#39;Stellar Question&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">10</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;.net&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">10</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;.net&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">100</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;agile&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">8</span><span style="color:#56b6c2">,</span>		<span style="color:#82cc6a">&#39;c#&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">10</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;.net&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">6</span><span style="color:#56b6c2">,</span>		<span style="color:#82cc6a">&#39;vb.net&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">6</span><span style="color:#56b6c2">,</span>		<span style="color:#82cc6a">&#39;visual-studio&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">6</span><span style="color:#56b6c2">,</span>		<span style="color:#82cc6a">&#39;vb.net&#39;</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span><span style="color:#7fbaf5">EXEC</span> tSQLt<span style="color:#56b6c2">.</span>FakeTable <span style="color:#82cc6a">&#39;dbo.Users&#39;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span><span style="color:#7fbaf5">INSERT</span> <span style="color:#7fbaf5">INTO</span> dbo<span style="color:#56b6c2">.</span>Users
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span>	<span style="color:#56b6c2">(</span>Id<span style="color:#56b6c2">,</span> DisplayName<span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span><span style="color:#7fbaf5">VALUES</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">10</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;Jon Skeet&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">8</span><span style="color:#56b6c2">,</span>		<span style="color:#82cc6a">&#39;Marc Gravell&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">6</span><span style="color:#56b6c2">,</span>		<span style="color:#82cc6a">&#39;JaredPar&#39;</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span>	<span style="color:#56b6c2">(</span><span style="color:#56b6c2">100</span><span style="color:#56b6c2">,</span>	<span style="color:#82cc6a">&#39;Lee Brownhill&#39;</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">TABLE</span> dbo<span style="color:#56b6c2">.</span>Expected
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span><span style="color:#56b6c2">(</span>DisplayName NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#56b6c2">40</span><span style="color:#56b6c2">),</span>NumberOfBadges <span style="color:#7fbaf5">INT</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">TABLE</span> dbo<span style="color:#56b6c2">.</span>Actual
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span><span><span style="color:#56b6c2">(</span>DisplayName NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#56b6c2">40</span><span style="color:#56b6c2">),</span>NumberOfBadges <span style="color:#7fbaf5">INT</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span><span><span style="color:#7fbaf5">INSERT</span> <span style="color:#7fbaf5">INTO</span> dbo<span style="color:#56b6c2">.</span>Expected
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span><span><span style="color:#56b6c2">(</span>DisplayName<span style="color:#56b6c2">,</span>NumberOfBadges<span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span><span><span style="color:#7fbaf5">VALUES</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span><span>	<span style="color:#56b6c2">(</span><span style="color:#82cc6a">&#39;Jon Skeet&#39;</span><span style="color:#56b6c2">,</span>		<span style="color:#56b6c2">9</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span><span>	<span style="color:#56b6c2">(</span><span style="color:#82cc6a">&#39;Marc Gravell&#39;</span><span style="color:#56b6c2">,</span>	<span style="color:#56b6c2">4</span><span style="color:#56b6c2">),</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span><span>	<span style="color:#56b6c2">(</span><span style="color:#82cc6a">&#39;JaredPar&#39;</span><span style="color:#56b6c2">,</span>		<span style="color:#56b6c2">3</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span><span><span style="color:#3e4460">/* ACT STAGE */</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span><span><span style="color:#7fbaf5">INSERT</span> <span style="color:#7fbaf5">INTO</span> dbo<span style="color:#56b6c2">.</span>Actual
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span><span>	<span style="color:#7fbaf5">EXEC</span> dbo<span style="color:#56b6c2">.</span>GetUsersWithMostBadges <span style="color:#bc74c4">@</span>featureflag <span style="color:#bc74c4">=</span> <span style="color:#56b6c2">0</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span><span><span style="color:#3e4460">/* ASSERT STAGE */</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65</span><span><span style="color:#7fbaf5">EXEC</span> tSQLt<span style="color:#56b6c2">.</span>AssertEqualsTable
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66</span><span>	<span style="color:#bc74c4">@</span>Expected <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;dbo.Expected&#39;</span><span style="color:#56b6c2">,</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67</span><span>	<span style="color:#bc74c4">@</span>Actual <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;dbo.Actual&#39;</span><span style="color:#56b6c2">,</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68</span><span>	<span style="color:#bc74c4">@</span>FailMsg <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;Our test failed!&#39;</span>
+</span></span></code></pre></div><br>
+<br>
+<h3 id="using-redgate-sql-test---navigation">Using Redgate SQL Test - Navigation</h3>
+<p>Now that we have both our Stored Procedure and Unit Test, we can open up Redgate SQL Test within SSMS:</p>
+<img src="/posts/post_images/sqltest_0.png" alt="sql test">
+<br>
+<br>
+<br>
+<p>In my environment, this opens a window that looks like this:</p>
+<img src="/posts/post_images/sqltest_1.png" alt="sql test" style="border: 2px solid black;">
+<br>
+<br>
+<ol>
+<li>Our database, StackOverflow2010, contains our test classes.</li>
+<li>Our schemas contain unit tests.</li>
+<li>Our unit tests reside within the &rsquo;tests&rsquo; schema.</li>
+</ol>
+<br>
+<br>
+<p>The best part? We can run our tests with a single click! Even better, we can run tests at different scopes within the database.</p>
+<p>To do this, simply use the right-click context menu:</p>
+<img src="/posts/post_images/sqltest_2.png" alt="sql test" style="border: 2px solid black;">
+<br>
+<br>
+<p>Using this process, we can:</p>
+<ol>
+<li>Run all tests within the database.</li>
+<li>Run all tests within the &rsquo;tests&rsquo; schema.</li>
+<li>Run individual unit tests.</li>
+</ol>
+<br>
+<br>
+<h3 id="using-redgate-sql-test---running-tests">Using Redgate SQL Test - Running Tests</h3>
+<p>As shown, the GUI allows us to run unit tests easily with a single click. After running the GetUsersWithMostBadges test, we see the following:</p>
+<img src="/posts/post_images/sqltest_3.png" alt="sql test" style="border: 2px solid black;">
+<br>
+<br>
+<p>A green tick confirms the unit test has passed.
+This process mirrors how we&rsquo;ve been executing tests previously:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> tsqlt<span style="color:#56b6c2">.</span>Run <span style="color:#bc74c4">@</span>TestName <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;[tests].[test GetUsersWithMostBadges]&#39;</span>
+</span></span></code></pre></div><br>
+<p>The Test Output window provides additional details, including execution results and diagnostic messages:</p>
+<img src="/posts/post_images/sqltest_4.png" alt="sql test" style="border: 2px solid black;">
+<br>
+<br>
+<br>
+<br>
+<h3 id="using-redgate-sql-test---code-coverage">Using Redgate SQL Test - Code Coverage</h3>
+<p>Next, I&rsquo;ll highlight one of my favorite features in Redgate SQL Test: code coverage.
+&ldquo;Code Coverage&rdquo; as a concept within unit testing is exactly what you probably think it is.</p>
+<blockquote>
+<p>&ldquo;How much of my code is covered by my unit test?&rdquo;</p></blockquote>
+<p>This feature of SQL Test is very powerful and gives us a fantastic tool to use when we want to ensure all of our code is &lsquo;covered&rsquo; by unit tests. Let&rsquo;s run through an example.</p>
+<p>Let&rsquo;s run our unit test again and navigate to the &lsquo;Code Coverage&rsquo; tab in SQL Test:</p>
+<img src="/posts/post_images/sqltest_5.png" alt="sql test" style="border: 2px solid black;">
+<br>
+<br>
+<p>Before moving on, I want to highlight a couple of key points from the above screenshot, within the Code Coverage tab:</p>
+<ul>
+<li>Under the Object Name column header, we can see our current Stored Procedure - dbo.GetUsersWithMostBadges. All of the other entries are items that exist within this database.</li>
+<li>This procedure has three statements, and two of them are covered by our unit test (remember this, dear reader)</li>
+<li>This gives us 66.67% code coverage</li>
+</ul>
+<br>
+<p>Clicking the object name link takes us to the code for the underlying procedure:</p>
+<img src="/posts/post_images/sqltest_6.png" alt="sql test" style="border: 2px solid black;">
+<br>
+<br>
+<p>As shown above, the lines of code in green are covered by our associated unit test. Variable declarations and BEGIN/END keywords are intentionally excluded, as tSQLt does not consider them.
+The green-highlighted lines indicate code executed as part of the associated unit test.</p>
+<p>However, we can see that one line - CREATE TABLE #logging (id INT) - is not covered by the associated unit test.
+This aligns with the previous screenshot, where SQL Test showed that three statements exist, but only two are covered by our test.</p>
+<p>As you may have noticed, the missing &lsquo;CREATE TABLE&rsquo; statement isn&rsquo;t executed because our unit test runs the procedure with <strong>@featureflag = 0</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#3e4460">/* ACT STAGE */</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#7fbaf5">INSERT</span> <span style="color:#7fbaf5">INTO</span> dbo<span style="color:#56b6c2">.</span>Actual
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>	<span style="color:#7fbaf5">EXEC</span> dbo<span style="color:#56b6c2">.</span>GetUsersWithMostBadges <span style="color:#bc74c4">@</span>featureflag <span style="color:#bc74c4">=</span> <span style="color:#56b6c2">0</span>
+</span></span></code></pre></div><p>So we need to create a new version of the unit test that calls the procedure with @featureflag = 1.</p>
+<p>Let&rsquo;s create and deploy a new unit test named &rsquo;test_GetUsersWithMostBadges2&rsquo;. In the Act stage, we&rsquo;ll call the procedure with <strong>@featureflag = 1</strong>. <br>
+Here&rsquo;s a snippet of the new unit test:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#3e4460">/* ACT STAGE */</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#7fbaf5">INSERT</span> <span style="color:#7fbaf5">INTO</span> dbo<span style="color:#56b6c2">.</span>Actual
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>	<span style="color:#7fbaf5">EXEC</span> dbo<span style="color:#56b6c2">.</span>GetUsersWithMostBadges <span style="color:#bc74c4">@</span>featureflag <span style="color:#bc74c4">=</span> <span style="color:#56b6c2">1</span>
+</span></span></code></pre></div><br>
+<p>Once deployed, we can refresh the &rsquo;tests&rsquo; schema in SQL Test to view our new test GetUsersWithMostBadges2:</p>
+<img src="/posts/post_images/sqltest_7.png" alt="sql test" style="border: 2px solid black;">
+<br>
+<br>
+<br>
+<p>Let&rsquo;s execute the new unit test. Once it&rsquo;s run, within the Code Coverage tab, we can see that all three statements are now covered, achieving 100% coverage:</p>
+<img src="/posts/post_images/sqltest_8.png" alt="sql test" style="border: 2px solid black;">
+<br>
+<br>
+<br>
+<p>Clicking the linked stored procedure name takes us to the corresponding procedure code, showing that the previously missing coverage is now resolved:</p>
+<img src="/posts/post_images/sqltest_9.png" alt="sql test" style="border: 2px solid black;">
+<br>
+<br>
+<br>
+<br>
+<h3 id="recap">Recap</h3>
+<p>Today, we covered Redgate SQL Test (pun totally intended). We explored a small yet powerful part of this tool’s functionality.
+As with most Redgate tooling, it really makes life easier. With its intuitive GUI, we can quickly run tests, assess coverage, and identify gaps where tests are missing.</p>
+<p>That brings us to the end of this series, for now. I do hope you have enjoyed this series as much as I have had creating it. It&rsquo;s been great fun getting back into Unit Testing within SQL Server.</p>
+<p>See you in the next post!</p>
+<br>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M4 0h8s2 0 4 2l15 15s2 2 0 4L21 31s-2 2-4 0L2 16s-2-2-2-4V3s0-3 4-3m3 10a3 3 0 0 0 0-6 3 3 0 0 0 0 6"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/sql/" rel="tag">sql</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/tsql/" rel="tag">tsql</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/redgate/" rel="tag">redgate</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Lee Brownhill avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">Author: Lee Brownhill</span>
+	</div>
+	<div class="authorbox__description">
+		Lee Brownhill is a SQL Server Professional. He enjoys making SQL Server go faster
+	</div>
+</div>
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2025 Lee Brownhill.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>
