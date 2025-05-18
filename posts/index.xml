@@ -6,15 +6,8 @@
     <description>Recent content in Posts on Lee Brownhill&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 18 May 2025 06:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 08 May 2025 06:00:00 +0000</lastBuildDate>
     <atom:link href="https://leebrownhill.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>SQL Server Optimisation: Why Less Is More</title>
-      <link>https://leebrownhill.github.io/posts/6_sqloptimisationwhylessismore/</link>
-      <pubDate>Sun, 18 May 2025 06:00:00 +0000</pubDate>
-      <guid>https://leebrownhill.github.io/posts/6_sqloptimisationwhylessismore/</guid>
-      <description>&lt;br&gt;&#xA;&lt;p&gt;One of the most important lessons, or concepts I have learned regarding performance tuning, was the concept of breaking things down.&#xA;Who knew? The experts were right all along when they said, &amp;ldquo;If you&amp;rsquo;re confused by the query, SQL probably is too&amp;rdquo;.&lt;/p&gt;</description>
-    </item>
     <item>
       <title>SQL Unit Testing Using tSQLt: Part 5</title>
       <link>https://leebrownhill.github.io/posts/5_sqlunittestingpart5/</link>
