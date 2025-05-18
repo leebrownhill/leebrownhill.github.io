@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>SQL Server Optimisation: Why Less Is More - Lee Brownhill&#39;s Blog</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="A blog post discussing the merits of minimising your SQL Server code to improve not only readability but also performance">
-		<meta property="og:url" content="https://leebrownhill.github.io/posts/6_sqloptimisationwhylessismore/">
+		<meta property="og:url" content="http://localhost:1313/posts/6_sqloptimisationwhylessismore/">
   <meta property="og:site_name" content="Lee Brownhill&#39;s Blog">
   <meta property="og:title" content="SQL Server Optimisation: Why Less Is More">
   <meta property="og:description" content="A blog post discussing the merits of minimising your SQL Server code to improve not only readability but also performance">
@@ -29,25 +29,10 @@
 
 	<link rel="shortcut icon" href="/favicon.ico">
 		
-		
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
-      <script>
-        var doNotTrack = false;
-        if ( false ) {
-          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-          var doNotTrack = (dnt == "1" || dnt == "yes");
-        }
-        if (!doNotTrack) {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-7983PDFMXQ');
-        }
-      </script>
 
 	<meta name="author" content="Lee Brownhill">
 	<meta property="og:description" content="A blog post discussing the merits of minimising your SQL Server code to improve not only readability but also performance">
-	<meta property="og:image" content="https://leebrownhill.github.io/img/featured/tortoise.jpg">
+	<meta property="og:image" content="http://localhost:1313/img/featured/tortoise.png">
 	<meta property="og:image:type" content="img/png">
 
 </head>
@@ -138,17 +123,19 @@
 			<br>
 <p>One of the most important lessons, or concepts I have learned regarding performance tuning, was the concept of breaking things down.
 Who knew? The experts were right all along when they said, &ldquo;If you&rsquo;re confused by the query, SQL probably is too&rdquo;.</p>
-<br>
 <p>In today&rsquo;s post, we will cover a simple, but powerful concept when trying to write queries.
 A common sight as a DBA is long monolithic queries attempt to do ALL THE THINGS in one pass (including solving world peace at the end, powered by a table variable).
 Joking aside, the longer and more complex a query is, the greater the chance of issues arising, especially as the database grows over time. That 10,000 line stored procedure may run fine in the early days when you have 100 records in each table. However, it won&rsquo;t last.</p>
+<br>
 <h3 id="predicting-the-future">Predicting The Future</h3>
 <p>One thing that happens when you execute a query in SQL Server is that SQL quickly determines the optimal execution plan for your query. At this point, things can go wrong with large, complex queries.
 SQL must estimate multiple factors, including how many records pass through the query at different stages of dataset processing. The more datasets being rendered, the more logic there is, the more complex the joins; the more pushed SQL is going to be for making good judgement calls within that tiny window of time.</p>
+<br>
 <h3 id="divide-and-conquer">Divide And Conquer</h3>
 <p>Fear not, intrepid reader - we can assist SQL in making smarter decisions. There is a concept which can help us here called &lsquo;materialising&rsquo; datasets.
 We can take an approach that guides SQL as it rapidly makes judgement calls about retrieving the tables and columns you’ve joined.
 Minimising the number of rows we need to work with as quickly as possible, as early as possible, can have fantastic effects on your query&rsquo;s performance.</p>
+<br>
 <h3 id="demo-setting-the-stage">Demo: Setting The Stage</h3>
 <p>Lets do a demo to show what I mean. I will be using:</p>
 <ul>
@@ -273,6 +260,7 @@ You don&rsquo;t need to understand it all -  you don&rsquo;t even need to read i
 <li>Look for repeated work or the repeated accessing of objects: The old adage is correct: the fastest query is the one you don&rsquo;t run. Too often I will see queries hitting the same table, several times in different ways when just one pass of the object would have done.</li>
 </ul>
 <p>Within the mess that is our demo query above, there are two aspects which I would like to address:</p>
+<br>
 <h4 id="1-accessing-the-dbousers-table---many-times">1 Accessing the dbo.Users table - many times</h4>
 <p>We are repeatedly accessing the dbo.Users table to check that if corresponding post has a user with or without a website:</p>
 <div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#3e4460">-- Example 1
@@ -295,10 +283,11 @@ You don&rsquo;t need to understand it all -  you don&rsquo;t even need to read i
 <li>Materialising the dataset into a temporary table instead of using a Common Table Expression (CTE), for example, is key. This gives us a dataset which is &lsquo;static&rsquo; and does not need to be rendered each time it&rsquo;s called. Statistics are also used with temporary objects which will further aid SQL to make better judgement calls when allocating resource, as it should have a decent idea of how many records the temporary table holds.</li>
 <li>We could even index the temporary table, should we need to.</li>
 </ul>
+<br>
 <h4 id="2-rendering-the-dboposts-data---all-the-ways-all-the-time">2 Rendering the dbo.Posts data - all the ways, all the time</h4>
 <p>In a similar vein to the issue with the Users table, we are rendering information from the dbo.Posts table. We have multiple CTEs rendering Posts information, based on whether it&rsquo;s a question or answer.
 Further down, we reassemble this collected information using a UNION to bring the multiple datasets back together.</p>
-<p>Issue 1 : Repeated dataset renders for questions and answers</p>
+<p><strong>Issue 1 : Repeated dataset renders for questions and answers</strong></p>
 <div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#3e4460">-- Example 1
 </span></span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#3e4460"></span><span style="color:#7fbaf5">WITH</span> GetQuestions <span style="color:#7fbaf5">AS</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#56b6c2">(</span>
@@ -323,7 +312,7 @@ Further down, we reassemble this collected information using a UNION to bring th
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>	<span style="color:#7fbaf5">WHERE</span> p<span style="color:#56b6c2">.</span>PostTypeId <span style="color:#bc74c4">=</span> <span style="color:#56b6c2">2</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>	<span style="color:#7fbaf5">AND</span> <span style="color:#7fbaf5">EXISTS</span> <span style="color:#56b6c2">(</span><span style="color:#7fbaf5">SELECT</span> <span style="color:#56b6c2">1</span> <span style="color:#7fbaf5">FROM</span> dbo<span style="color:#56b6c2">.</span>Users u <span style="color:#7fbaf5">WHERE</span> p<span style="color:#56b6c2">.</span>OwnerUserId <span style="color:#bc74c4">=</span> u<span style="color:#56b6c2">.</span>Id <span style="color:#7fbaf5">AND</span> u<span style="color:#56b6c2">.</span>WebsiteUrl <span style="color:#bc74c4">&lt;&gt;</span> <span style="color:#82cc6a">&#39;&#39;</span><span style="color:#56b6c2">)</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span><span style="color:#56b6c2">)</span>
-</span></span></code></pre></div><p>Issue 2 : Unnecessary dataset combining</p>
+</span></span></code></pre></div><p><strong>Issue 2 : Unnecessary dataset combining</strong></p>
 <div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>	<span style="color:#7fbaf5">SELECT</span> 
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>		GetQuestions<span style="color:#56b6c2">.</span>Q<span style="color:#56b6c2">,</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>		GetQuestions<span style="color:#56b6c2">.</span>Title<span style="color:#56b6c2">,</span>
@@ -388,21 +377,32 @@ However, it&rsquo;s really not uncommon to see this type of process in the real 
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span>            <span style="color:#7fbaf5">THEN</span> <span style="color:#56b6c2">1</span> <span style="color:#7fbaf5">ELSE</span> <span style="color:#56b6c2">0</span> <span style="color:#7fbaf5">END</span><span style="color:#56b6c2">)</span> <span style="color:#7fbaf5">AS</span> TotalAnswersWithoutURL
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span><span style="color:#7fbaf5">FROM</span> dbo<span style="color:#56b6c2">.</span>Posts p
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span><span style="color:#7fbaf5">INNER</span> <span style="color:#7fbaf5">JOIN</span> <span style="color:#bc74c4">#</span>UserDetail u <span style="color:#7fbaf5">ON</span> p<span style="color:#56b6c2">.</span>OwnerUserId <span style="color:#bc74c4">=</span> u<span style="color:#56b6c2">.</span>UserId
-</span></span></code></pre></div><p>Sure, you will just have to take my word for it here (or do the demo yourself), but just for completeness, here are the outputs of query 1 and 2:</p>
-<p>Query 1 Output -
-[IMAGE]</p>
-<p>Query 2 Output -
-[IMAGE]</p>
+</span></span></code></pre></div><br>
+<p>Sure, you will just have to take my word for it here (or do the demo yourself), but just for completeness, here are the outputs of query 1 and 2:</p>
+<p>Query 1 Output - <br></p>
+<img src="/posts/post_images/results_4.png" alt="results" style="border: 0px solid black;">
+<br>
+<br>
+<p>Query 2 Output - <br></p>
+<img src="/posts/post_images/results_5.png" alt="results" style="border: 0px solid black;">
+<br>
+<br>
+<br>
+<br>
 <h3 id="does-it-run-better">Does It Run Better?</h3>
 <p>Why yes, good sir, of course.</p>
-<p>Using STATISTICS IO and TIME, we have the following:</p>
+<p>Using the output from STATISTICS IO and TIME, we have the following:</p>
 <ul>
 <li>Logical reads are down by 74%</li>
 <li>Total CPU time spent is down by 72%</li>
 <li>Total elapsed time is down by 68%</li>
 </ul>
-<p>[IMAGE]</p>
+<img src="/posts/post_images/stats_0.png" alt="results" style="border: 1px solid black;">
+<br>
+<br>
+<br>
 <p>Thanks for reading!</p>
+<br>
 		</div>
 		<footer class="post__footer">
 			
