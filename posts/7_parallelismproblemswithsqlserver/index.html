@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Parallelism Problems within SQL Server - Lee Brownhill&#39;s Blog</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Understanding SQL Server parallelism and the risks of default settings — optimise queries for better performance">
+		<meta property="og:url" content="https://leebrownhill.github.io/posts/7_parallelismproblemswithsqlserver/">
+  <meta property="og:site_name" content="Lee Brownhill&#39;s Blog">
+  <meta property="og:title" content="Parallelism Problems within SQL Server">
+  <meta property="og:description" content="Understanding SQL Server parallelism and the risks of default settings — optimise queries for better performance">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-06-03T05:00:00+00:00">
+    <meta property="article:modified_time" content="2025-06-03T05:00:00+00:00">
+    <meta property="article:tag" content="SQL">
+    <meta property="article:tag" content="Parallelism">
+    <meta property="article:tag" content="CXPACKET">
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+		
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
+
+	<meta name="author" content="Lee Brownhill">
+	<meta property="og:description" content="Understanding SQL Server parallelism and the risks of default settings — optimise queries for better performance">
+	<meta property="og:image" content="https://leebrownhill.github.io/img/featured/runners.png">
+	<meta property="og:image:type" content="img/png">
+
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	
+  	
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
+
+	<div class="container header__container">
+		
+	<div class="logo logo--mixed">
+		<a class="logo__link" href="/" title="Lee Brownhill&#39;s Blog" rel="home">
+			<div class="logo__item logo__imagebox">
+					<img class="logo__img" src="/img/avatar.png">
+				</div><div class="logo__item logo__text">
+					<div class="logo__title">Lee Brownhill&#39;s Blog</div>
+					<div class="logo__tagline">A blog about SQL Server, mostly</div>
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">blog</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/projects">
+				
+				<span class="menu__text">projects</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about">
+				
+				<span class="menu__text">about</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/contact">
+				
+				<span class="menu__text">contact</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+
+
+	
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Parallelism Problems within SQL Server</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<br>
+<h3 id="the-dangers-of-defaults">The Dangers of Defaults</h3>
+<p>Some of the defaults in earlier versions of SQL Server are less than ideal, particularly <a href="https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configure-the-cost-threshold-for-parallelism-server-configuration-option?view=sql-server-ver17">Cost Threshold For Parallelism</a> (CTFP) and <a href="https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configure-the-max-degree-of-parallelism-server-configuration-option?view=sql-server-ver17">Max Degree Of Parallelism</a> (MAXDOP)</p>
+<p>Sure, things have improved in later versions. For example, since SQL Server 2019 the installer now prompts you to change MAXDOP.
+However, its still a problem for many workloads, I see this issue regularly across multiple client environments.
+<br></p>
+<p>One of the most common settings I see left at the defaults are CTFP and MAXDOP .</p>
+<p>Environments like these often suffer from:</p>
+<ul>
+<li>Too many (unecessary) worker threads spinning up with each query</li>
+<li>Uneven worker thread distribution</li>
+<li>Expensive (unnecessary) disk spills</li>
+<li>Excessive waiting on a single core when one thread carries most of the workload</li>
+</ul>
+<p>Leaving cost threshold for parallelism and maxdop at their defaults is asking for trouble - and I am going to show why.</p>
+<br>
+<br>
+<h3 id="unused-worker-threads-example">Unused Worker Threads Example</h3>
+<p>For this example, I have set my CTFP and MAXDOP to the defaults (on anything pre SQL 2019):</p>
+<img src="/posts/post_images/parallelism_3.png" alt="parallelism settings" style="border: 1px solid black;">
+<br>
+<br>
+<br>
+<p>For this demo, we are using the larger Stack Overflow database. Below is our simple query:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">SELECT</span> b<span style="color:#56b6c2">.</span>Id<span style="color:#56b6c2">,</span> b<span style="color:#56b6c2">.</span>UserId
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#7fbaf5">FROM</span> dbo<span style="color:#56b6c2">.</span>Badges b
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#7fbaf5">WHERE</span> b<span style="color:#56b6c2">.</span>Name <span style="color:#bc74c4">=</span> N<span style="color:#82cc6a">&#39;Proofreader&#39;</span>
+</span></span></code></pre></div><br>
+<p>Here is the execution plan it generates:</p>
+<img src="/posts/post_images/execution_plan.png" alt="execution plan">
+<br>
+<br>
+<p>As you can see, we have a parallel icon on every operator, which indicates this query went parallel across multiple worker threads. That&rsquo;s good, right? Well, not quite&hellip;</p>
+<br>
+<p>Let&rsquo;s examine how the work was distributed across those threads for one of the operators:</p>
+<img src="/posts/post_images/execution_plan_1.png" alt="execution plan">
+<br>
+<br>
+<p>We spun up eight worker threads for this query (meaning it ran in parallel). However, the workload distribution wasn’t exactly balanced. Only threads two and three actually did any work. Sad trombone 🎺</p>
+<br>
+<br>
+<h3 id="the-problem-with-uneven-worker-threads">The Problem with Uneven Worker Threads</h3>
+<p>As we&rsquo;ve seen, just because a query goes &ldquo;<em>parallel</em>&rdquo; across multiple threads, doesn’t guarantee that work goes across those threads evenly. Some of those threads may end up with zero tasks to do, whilst a couple of the threads have all the work to do.</p>
+<p>In our execution plan, when this parallelism operator:</p>
+<img src="/posts/post_images/parallelism_4.png" alt="parallelism on operator" style="width: 210px; height: auto;">
+<br>
+<br>
+<br>
+<p>appears on the far left, it means that all operators to its right have executed in parallel. This is indicated by the arrows on each operator:</p>
+<img src="/posts/post_images/parallelism_1.png" alt="parallelism on operator" style="width: 400px; height: auto;">      
+<p><em>go faster stripes</em></p>
+<br>
+<p>In our execution plan, all the operators apparently went &lsquo;parallel&rsquo;:</p>
+<img src="/posts/post_images/execution_plan_2.png" alt="execution plan">
+<br>
+<br>
+<br>
+<p>However, in this case, this also means that each of those operators also had unevenly distributed worker thread allocation. For each of the operators, we see the same imbalance in workload distribution:</p>
+<img src="/posts/post_images/execution_plan_3.png" alt="execution plan">
+<br>
+<br>
+<p>The Key Lookup operator exhibits the same skewed worker thread distribution as the other operators. However, once the process reaches the Parallelism operator, the workload is reorganised.</p>
+<br>
+<p>Now, let&rsquo;s add an ORDER BY to our query, as I want to get an operator in our execution which gets a <a href="https://techcommunity.microsoft.com/blog/sqlserver/understanding-sql-server-memory-grant/383595">memory grant</a>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">SELECT</span> b<span style="color:#56b6c2">.</span>Id<span style="color:#56b6c2">,</span> b<span style="color:#56b6c2">.</span>UserId
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#7fbaf5">FROM</span> dbo<span style="color:#56b6c2">.</span>Badges b
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#7fbaf5">WHERE</span> b<span style="color:#56b6c2">.</span>Name <span style="color:#bc74c4">=</span> N<span style="color:#82cc6a">&#39;Proofreader&#39;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#7fbaf5">ORDER</span> <span style="color:#7fbaf5">BY</span> b<span style="color:#56b6c2">.</span>UserId <span style="color:#7fbaf5">ASC</span>
+</span></span></code></pre></div><br>
+<p>This generates the following execution plan, now with a sort operator:</p>
+<img src="/posts/post_images/execution_plan_4.png" alt="execution plan">
+<br>
+<br>
+<br>
+<p>Once again, our query went parallel. Looking at how the work was distributed, we can see it was uneven with only two of the worker threads doing any work:</p>
+<img src="/posts/post_images/execution_plan_5.png" alt="execution plan">
+<br>
+<br>
+<br>
+<p>Clicking on the Sort operator, we can see the same two threads did all the work here too:</p>
+<img src="/posts/post_images/execution_plan_6.png" alt="execution plan">
+<br>
+<br>
+<br>
+<p>Now, let us look at the memory details of this sort operator:</p>
+<img src="/posts/post_images/execution_plan_7.png" alt="execution plan">
+<br>
+<br>
+<p>Well, would you look at that, even though we know the only threads that actually had any work to do in this plan were threads 1 and 3, the memory grant was <strong>STILL distributed evenly across all 8 threads</strong>.</p>
+<br>
+<p>Let&rsquo;s re-iterate this point, because it&rsquo;s important.</p>
+<p>When SQL decided how to execute our query, it gave the query an overall Memory Grant of 7168KB, We can see this if we hover over the SELECT operator within the plan:</p>
+<img src="/posts/post_images/memory_grant_0.png" alt="memory grant" style="border: 1px solid black; width: 400px; height: auto;">
+<br>
+<br>
+<br>
+<p>That Memory Grant was used by the SORT operator, and an amount memory was distributed &rsquo;evenly&rsquo; across the eight worker threads even though the only threads that needed it were threads 1 and 3. <br>
+The memory for the other six threads was simply not used for anything even though - <strong>and importantly</strong> - it was still allocated to this query.</p>
+<p>In fact, this concept explains why we spilled to disk on the sort operator (indicated by the yellow exclamation mark on the operator):</p>
+<img src="/posts/post_images/execution_plan_8.png" alt="execution plan">
+<br>
+<br>
+<p>We spilled to disk because, even though the query got an adequate memory grant overall (the 7168KB), Worker threads one and three only received a small chunk of that memory grant (800 each). The rest of the memory grant was used up by the other six threads that had zero work assigned to them. Because of this, the query had to spill to disk, as there simply wasn&rsquo;t enough memory available for the two worker threads doing the work.</p>
+<br>
+<p>We could technically stop the spill to disk, by limiting the amount of worker threads in use. Let&rsquo;s add a <a href="https://learn.microsoft.com/en-us/sql/t-sql/queries/hints-transact-sql-query?view=sql-server-ver17">MAXDOP hint</a> to our query:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">SELECT</span> b<span style="color:#56b6c2">.</span>Id<span style="color:#56b6c2">,</span> b<span style="color:#56b6c2">.</span>UserId
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#7fbaf5">FROM</span> dbo<span style="color:#56b6c2">.</span>Badges b
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#7fbaf5">WHERE</span> b<span style="color:#56b6c2">.</span>Name <span style="color:#bc74c4">=</span> N<span style="color:#82cc6a">&#39;Proofreader&#39;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#7fbaf5">ORDER</span> <span style="color:#7fbaf5">BY</span> b<span style="color:#56b6c2">.</span>UserId <span style="color:#7fbaf5">ASC</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span><span style="color:#7fbaf5">OPTION</span> <span style="color:#56b6c2">(</span>MAXDOP <span style="color:#56b6c2">2</span><span style="color:#56b6c2">)</span>
+</span></span></code></pre></div><p>In the query above, we have specified a MAXDOP of 2, which will limit the query so that it only goes parallel over two cores. Of course, this is a terrible idea in theory, and I wouldn&rsquo;t recommend it for production workloads unless it made sense to.</p>
+<br>
+<p>Now, let’s look at the execution plan once more. We can see that the spill has not occurred this time on the SORT operator:</p>
+<img src="/posts/post_images/execution_plan_9.png" alt="execution plan">
+<br>
+<br>
+<br>
+<p>Looking at one of the other operators, we can see that we only used two worker threads:</p>
+<img src="/posts/post_images/execution_plan_10.png" alt="execution plan">
+<p><em>Side note: Thread 0 is the coordinating thread, so it does not behave the same way as other threads. Think of it as the &lsquo;manager&rsquo; of the other threads, distributing and organising the work.</em></p>
+<br>
+<p>If we review the memory allocation by thread on the SORT operator, we can see that the two threads this time received all of the memory allocation for this operator, which is exactly why it does not spill to disk:</p>
+<img src="/posts/post_images/execution_plan_11.png" alt="execution plan">
+<br>
+<br>
+<p>But does this help us? No, not really. We have successfully stopped the spill to disk, but what happens when the query runs and the working dataset differs drastically in size? We might actually want to go parallel across eight cores for that example.</p>
+<br>
+<br>
+<h3 id="key-takeaways">Key Takeaways</h3>
+<p>Today we looked at one of the many reasons SQL Server defaults should be changed. Things have improved in later versions of SQL where the installer prompts you to amend some of these settings.
+However, on versions prior to this, it&rsquo;s such a common problem.</p>
+<p>I see many client environments where the settings for MAXDOP and CTFP are still at their defaults and queries are going wild in regards to going parallel.</p>
+<p>Everyone has their own takes on what these should be set to initially and it will normally vary depending on all the factors involved such as server size and workload size. But the main takeaway is to <strong>not leave them at CTFP = 5 and MAXDOP = 0</strong></p>
+<p>As a general rule of thumb, I would always choose to update the two mentioned settings to something more sensible, such as:</p>
+<ul>
+<li>CTFP: 30 to 50 (<em>as a starting point</em>)</li>
+<li>MAXDOP: <a href="https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configure-the-max-degree-of-parallelism-server-configuration-option?view=sql-server-ver17">Official recommendations</a></li>
+</ul>
+<br>
+<p>Thanks for reading!</p>
+<br>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M4 0h8s2 0 4 2l15 15s2 2 0 4L21 31s-2 2-4 0L2 16s-2-2-2-4V3s0-3 4-3m3 10a3 3 0 0 0 0-6 3 3 0 0 0 0 6"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/sql/" rel="tag">SQL</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/parallelism/" rel="tag">Parallelism</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/cxpacket/" rel="tag">CXPACKET</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Lee Brownhill avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">Author: Lee Brownhill</span>
+	</div>
+	<div class="authorbox__description">
+		Lee Brownhill is a SQL Server Professional. He enjoys making SQL Server go faster
+	</div>
+</div>
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2025 Lee Brownhill.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

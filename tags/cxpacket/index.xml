@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CXPACKET on Lee Brownhill&#39;s Blog</title>
+    <link>https://leebrownhill.github.io/tags/cxpacket/</link>
+    <description>Recent content in CXPACKET on Lee Brownhill&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 03 Jun 2025 05:00:00 +0000</lastBuildDate>
+    <atom:link href="https://leebrownhill.github.io/tags/cxpacket/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Parallelism Problems within SQL Server</title>
+      <link>https://leebrownhill.github.io/posts/7_parallelismproblemswithsqlserver/</link>
+      <pubDate>Tue, 03 Jun 2025 05:00:00 +0000</pubDate>
+      <guid>https://leebrownhill.github.io/posts/7_parallelismproblemswithsqlserver/</guid>
+      <description>&lt;BR&gt; Some of the defaults in earlier versions of SQL Server are less than ideal, particularly Cost Threshold For Parallelism (CTFP) and Max Degree Of Parallelism (MAXDOP).&#xA;&lt;BR&gt; &lt;BR&gt;&#xA;Sure, things have improved in later versions. For example, since SQL Server 2019 the installer now prompts you to change MAXDOP. However, its still a problem for many workloads&amp;hellip;</description>
+    </item>
+  </channel>
+</rss>

@@ -3,12 +3,12 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>404 Page not found - Lee Brownhill&#39;s Blog</title>
+	<title>Parallelism - Lee Brownhill&#39;s Blog</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="">
-		<meta property="og:url" content="https://leebrownhill.github.io/404.html">
+		<meta property="og:url" content="https://leebrownhill.github.io/tags/parallelism/">
   <meta property="og:site_name" content="Lee Brownhill&#39;s Blog">
-  <meta property="og:title" content="404 Page not found">
+  <meta property="og:title" content="Parallelism">
   <meta property="og:description" content="Lee Brownhill&#39;s Blog about mostly SQL Server">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="website">
@@ -20,6 +20,7 @@
 
 	<link rel="stylesheet" href="/css/style.css">
 	
+	<link rel="alternate" type="application/rss+xml" href="/tags/parallelism/index.xml" title="Lee Brownhill's Blog">
 
 	<link rel="shortcut icon" href="/favicon.ico">
 		
@@ -122,12 +123,32 @@
 		<div class="wrapper flex">
 			<div class="primary">
 			
-<main class="main" role="main">
-	<div class="warning">
-		<h1 class="warning__headline">404. Page not found</h1>
-		<p class="warning__text">The page you were looking for appears to have been moved, deleted or does not exist. Please, use search or go to <a href="/">main page</a>.</p>
+<main class="main list" role="main">
+	<header class="main__header">
+		<h1 class="main__title">Parallelism</h1>
+	</header><article class="list__item post">
+	
+	<figure class="list__thumbnail thumbnail">
+		<a class="thumbnail__link" href="/posts/7_parallelismproblemswithsqlserver/">
+		<img class="thumbnail__image" src="/img/featured/runners.png" alt="Parallelism Problems within SQL Server">
+		</a>
+	</figure>
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/posts/7_parallelismproblemswithsqlserver/" rel="bookmark">
+			Parallelism Problems within SQL Server
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<BR> Some of the defaults in earlier versions of SQL Server are less than ideal, particularly Cost Threshold For Parallelism (CTFP) and Max Degree Of Parallelism (MAXDOP).
+<BR> <BR>
+Sure, things have improved in later versions. For example, since SQL Server 2019 the installer now prompts you to change MAXDOP. However, its still a problem for many workloads&hellip;
 	</div>
+</article>
 </main>
+
 
 			</div>
 			
