@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Redgate SQLTest and SQLCop - Lee Brownhill&#39;s Blog</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="SQLCop, part of Redgate SQL Test, provides over 100 tSQLt-based tests to standardise databases, enforce best practices, and detect common issues. It helps teams adopt structured SQL Server unit testing efficiently">
+		<meta property="og:url" content="http://localhost:1313/posts/8_redgatesqltestandsqlcop/">
+  <meta property="og:site_name" content="Lee Brownhill&#39;s Blog">
+  <meta property="og:title" content="Redgate SQLTest and SQLCop">
+  <meta property="og:description" content="SQLCop, part of Redgate SQL Test, provides over 100 tSQLt-based tests to standardise databases, enforce best practices, and detect common issues. It helps teams adopt structured SQL Server unit testing efficiently">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-06-10T05:00:00+00:00">
+    <meta property="article:modified_time" content="2025-06-10T05:00:00+00:00">
+    <meta property="article:tag" content="Sql">
+    <meta property="article:tag" content="Redgate">
+    <meta property="article:tag" content="Unit Testing">
+    <meta property="article:tag" content="SQLCop">
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+
+	<meta name="author" content="Lee Brownhill">
+	<meta property="og:description" content="SQLCop, part of Redgate SQL Test, provides over 100 tSQLt-based tests to standardise databases, enforce best practices, and detect common issues. It helps teams adopt structured SQL Server unit testing efficiently">
+	<meta property="og:image" content="http://localhost:1313/img/featured/spy.png">
+	<meta property="og:image:type" content="img/png">
+
+	
+  	
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
+
+	<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "rtl5c4wqh1");
+	</script>
+
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	
+
+	<div class="container header__container">
+		
+	<div class="logo logo--mixed">
+		<a class="logo__link" href="/" title="Lee Brownhill&#39;s Blog" rel="home">
+			<div class="logo__item logo__imagebox">
+					<img class="logo__img" src="/img/avatar.png">
+				</div><div class="logo__item logo__text">
+					<div class="logo__title">Lee Brownhill&#39;s Blog</div>
+					<div class="logo__tagline">A blog about SQL Server, mostly</div>
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">blog</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/projects">
+				
+				<span class="menu__text">projects</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about">
+				
+				<span class="menu__text">about</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/contact">
+				
+				<span class="menu__text">contact</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+
+
+	
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Redgate SQLTest and SQLCop</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<br>
+<h3 id="what-is-it">What is it?</h3>
+<p>As part of <a href="https://www.red-gate.com/products/sql-test/">Redgate SQL Test</a>, you get SQLCop (<em>although the tests themselves are freely available to use</em>).
+<br>
+SQLCop is a set of over 100 open-source tests for your databases.
+The tests were originally maintained by <a href="https://blogs.lessthandot.com/">George Mastros</a> but are now managed by <a href="https://documentation.red-gate.com/sqt1/sql-cop-static-analysis-tests">Redgate Software</a>.</p>
+<p>These tests cover several areas and serve to provide a level of standardisation, uniformity, and security to your database. The areas covered include:</p>
+<ul>
+<li>Code</li>
+<li>Columns</li>
+<li>Tables and Views</li>
+<li>Indexes</li>
+<li>General Configuration</li>
+<li>Health</li>
+</ul>
+<br>
+<p>What&rsquo;s really cool, is that you can even contribute to the tests yourself here -  <a href="https://github.com/red-gate/SQLCop">SQLCop Github</a>.</p>
+<p>I find these tests great for standardising database configurations across the board. Additionally, it&rsquo;s a great introduction to tSQLt, as these tests can be installed and run all from within a GUI with a handful of clicks.
+It&rsquo;s a great way to get started writing your own tSQLt tests. Additionally, you can review the tSQLt Intro series we covered <a href="https://www.leebrownhill.com/tags/unit-testing/">here</a>.
+You have no excuses 🙂</p>
+<br>
+<h3 id="how-can-we-get-it">How can we get it?</h3>
+<p>The first thing we need to do is install the tSQLt framework to our chosen database.
+Assuming you have Redgate SQL Test installed, open it up within SSMS.
+If you haven’t installed it into any database yet, you will see this. Hit the &lsquo;Add Database to SQL Test&rsquo; option:</p>
+<img src="/posts/post_images/redgatesqltest_0.png" alt="Redgate SQL Test" style="border: 1px solid black;width: 700px; height: auto;">
+<br>
+<br>
+<br>
+<p>You will then simply select the database you wish to add, followed by clicking the &lsquo;Add Database&rsquo; button:</p>
+<img src="/posts/post_images/redgatesqltest_1.png" alt="Redgate SQL Test" style="width: 500px; height: auto;">
+<br>
+<br>
+<br>
+<p>You will now get a confirmation of what will happen. As you can see below, several changes will need to be made to your database, such as enabling SQL CLR and turning Trustworthy ON.
+Additionally, you can see the checkbox to automatically add the SQLCop tests directly to your chosen database:</p>
+<img src="/posts/post_images/redgatesqltest_2.png" alt="Redgate SQL Test" style="width: 700px; height: auto;">
+<br>
+<br>
+<br>
+<p>Once everything is complete, you should see the following screen:</p>
+<img src="/posts/post_images/redgatesqltest_3.png" alt="Redgate SQL Test" style="width: 600px; height: auto;">
+<br>
+<br>
+<br>
+<p>You should now see something like this, which means you&rsquo;re good to go:</p>
+<img src="/posts/post_images/redgatesqltest_4.png" alt="Redgate SQL Test" style="border: 1px solid black;">
+<br>
+<br>
+<br>
+<h3 id="how-do-we-use-it">How do we use it</h3>
+<br>
+<p>Expanding the SQLCop branch, you will see all the available tests:</p>
+<img src="/posts/post_images/redgatesqltest_5.png" alt="Redgate SQL Test" style="border: 1px solid black;">
+<p><em>(there are many more than displayed on this screen shot!)</em></p>
+<br>
+<br>
+<br>
+<p>I will now run all of the tests against my databases. I currently have these two:</p>
+<img src="/posts/post_images/redgatesqltest_6.png" alt="Redgate SQL Test">
+<br>
+<br>
+<br>
+<p>Utilising and accessing the SQLCop tests works the same way as running tests in the previous blog post here: [https://www.leebrownhill.com/posts/5_sqlunittestingpart5/]</p>
+<p>Right click on the SQLCop branch, followed by Run Tests:</p>
+<img src="/posts/post_images/redgatesqltest_7.png" alt="Redgate SQL Test" style="border: 1px solid black;">
+<br>
+<br>
+<br>
+<p>Once we have run them, you will see the outcome of the tests:</p>
+<img src="/posts/post_images/redgatesqltest_8.png" alt="Redgate SQL Test" style="border: 1px solid black;">
+<br>
+<br>
+<br>
+<p>Within the available tests, there are some incredibly useful checks that we can run against the databases on our SQL instance.
+Some of my favourites are:</p>
+<ul>
+<li>Compatibility Level – Checks for any databases that aren&rsquo;t using the latest compatibility version available for your SQL instance.</li>
+<li>Auto Update Statistics – Checks for any databases that don’t have automatic statistic updates enabled.</li>
+<li>Procedures using dynamic SQL without sp_executesql – Identifies potentially unsafe dynamic SQL calls, such as those using EXEC</li>
+</ul>
+<br>
+<h3 id="going-forward">Going Forward</h3>
+<p>SQLCop provides a valuable set of tSQLt-based tests. These tests highlight common database issues and help you enforce best-practice techniques.
+The tests serve as an excellent starting point for standardising databases within your estate.
+SQLCop serves as an excellent springboard for adopting the tSQLt framework, allowing your developers and DBAs to gradually explore unit testing in SQL Server and build their own customised tests.</p>
+<p>Thanks for reading!</p>
+<br>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M4 0h8s2 0 4 2l15 15s2 2 0 4L21 31s-2 2-4 0L2 16s-2-2-2-4V3s0-3 4-3m3 10a3 3 0 0 0 0-6 3 3 0 0 0 0 6"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/sql/" rel="tag">sql</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/redgate/" rel="tag">redgate</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/unit-testing/" rel="tag">unit testing</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/sqlcop/" rel="tag">SQLCop</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Lee Brownhill avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">Author: Lee Brownhill</span>
+	</div>
+	<div class="authorbox__description">
+		Lee Brownhill is a SQL Server Professional. He enjoys making SQL Server go faster
+	</div>
+</div>
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2025 Lee Brownhill.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>
