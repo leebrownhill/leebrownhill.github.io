@@ -6,8 +6,15 @@
     <description>Recent content in Unit Testing on Lee Brownhill&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 08 May 2025 06:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 10 Jun 2025 05:00:00 +0000</lastBuildDate>
     <atom:link href="https://leebrownhill.github.io/tags/unit-testing/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Redgate SQLTest and SQLCop</title>
+      <link>https://leebrownhill.github.io/posts/8_redgatesqltestandsqlcop/</link>
+      <pubDate>Tue, 10 Jun 2025 05:00:00 +0000</pubDate>
+      <guid>https://leebrownhill.github.io/posts/8_redgatesqltestandsqlcop/</guid>
+      <description>&lt;br&gt; As part of Redgate SQL Test, you get SQLCop &lt;br&gt; (although the tests themselves are freely available to use). &lt;br&gt; &lt;br&gt;&#xA;SQLCop is a set of over 100 open-source tests for your databases. &lt;br&gt;&#xA;The tests were originally maintained by George Mastros but are now managed by Redgate Software</description>
+    </item>
     <item>
       <title>SQL Unit Testing Using tSQLt: Part 5</title>
       <link>https://leebrownhill.github.io/posts/5_sqlunittestingpart5/</link>

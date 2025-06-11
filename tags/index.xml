@@ -6,8 +6,36 @@
     <description>Recent content in Tags on Lee Brownhill&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 03 Jun 2025 05:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 10 Jun 2025 05:00:00 +0000</lastBuildDate>
     <atom:link href="https://leebrownhill.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Redgate</title>
+      <link>https://leebrownhill.github.io/tags/redgate/</link>
+      <pubDate>Tue, 10 Jun 2025 05:00:00 +0000</pubDate>
+      <guid>https://leebrownhill.github.io/tags/redgate/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Sql</title>
+      <link>https://leebrownhill.github.io/tags/sql/</link>
+      <pubDate>Tue, 10 Jun 2025 05:00:00 +0000</pubDate>
+      <guid>https://leebrownhill.github.io/tags/sql/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>SQLCop</title>
+      <link>https://leebrownhill.github.io/tags/sqlcop/</link>
+      <pubDate>Tue, 10 Jun 2025 05:00:00 +0000</pubDate>
+      <guid>https://leebrownhill.github.io/tags/sqlcop/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Unit Testing</title>
+      <link>https://leebrownhill.github.io/tags/unit-testing/</link>
+      <pubDate>Tue, 10 Jun 2025 05:00:00 +0000</pubDate>
+      <guid>https://leebrownhill.github.io/tags/unit-testing/</guid>
+      <description></description>
+    </item>
     <item>
       <title>CXPACKET</title>
       <link>https://leebrownhill.github.io/tags/cxpacket/</link>
@@ -20,13 +48,6 @@
       <link>https://leebrownhill.github.io/tags/parallelism/</link>
       <pubDate>Tue, 03 Jun 2025 05:00:00 +0000</pubDate>
       <guid>https://leebrownhill.github.io/tags/parallelism/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>SQL</title>
-      <link>https://leebrownhill.github.io/tags/sql/</link>
-      <pubDate>Tue, 03 Jun 2025 05:00:00 +0000</pubDate>
-      <guid>https://leebrownhill.github.io/tags/sql/</guid>
       <description></description>
     </item>
     <item>
@@ -44,24 +65,10 @@
       <description></description>
     </item>
     <item>
-      <title>Redgate</title>
-      <link>https://leebrownhill.github.io/tags/redgate/</link>
-      <pubDate>Thu, 08 May 2025 06:00:00 +0000</pubDate>
-      <guid>https://leebrownhill.github.io/tags/redgate/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>Tsql</title>
       <link>https://leebrownhill.github.io/tags/tsql/</link>
       <pubDate>Thu, 08 May 2025 06:00:00 +0000</pubDate>
       <guid>https://leebrownhill.github.io/tags/tsql/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Unit Testing</title>
-      <link>https://leebrownhill.github.io/tags/unit-testing/</link>
-      <pubDate>Thu, 08 May 2025 06:00:00 +0000</pubDate>
-      <guid>https://leebrownhill.github.io/tags/unit-testing/</guid>
       <description></description>
     </item>
   </channel>
