@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Optimisation on Lee Brownhill&#39;s Blog</title>
-    <link>http://localhost:1313/tags/optimisation/</link>
+    <link>https://leebrownhill.github.io/tags/optimisation/</link>
     <description>Recent content in Optimisation on Lee Brownhill&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 19 May 2025 05:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/optimisation/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://leebrownhill.github.io/tags/optimisation/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>SQL Server Optimisation: Why Less Is More</title>
-      <link>http://localhost:1313/posts/6_sqloptimisationwhylessismore/</link>
+      <link>https://leebrownhill.github.io/posts/6_sqloptimisationwhylessismore/</link>
       <pubDate>Mon, 19 May 2025 05:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/6_sqloptimisationwhylessismore/</guid>
+      <guid>https://leebrownhill.github.io/posts/6_sqloptimisationwhylessismore/</guid>
       <description>&lt;br&gt;&#xA;&lt;p&gt;One of the most valuable lessons I&amp;rsquo;ve learned in performance tuning is the importance of breaking queries tasks into smaller, more manageable sections.&#xA;Who knew? The experts were right all along when they said, &amp;ldquo;If you&amp;rsquo;re confused by the query, SQL probably is too&amp;rdquo;.&lt;/p&gt;</description>
     </item>
   </channel>

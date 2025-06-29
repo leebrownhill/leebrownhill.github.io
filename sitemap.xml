@@ -2,106 +2,97 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/tags/community/</loc>
+    <loc>https://leebrownhill.github.io/</loc>
+    <lastmod>2025-07-01T05:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://leebrownhill.github.io/posts/</loc>
+    <lastmod>2025-07-01T05:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://leebrownhill.github.io/tags/community/</loc>
     <lastmod>2025-06-23T05:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/events/</loc>
+    <loc>https://leebrownhill.github.io/tags/events/</loc>
     <lastmod>2025-06-23T05:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/</loc>
+    <loc>https://leebrownhill.github.io/tags/sqlbits/</loc>
     <lastmod>2025-06-23T05:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/parameter-sniffing/</loc>
+    <loc>https://leebrownhill.github.io/posts/10_sqlbits2025_helpingoutandhavingfun/</loc>
     <lastmod>2025-06-23T05:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/11_paramsniffingsimpleexample/</loc>
+    <loc>https://leebrownhill.github.io/tags/</loc>
     <lastmod>2025-06-23T05:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/performance/</loc>
-    <lastmod>2025-06-23T05:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/</loc>
-    <lastmod>2025-06-23T05:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/sql/</loc>
-    <lastmod>2025-06-23T05:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/sqlbits/</loc>
-    <lastmod>2025-06-23T05:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/10_sqlbits2025_helpingoutandhavingfun/</loc>
-    <lastmod>2025-06-23T05:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/</loc>
-    <lastmod>2025-06-23T05:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/data-community/</loc>
+    <loc>https://leebrownhill.github.io/tags/data-community/</loc>
     <lastmod>2025-06-14T06:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/development/</loc>
+    <loc>https://leebrownhill.github.io/tags/development/</loc>
     <lastmod>2025-06-14T06:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/9_podcasts-speaking-and-why-now/</loc>
+    <loc>https://leebrownhill.github.io/posts/9_podcasts-speaking-and-why-now/</loc>
     <lastmod>2025-06-14T06:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/professional-growth/</loc>
+    <loc>https://leebrownhill.github.io/tags/professional-growth/</loc>
     <lastmod>2025-06-14T06:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/speaking/</loc>
+    <loc>https://leebrownhill.github.io/tags/speaking/</loc>
     <lastmod>2025-06-14T06:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/redgate/</loc>
+    <loc>https://leebrownhill.github.io/tags/redgate/</loc>
     <lastmod>2025-06-11T06:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/8_redgatesqltestandsqlcop/</loc>
+    <loc>https://leebrownhill.github.io/posts/8_redgatesqltestandsqlcop/</loc>
     <lastmod>2025-06-11T06:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/sqlcop/</loc>
+    <loc>https://leebrownhill.github.io/tags/sql/</loc>
     <lastmod>2025-06-11T06:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/unit-testing/</loc>
+    <loc>https://leebrownhill.github.io/tags/sqlcop/</loc>
     <lastmod>2025-06-11T06:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/cxpacket/</loc>
+    <loc>https://leebrownhill.github.io/tags/unit-testing/</loc>
+    <lastmod>2025-06-11T06:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://leebrownhill.github.io/tags/cxpacket/</loc>
     <lastmod>2025-06-03T05:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/parallelism/</loc>
+    <loc>https://leebrownhill.github.io/tags/parallelism/</loc>
     <lastmod>2025-06-03T05:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/7_parallelismproblemswithsqlserver/</loc>
+    <loc>https://leebrownhill.github.io/posts/7_parallelismproblemswithsqlserver/</loc>
     <lastmod>2025-06-03T05:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/optimisation/</loc>
+    <loc>https://leebrownhill.github.io/tags/optimisation/</loc>
     <lastmod>2025-05-19T05:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/performance-tuning/</loc>
+    <loc>https://leebrownhill.github.io/tags/performance-tuning/</loc>
     <lastmod>2025-05-19T05:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/6_sqloptimisationwhylessismore/</loc>
+    <loc>https://leebrownhill.github.io/posts/6_sqloptimisationwhylessismore/</loc>
     <lastmod>2025-05-19T05:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/5_sqlunittestingpart5/</loc>
+    <loc>https://leebrownhill.github.io/posts/5_sqlunittestingpart5/</loc>
     <lastmod>2025-05-08T06:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/tsql/</loc>
+    <loc>https://leebrownhill.github.io/tags/tsql/</loc>
     <lastmod>2025-05-08T06:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/4_sqlunittestingpart4/</loc>
+    <loc>https://leebrownhill.github.io/posts/4_sqlunittestingpart4/</loc>
     <lastmod>2025-04-29T06:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/3_sqlunittestingpart3/</loc>
+    <loc>https://leebrownhill.github.io/posts/3_sqlunittestingpart3/</loc>
     <lastmod>2025-04-23T06:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/2_sqlunittestingpart2/</loc>
+    <loc>https://leebrownhill.github.io/posts/2_sqlunittestingpart2/</loc>
     <lastmod>2025-04-16T06:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/1_sqlunittestingpart1/</loc>
+    <loc>https://leebrownhill.github.io/posts/1_sqlunittestingpart1/</loc>
     <lastmod>2025-04-09T06:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/about/</loc>
+    <loc>https://leebrownhill.github.io/about/</loc>
   </url><url>
-    <loc>http://localhost:1313/contact/</loc>
+    <loc>https://leebrownhill.github.io/contact/</loc>
   </url><url>
-    <loc>http://localhost:1313/projects/</loc>
+    <loc>https://leebrownhill.github.io/projects/</loc>
   </url>
 </urlset>

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Speaking on Lee Brownhill&#39;s Blog</title>
-    <link>http://localhost:1313/tags/speaking/</link>
+    <link>https://leebrownhill.github.io/tags/speaking/</link>
     <description>Recent content in Speaking on Lee Brownhill&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 14 Jun 2025 06:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/speaking/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://leebrownhill.github.io/tags/speaking/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Podcasts, Speaking, and Why I’m Doing This Now</title>
-      <link>http://localhost:1313/posts/9_podcasts-speaking-and-why-now/</link>
+      <link>https://leebrownhill.github.io/posts/9_podcasts-speaking-and-why-now/</link>
       <pubDate>Sat, 14 Jun 2025 06:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/9_podcasts-speaking-and-why-now/</guid>
+      <guid>https://leebrownhill.github.io/posts/9_podcasts-speaking-and-why-now/</guid>
       <description>&lt;br&gt; Within the professional world, I&amp;rsquo;m a firm believer in putting oneself in uncomfortable, but healthy, situations. &lt;br&gt;&lt;br&gt; Uncomfortable situations are where development and growth occur.&#xA;Sure, it&amp;rsquo;s nice knowing exactly what you&amp;rsquo;re doing some days, and you complete tasks so easily&amp;hellip;</description>
     </item>
   </channel>
