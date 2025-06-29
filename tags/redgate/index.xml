@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Redgate on Lee Brownhill&#39;s Blog</title>
-    <link>https://leebrownhill.github.io/tags/redgate/</link>
+    <link>http://localhost:1313/tags/redgate/</link>
     <description>Recent content in Redgate on Lee Brownhill&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 11 Jun 2025 06:00:00 +0000</lastBuildDate>
-    <atom:link href="https://leebrownhill.github.io/tags/redgate/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/redgate/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Redgate SQLTest and SQLCop</title>
-      <link>https://leebrownhill.github.io/posts/8_redgatesqltestandsqlcop/</link>
+      <link>http://localhost:1313/posts/8_redgatesqltestandsqlcop/</link>
       <pubDate>Wed, 11 Jun 2025 06:00:00 +0000</pubDate>
-      <guid>https://leebrownhill.github.io/posts/8_redgatesqltestandsqlcop/</guid>
+      <guid>http://localhost:1313/posts/8_redgatesqltestandsqlcop/</guid>
       <description>&lt;br&gt; As part of Redgate SQL Test, you get SQLCop &lt;br&gt; (although the tests themselves are freely available to use). &lt;br&gt; &lt;br&gt;&#xA;SQLCop is a set of over 100 open-source tests for your databases. &lt;br&gt;&#xA;The tests were originally maintained by George Mastros but are now managed by Redgate Software</description>
     </item>
     <item>
       <title>SQL Unit Testing Using tSQLt: Part 5</title>
-      <link>https://leebrownhill.github.io/posts/5_sqlunittestingpart5/</link>
+      <link>http://localhost:1313/posts/5_sqlunittestingpart5/</link>
       <pubDate>Thu, 08 May 2025 06:00:00 +0000</pubDate>
-      <guid>https://leebrownhill.github.io/posts/5_sqlunittestingpart5/</guid>
+      <guid>http://localhost:1313/posts/5_sqlunittestingpart5/</guid>
       <description>&lt;br&gt;&#xA;&lt;p&gt;Welcome back friends!&lt;/p&gt;&#xA;&lt;p&gt;During the past &lt;a href=&#34;https://www.leebrownhill.com/tags/tsql/&#34;&gt;four posts&lt;/a&gt;, we have covered the fundamental concepts regarding tSQLt, look at how far we&amp;rsquo;ve come!.&#xA;So far, everything we have done has been within SSMS using the open source framework that is tSQLt.&#xA;In this post, we&amp;rsquo;re going to take a look at some third party tooling available, harnessing the power of tSQLt.&lt;/p&gt;</description>
     </item>
   </channel>
