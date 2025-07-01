@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Parameter Sniffing: A Simple Example - Lee Brownhill&#39;s Blog</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="">
-		<meta property="og:url" content="http://localhost:1313/posts/11_paramsniffingsimpleexample/">
+	<meta name="description" content="Explore how SQL Servers parameter sensitivity can impact performance, with a clear demo showing plan reuse pitfalls and practical insights.">
+		<meta property="og:url" content="https://leebrownhill.github.io/posts/11_paramsniffingsimpleexample/">
   <meta property="og:site_name" content="Lee Brownhill&#39;s Blog">
   <meta property="og:title" content="Parameter Sniffing: A Simple Example">
-  <meta property="og:description" content="A while ago, I was working with a client who was experiencing performance issues on SQL Server 2019. We quickly isolated the problematic procedure and they asked ’this normally runs fine, why is this a problem now?’ A fair question…">
+  <meta property="og:description" content="Explore how SQL Servers parameter sensitivity can impact performance, with a clear demo showing plan reuse pitfalls and practical insights.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2025-06-23T05:00:00+00:00">
-    <meta property="article:modified_time" content="2025-06-23T05:00:00+00:00">
+    <meta property="article:published_time" content="2025-07-01T05:00:00+00:00">
+    <meta property="article:modified_time" content="2025-07-01T05:00:00+00:00">
     <meta property="article:tag" content="Parameter Sniffing">
     <meta property="article:tag" content="Performance">
     <meta property="article:tag" content="Sql">
@@ -29,10 +29,25 @@
 
 	<link rel="shortcut icon" href="/favicon.ico">
 		
+		
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
 
 	<meta name="author" content="Lee Brownhill">
-	<meta property="og:description" content="">
-	<meta property="og:image" content="http://localhost:1313/img/featured/sniff.png">
+	<meta property="og:description" content="Explore how SQL Servers parameter sensitivity can impact performance, with a clear demo showing plan reuse pitfalls and practical insights.">
+	<meta property="og:image" content="https://leebrownhill.github.io/img/featured/sniff.png">
 	<meta property="og:image:type" content="img/png">
 
 	
@@ -137,10 +152,12 @@ We quickly isolated the problematic procedure and they asked &rsquo;this normall
 A fair question.</p>
 <p>Digging deeper, I could see we were facing a Parameter Sniffing issue. When I explained this to the client, I found myself looking online to find a good example to help illustrate the concept. This got me thinking that I should probably have something on my own blog to demonstrate how this can happen, so here we are 🙂</p>
 <br>
+<p><strong>Disclaimer</strong>: There are many nuances to this topic, and this post is not intended to provide an exhaustive overview. Its purpose is to present a straightforward example to illustrate the concept.</p>
+<br>
 <br>
 <h3 id="setting-things-up">Setting things up</h3>
-<p>For this demo, we will use the large StackOverflow database (207Gb). We will create ourselves a Stored Procedure called dbo.Cecil:</p>
-<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">OR</span> <span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">PROCEDURE</span> dbo<span style="color:#56b6c2">.</span>Cecil
+<p>For this demo, we will use the large StackOverflow database (207Gb). We will create ourselves a Stored Procedure called dbo.Rincewind:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">OR</span> <span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">PROCEDURE</span> dbo<span style="color:#56b6c2">.</span>Rincewind
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#bc74c4">@</span>Badge <span style="color:#7fbaf5">AS</span> NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#56b6c2">40</span><span style="color:#56b6c2">)</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#7fbaf5">AS</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span><span style="color:#7fbaf5">BEGIN</span>
@@ -175,9 +192,9 @@ Looking at the distribution in the dbo.Badges table, some badge names have a lar
 <p>I shall explain exactly why shortly.</p>
 <br>
 <br>
-<h3 id="executing-the-procedure-1">Executing the Procedure 1</h3>
+<h3 id="executing-the-procedure---1">Executing the Procedure - 1</h3>
 <p>Now let&rsquo;s execute our procedure with the first chosen value:</p>
-<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> dbo<span style="color:#56b6c2">.</span>Cecil <span style="color:#bc74c4">@</span>Badge <span style="color:#bc74c4">=</span> N<span style="color:#82cc6a">&#39;Popular Question&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> dbo<span style="color:#56b6c2">.</span>Rincewind <span style="color:#bc74c4">@</span>Badge <span style="color:#bc74c4">=</span> N<span style="color:#82cc6a">&#39;Popular Question&#39;</span>
 </span></span></code></pre></div><p>For this run, SQL did 578,098 logical reads:</p>
 <img src="/posts/post_images/parametersniffing_1.1.png" alt="Execution Time">
 <br>
@@ -189,9 +206,9 @@ Looking at the distribution in the dbo.Badges table, some badge names have a lar
 <p>Given the current lack of indexes on this table and the high number of matching records for our badge type - this was a logical choice SQL Server made.</p>
 <br>
 <br>
-<h3 id="executing-the-procedure-2">Executing the Procedure 2</h3>
+<h3 id="executing-the-procedure---2">Executing the Procedure - 2</h3>
 <p>Next, we are going to execute the same procedure, with our other chosen input value of &lsquo;powerpoint&rsquo;:</p>
-<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> dbo<span style="color:#56b6c2">.</span>Cecil <span style="color:#bc74c4">@</span>Badge <span style="color:#bc74c4">=</span> N<span style="color:#82cc6a">&#39;powerpoint&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> dbo<span style="color:#56b6c2">.</span>Rincewind <span style="color:#bc74c4">@</span>Badge <span style="color:#bc74c4">=</span> N<span style="color:#82cc6a">&#39;powerpoint&#39;</span>
 </span></span></code></pre></div><p>For this run, SQL did 583,641 logical reads:</p>
 <img src="/posts/post_images/parametersniffing_3.1.png" alt="Execution Time">
 <br>
@@ -211,12 +228,12 @@ Looking at the distribution in the dbo.Badges table, some badge names have a lar
 </ul>
 <p>But what happens when we run the procedure with the scenarios in the opposite order? Let’s find out…</p>
 <br>
-<p>First, let’s reset things by marking the procedure for recompile. This will remove any cached plans that exist within the procedure cache, for dbo.Cecil:</p>
-<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> sys<span style="color:#56b6c2">.</span>sp_recompile <span style="color:#bc74c4">@</span>objname <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;dbo.Cecil&#39;</span>
+<p>First, let’s reset things by marking the procedure for recompile. This will remove any cached plans that exist within the procedure cache, for dbo.Rincewind:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> sys<span style="color:#56b6c2">.</span>sp_recompile <span style="color:#bc74c4">@</span>objname <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;dbo.Rincewind&#39;</span>
 </span></span></code></pre></div><p><em>Note: In theory, this simulates a server or service restart. Cached plans can (and will) be removed for other reasons, such as memory pressure</em></p>
 <br>
 <p>Now, let&rsquo;s run our procedure with the &lsquo;small&rsquo; input parameter:</p>
-<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> dbo<span style="color:#56b6c2">.</span>Cecil <span style="color:#bc74c4">@</span>Badge <span style="color:#bc74c4">=</span> N<span style="color:#82cc6a">&#39;powerpoint&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> dbo<span style="color:#56b6c2">.</span>Rincewind <span style="color:#bc74c4">@</span>Badge <span style="color:#bc74c4">=</span> N<span style="color:#82cc6a">&#39;powerpoint&#39;</span>
 </span></span></code></pre></div><p>For this run, SQL did 44 logical reads:</p>
 <img src="/posts/post_images/parametersniffing_5.1.png" alt="Execution Time">
 <br>
@@ -233,7 +250,7 @@ Looking at the distribution in the dbo.Badges table, some badge names have a lar
 <br>
 <br>
 <p>Continuing on, we will now run the procedure with the parameter that we know matches a lot more records:</p>
-<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> dbo<span style="color:#56b6c2">.</span>Cecil <span style="color:#bc74c4">@</span>Badge <span style="color:#bc74c4">=</span> N<span style="color:#82cc6a">&#39;Popular Question&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">EXEC</span> dbo<span style="color:#56b6c2">.</span>Rincewind <span style="color:#bc74c4">@</span>Badge <span style="color:#bc74c4">=</span> N<span style="color:#82cc6a">&#39;Popular Question&#39;</span>
 </span></span></code></pre></div><p>Well, this is odd - the execution this run did a whopping 31,241,807 reads. That&rsquo;s a 5,303% increase! Additionally, the run-time almost doubled
 compared to the first time we ran this scenario:</p>
 <img src="/posts/post_images/parametersniffing_8.1.png" alt="Execution Time">

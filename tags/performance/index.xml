@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Performance on Lee Brownhill&#39;s Blog</title>
-    <link>http://localhost:1313/tags/performance/</link>
+    <link>https://leebrownhill.github.io/tags/performance/</link>
     <description>Recent content in Performance on Lee Brownhill&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 23 Jun 2025 05:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/performance/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 01 Jul 2025 05:00:00 +0000</lastBuildDate>
+    <atom:link href="https://leebrownhill.github.io/tags/performance/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Parameter Sniffing: A Simple Example</title>
-      <link>http://localhost:1313/posts/11_paramsniffingsimpleexample/</link>
-      <pubDate>Mon, 23 Jun 2025 05:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/11_paramsniffingsimpleexample/</guid>
-      <description>A while ago, I was working with a client who was experiencing performance issues on SQL Server 2019.&#xA;We quickly isolated the problematic procedure and they asked &amp;rsquo;this normally runs fine, why is this a problem now?&amp;rsquo;&#xA;A fair question.</description>
+      <link>https://leebrownhill.github.io/posts/11_paramsniffingsimpleexample/</link>
+      <pubDate>Tue, 01 Jul 2025 05:00:00 +0000</pubDate>
+      <guid>https://leebrownhill.github.io/posts/11_paramsniffingsimpleexample/</guid>
+      <description>&lt;br&gt; A while ago, I was working with a client who was experiencing performance issues on SQL Server 2019.&#xA;&lt;br&gt; &lt;br&gt; We quickly isolated the problematic procedure and they asked &amp;rsquo;this normally runs fine, why is this a problem now?&amp;rsquo;&#xA;A fair question&amp;hellip;</description>
     </item>
   </channel>
 </rss>
