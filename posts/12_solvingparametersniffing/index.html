@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Parameter Sniffing: Practical Fixes That Work - Lee Brownhill&#39;s Blog</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Struggling with parameter sniffing in SQL Server? This guide explains simple, effective fixes using built-in tools and features">
+		<meta property="og:url" content="https://leebrownhill.github.io/posts/12_solvingparametersniffing/">
+  <meta property="og:site_name" content="Lee Brownhill&#39;s Blog">
+  <meta property="og:title" content="Parameter Sniffing: Practical Fixes That Work">
+  <meta property="og:description" content="Struggling with parameter sniffing in SQL Server? This guide explains simple, effective fixes using built-in tools and features">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-07-07T05:00:00+00:00">
+    <meta property="article:modified_time" content="2025-07-07T05:00:00+00:00">
+    <meta property="article:tag" content="Parameter Sniffing">
+    <meta property="article:tag" content="Performance">
+    <meta property="article:tag" content="Sql">
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+		
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
+
+	<meta name="author" content="Lee Brownhill">
+	<meta property="og:description" content="Struggling with parameter sniffing in SQL Server? This guide explains simple, effective fixes using built-in tools and features">
+	<meta property="og:image" content="https://leebrownhill.github.io/img/featured/piggy.png">
+	<meta property="og:image:type" content="img/png">
+
+	
+  	
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
+
+	<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "rtl5c4wqh1");
+	</script>
+
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	
+
+	<div class="container header__container">
+		
+	<div class="logo logo--mixed">
+		<a class="logo__link" href="/" title="Lee Brownhill&#39;s Blog" rel="home">
+			<div class="logo__item logo__imagebox">
+					<img class="logo__img" src="/img/avatar.png">
+				</div><div class="logo__item logo__text">
+					<div class="logo__title">Lee Brownhill&#39;s Blog</div>
+					<div class="logo__tagline">A blog about SQL Server, mostly</div>
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">blog</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/projects">
+				
+				<span class="menu__text">projects</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about">
+				
+				<span class="menu__text">about</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/contact">
+				
+				<span class="menu__text">contact</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+
+
+	
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Parameter Sniffing: Practical Fixes That Work</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<br>
+<h3 id="previously">Previously</h3>
+<p>In the previous post, we covered the basics of parameter sniffing with a simple demo to show what actually happens. We took a basic stored procedure and illustrated how the first plan to get cached can have severe performance implications.</p>
+<p>Parameter sensitivity is a complex topic with many subtle nuances. It would be impossible to cover them all in a single blog post - although <a href="https://mvp.microsoft.com/en-US/mvp/profile/21f1e860-3c9a-e411-93f2-9cb65495d3c4">Erland Sommarskog</a> gives it a good go in his mammoth blog post <a href="https://www.sommarskog.se/query-plan-mysteries.html">here</a>.</p>
+<p>In today&rsquo;s post, Im going to discuss some of the options we have in our toolbox when faced with Parameter Sniffing issues. As with all things in SQL Server, each option comes with its own pros and cons, so they should always be used with caution and thoroughly tested.</p>
+<p>This isn&rsquo;t an exhaustive list, however its the ones I most commonly see used out in the wild.</p>
+<br>
+<br>
+<h3 id="option-recompile">Option Recompile</h3>
+<p>The query hint <a href="https://learn.microsoft.com/en-us/sql/t-sql/queries/hints-transact-sql-query?view=sql-server-ver17#recompile">OPTION (RECOMPILE)</a> instructs SQL Server to generate a new plan, each time the procedure executes. More precisely, it tells SQL Server to consider the current parameter values (rather than relying on cached estimates) when compiling the plan. In essence, adding a recompile hint forces SQL Server to craft a fresh execution plan on every execution.</p>
+<p>However, this comes at a cost, and that cost is additional CPU usage. Additional CPU cost will be incurred each time this process happens, as SQL will not simply re-use a plan that happens to be in cache anymore. It will have to generate a new plan, and so, this costs. <br>
+With that in mind, I wouldn&rsquo;t recommend adding this query hint to a procedure that runs 1,000 times per minute, for example.
+However, if it’s a stored procedure that runs just a handful of times per minute? Sure, it’s a good solution to use in the right circumstance and has helped me out numerous times.</p>
+<br>
+<p>Two ways of implementing this query hint are either at the <strong>procedure level</strong> or <strong>statement level</strong>:</p>
+<br>
+<h5 id="at-procedure-level">At procedure level</h5>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">OR</span> <span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">PROCEDURE</span> dbo<span style="color:#56b6c2">.</span>Rincewind
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#bc74c4">@</span>Badge <span style="color:#7fbaf5">AS</span> NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#56b6c2">40</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#7fbaf5">WITH</span> RECOMPILE
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span><span style="color:#7fbaf5">AS</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span><span style="color:#7fbaf5">BEGIN</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span><span style="color:#7fbaf5">SELECT</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>	b<span style="color:#56b6c2">.</span>Name <span style="color:#7fbaf5">AS</span> <span style="color:#56b6c2">[</span>BadgeName<span style="color:#56b6c2">],</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>	b<span style="color:#56b6c2">.</span>UserId <span style="color:#7fbaf5">AS</span> <span style="color:#56b6c2">[</span>UserId<span style="color:#56b6c2">],</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>	b<span style="color:#56b6c2">.</span><span style="color:#7fbaf5">Date</span> <span style="color:#7fbaf5">AS</span> <span style="color:#56b6c2">[</span>DateAwarded<span style="color:#56b6c2">]</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span><span style="color:#7fbaf5">FROM</span> dbo<span style="color:#56b6c2">.</span>Badges b
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span><span style="color:#7fbaf5">WHERE</span> b<span style="color:#56b6c2">.</span>Name <span style="color:#bc74c4">=</span> <span style="color:#bc74c4">@</span>Badge
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span><span style="color:#7fbaf5">END</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span><span style="color:#7fbaf5">GO</span>
+</span></span></code></pre></div><br>
+<h5 id="at-statement-level">At statement level</h5>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">OR</span> <span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">PROCEDURE</span> dbo<span style="color:#56b6c2">.</span>Rincewind
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#bc74c4">@</span>Badge <span style="color:#7fbaf5">AS</span> NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#56b6c2">40</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#7fbaf5">AS</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span><span style="color:#7fbaf5">BEGIN</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span><span style="color:#7fbaf5">SELECT</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>	b<span style="color:#56b6c2">.</span>Name <span style="color:#7fbaf5">AS</span> <span style="color:#56b6c2">[</span>BadgeName<span style="color:#56b6c2">],</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>	b<span style="color:#56b6c2">.</span>UserId <span style="color:#7fbaf5">AS</span> <span style="color:#56b6c2">[</span>UserId<span style="color:#56b6c2">],</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>	b<span style="color:#56b6c2">.</span><span style="color:#7fbaf5">Date</span> <span style="color:#7fbaf5">AS</span> <span style="color:#56b6c2">[</span>DateAwarded<span style="color:#56b6c2">]</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span><span style="color:#7fbaf5">FROM</span> dbo<span style="color:#56b6c2">.</span>Badges b
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span><span style="color:#7fbaf5">WHERE</span> b<span style="color:#56b6c2">.</span>Name <span style="color:#bc74c4">=</span> <span style="color:#bc74c4">@</span>Badge <span style="color:#7fbaf5">OPTION</span> <span style="color:#56b6c2">(</span>RECOMPILE<span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span><span style="color:#7fbaf5">END</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span><span style="color:#7fbaf5">GO</span>
+</span></span></code></pre></div><p>Personally, I prefer adding the query hint at the statement level. This ensures that key metrics are still stored regarding the procedure.</p>
+<p>For example - adding it at the procedure level will mean that key metrics about the procedure, such as &rsquo;number of executions&rsquo;, will no longer be recorded or present for the procedure. For this reason, I always prefer adding it at the statement level. This ensures all the metrics are still recorded and retained (you never know when you might need them).</p>
+<br>
+<br>
+<h3 id="option-optimize-for-unknown">Option Optimize for Unknown</h3>
+<p>Another choice we could make is to use the <a href="https://learn.microsoft.com/en-us/sql/t-sql/queries/hints-transact-sql-query?view=sql-server-ver17#optimize-for-unknown">OPTIMIZE FOR UNKNOWN</a> query hint.</p>
+<p>Example usage:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">OR</span> <span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">PROCEDURE</span> dbo<span style="color:#56b6c2">.</span>Rincewind
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#bc74c4">@</span>Badge <span style="color:#7fbaf5">AS</span> NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#56b6c2">40</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#7fbaf5">AS</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span><span style="color:#7fbaf5">BEGIN</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span><span style="color:#7fbaf5">SELECT</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>	b<span style="color:#56b6c2">.</span>Name <span style="color:#7fbaf5">AS</span> <span style="color:#56b6c2">[</span>BadgeName<span style="color:#56b6c2">],</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>	b<span style="color:#56b6c2">.</span>UserId <span style="color:#7fbaf5">AS</span> <span style="color:#56b6c2">[</span>UserId<span style="color:#56b6c2">],</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>	b<span style="color:#56b6c2">.</span><span style="color:#7fbaf5">Date</span> <span style="color:#7fbaf5">AS</span> <span style="color:#56b6c2">[</span>DateAwarded<span style="color:#56b6c2">]</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span><span style="color:#7fbaf5">FROM</span> dbo<span style="color:#56b6c2">.</span>Badges b
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span><span style="color:#7fbaf5">WHERE</span> b<span style="color:#56b6c2">.</span>Name <span style="color:#bc74c4">=</span> <span style="color:#bc74c4">@</span>Badge <span style="color:#7fbaf5">OPTION</span> <span style="color:#56b6c2">(</span>OPTIMIZE <span style="color:#7fbaf5">FOR</span> <span style="color:#7fbaf5">UNKNOWN</span><span style="color:#56b6c2">)</span> 
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span><span style="color:#7fbaf5">END</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span><span style="color:#7fbaf5">GO</span>
+</span></span></code></pre></div><br>
+<p>This option is an interesting one because it will ultimately change how (or specifically what) SQL uses to predict the number of records it will encounter when executing the query.
+This query hint tells SQL to optimise for the average value passed via the parameter. To understand this concept, we&rsquo;re going to have to look at <a href="https://learn.microsoft.com/en-us/sql/relational-databases/statistics/statistics?view=sql-server-ver17">statistics</a> for a second.</p>
+<p>Normally, when we execute a parameterised query (i.e. stored procedure), SQL Server will utilise what is called the histogram for the relevant statistic:</p>
+<img src="/posts/post_images/parametersniffingfixes_1.png" alt="Statistics Output" style="border: 0px solid black;width: 800px; height: auto;">
+<br>
+<br>
+<p>As shown above, via the statistics held, SQL knows that for the value &lsquo;Popular Question&rsquo; - 7,799,304 records exist.</p>
+<br>
+<p>However, when we use OPTIMIZE FOR UNKNOWN, SQL no longer uses the histogram metric; it will use the density vector.</p>
+<img src="/posts/post_images/parametersniffingfixes_2.1.png" alt="Statistics Output" style="border: 0px solid black;width: 900px; height: auto;">
+<br>
+<br>
+<br>
+<p>Now, to predict the number of records coming back, SQL will take the number of rows in the table and multiply that by the density vector value:</p>
+<img src="/posts/post_images/parametersniffingfixes_3.png" alt="Statistics Output" style="border: 0px solid black;width: 900px; height: auto;">
+<br>
+<br>
+<br>
+<p>So, when SQL executes that query, it’s always going to predict 7,167 records are going to be read:</p>
+<img src="/posts/post_images/parametersniffingfixes_4.png" alt="Execution Plan Detail" style="border: 0px solid black;width: 800px; height: auto;">
+<br>
+<br>
+<br>
+<p>This, dear friends, <em><strong>sucks</strong></em> when considering our scenario. The last thing we would want SQL to do when using the parameter value of &lsquo;Popular Question&rsquo; is to predict just 7,167 records are going to be encountered—because we know it’s actually 7,799,304.</p>
+<p>NB – This behaviour is also the same behaviour seen when declaring a local variable within your procedure—a &rsquo;trick&rsquo; used back in the day to ultimately make SQL use the average value regarding the input parameter used.</p>
+<br>
+<br>
+<h3 id="option-optimize-for-value">Option Optimize for Value</h3>
+<p>As you would expect, the query hint <a href="https://learn.microsoft.com/en-us/sql/t-sql/queries/hints-transact-sql-query?view=sql-server-ver17#b-use-optimize-for">OPTIMIZE FOR @value</a> does exactly what you think. It tells SQL Server to generate a plan for a specific parameter value.</p>
+<p>Example usage:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#7fbaf5">CREATE</span> <span style="color:#7fbaf5">OR</span> <span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">PROCEDURE</span> dbo<span style="color:#56b6c2">.</span>Rincewind
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#bc74c4">@</span>Badge <span style="color:#7fbaf5">AS</span> NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#56b6c2">40</span><span style="color:#56b6c2">)</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#7fbaf5">AS</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span><span style="color:#7fbaf5">BEGIN</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span><span style="color:#7fbaf5">SELECT</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>	b<span style="color:#56b6c2">.</span>Name <span style="color:#7fbaf5">AS</span> <span style="color:#56b6c2">[</span>BadgeName<span style="color:#56b6c2">],</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>	b<span style="color:#56b6c2">.</span>UserId <span style="color:#7fbaf5">AS</span> <span style="color:#56b6c2">[</span>UserId<span style="color:#56b6c2">],</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>	b<span style="color:#56b6c2">.</span><span style="color:#7fbaf5">Date</span> <span style="color:#7fbaf5">AS</span> <span style="color:#56b6c2">[</span>DateAwarded<span style="color:#56b6c2">]</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span><span style="color:#7fbaf5">FROM</span> dbo<span style="color:#56b6c2">.</span>Badges b
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span><span style="color:#7fbaf5">WHERE</span> b<span style="color:#56b6c2">.</span>Name <span style="color:#bc74c4">=</span> <span style="color:#bc74c4">@</span>Badge <span style="color:#7fbaf5">OPTION</span> <span style="color:#56b6c2">(</span>OPTIMIZE <span style="color:#7fbaf5">FOR</span> <span style="color:#56b6c2">(</span><span style="color:#bc74c4">@</span>Badge <span style="color:#bc74c4">=</span> <span style="color:#82cc6a">&#39;Popular Question&#39;</span><span style="color:#56b6c2">))</span> 
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span><span style="color:#7fbaf5">END</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span><span style="color:#7fbaf5">GO</span>
+</span></span></code></pre></div><p>The above would instruct SQL to always create the best plan it can for the input parameter of &lsquo;Popular Question&rsquo;.</p>
+<p>This can be a good solution &lsquo;if&rsquo; you know your data very well and you are confident that your data is rarely changing. Hardcoding such business logic into your code is generally a bad idea. It adds technical debt to your operation and becomes yet another thing to keep tabs on and maintain over time.</p>
+<p>With that said, however, in the right scenario it can be a good fit. For example, using our demo, we know that the plan for &lsquo;Popular Question&rsquo; works well enough for both parameter values &lsquo;Popular Question&rsquo; and &lsquo;powerpoint&rsquo;, and in this isolated scenario, having the ability to say &ldquo;always give me the plan suited for large dataset&rdquo; is actually pretty useful.</p>
+<br>
+<br>
+<h3 id="query-store">Query Store</h3>
+<p><a href="https://learn.microsoft.com/en-us/sql/relational-databases/performance/monitoring-performance-by-using-the-query-store?view=sql-server-ver17">Query Store</a> first appeared in SQL Server 2016, and I, for one, am a huge fan of it.
+One of my most used features of Query Store is the ability to quickly force a particular plan. As you can imagine, this can be very useful when considering the topic at hand.</p>
+<p>Considering the demo procedure we used in the previous post, we can see that within Query Store, we have two plans present for the procedure dbo.Rincewind:</p>
+<img src="/posts/post_images/query_store2.png" alt="Execution Time">
+<br>
+<br>
+<br>
+<br>
+<p>Using Query Store, we can simply choose one of these two plans and force it to be used for future executions of the procedure. I love this feature, as it’s so easy to implement and requires zero code changes.</p>
+<br>
+<br>
+<br>
+<h3 id="sql-server-version">SQL Server Version</h3>
+<p>From SQL 2022, things got better with the introduction of <a href="https://learn.microsoft.com/en-us/sql/relational-databases/performance/parameter-sensitive-plan-optimization?view=sql-server-ver17">Parameter Sensitive Plan optimisation</a>. This new-to-SQL 2022 feature directly combats the issue of parameter sensitivity. <br>
+Sure, there are still known aspects of it which are not ideal; however, it’s definitely a step in the right direction.</p>
+<p>This feature allows SQL to cache multiple plans for a single parameterised statement (for example, a stored procedure). Each of those cached plans would be optimised for different-sized datasets, based on the value passed in via your parameter.</p>
+<p>All this is possible by using the statistics histogram to identify disparity across the affected datasets.</p>
+<p>When SQL initially compiles a stored procedure, a dispatcher plan will be created, and this dispatcher plan will map to the variations of the query.
+This diagram from <a href="https://learn.microsoft.com/en-us/sql/relational-databases/performance/parameter-sensitive-plan-optimization?view=sql-server-ver17#predicate-cardinality-range">Microsoft</a> shows the structure of this mechanism:</p>
+<br>
+<img src="/posts/post_images/parametersniffingfixes_7.png" alt="Microsoft Diagram showing Parameter Sensitive Plan optimisation" style="border: 1px solid black;width: 800px; height: auto;">
+<br>
+<br>
+<br>
+<p>Running our own demo procedure dbo.Rincewind on a SQL 2022 instance, we see this dispatcher plan within the plan cache:</p>
+<img src="/posts/post_images/parametersniffingfixes_8.png" alt="Dispatcher Plan" style="border: 0px solid black;width: 300px; height: auto;">
+<br>
+<br>
+<br>
+<p>If we look at the plan XML for the dispatcher plan, we can see this line now, which details the boundaries at play:</p>
+<img src="/posts/post_images/parametersniffingfixes_9.png" alt="Execution Plan XML" style="border: 0px solid black;width: 751px; height: auto;">
+<br>
+<br>
+<br>
+<p>This plan will identify which plan to map to, given the input parameters passed to dbo.Rincewind - pretty cool, huh?
+Using this setup, my procedure will use the more optimal plan for the input parameters given. Regardless of the order I use my two input parameters, I always get the better plan.</p>
+<p>There are some caveats, however:</p>
+<ul>
+<li>Only works with equality predicates (for example, ID = 1 and not ID &gt; 1)</li>
+<li>Only identifies up to three of the most &lsquo;at risk&rsquo; predicates. This is to avoid plan cache bloat</li>
+<li>Can incur additional resource utilisation due to the additional logic being used to determine plan choice</li>
+<li>More plans per query are now stored, which can increase plan cache size and potentially memory requirements</li>
+</ul>
+<br>
+<br>
+<h3 id="closing-thoughts">Closing Thoughts</h3>
+<p>In today&rsquo;s post, we covered some of the options you have when facing parameter sniffing issues. There are more available and some are more successful than others. However, these are the ones I see most commonly used when working with different clients.</p>
+<p>As with most things in SQL Server, it’s all about picking the correct tool for the job, at the correct time, and so I would urge you to fully understand the options available before implementing them. The last thing anyone wants to see is a 10,000-line pull request littered with <em>OPTION RECOMPILE</em>, right? 🙂</p>
+<p>Thanks for reading!</p>
+<br>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M4 0h8s2 0 4 2l15 15s2 2 0 4L21 31s-2 2-4 0L2 16s-2-2-2-4V3s0-3 4-3m3 10a3 3 0 0 0 0-6 3 3 0 0 0 0 6"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/parameter-sniffing/" rel="tag">Parameter Sniffing</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/performance/" rel="tag">Performance</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/sql/" rel="tag">SQL</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Lee Brownhill avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">Author: Lee Brownhill</span>
+	</div>
+	<div class="authorbox__description">
+		Lee Brownhill is a SQL Server Professional. He enjoys making SQL Server go faster
+	</div>
+</div>
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2025 Lee Brownhill.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>
