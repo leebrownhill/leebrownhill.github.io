@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Learning SQL Server 2025: Optimized sp_executesql - Lee Brownhill&#39;s Blog</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Explore SQL Server 2025’s OPTIMIZED_SP_EXECUTESQL feature with a hands-on demo showing how it reduces plan cache bloat and boosts query performance.">
+		<meta property="og:url" content="http://localhost:1313/posts/13_sql2025_optimized_sp_executesql/">
+  <meta property="og:site_name" content="Lee Brownhill&#39;s Blog">
+  <meta property="og:title" content="Learning SQL Server 2025: Optimized sp_executesql">
+  <meta property="og:description" content="Explore SQL Server 2025’s OPTIMIZED_SP_EXECUTESQL feature with a hands-on demo showing how it reduces plan cache bloat and boosts query performance.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-09-22T05:00:00+00:00">
+    <meta property="article:modified_time" content="2025-09-22T05:00:00+00:00">
+    <meta property="article:tag" content="SQL2025">
+    <meta property="article:tag" content="Performance">
+    <meta property="article:tag" content="Sql">
+    <meta property="article:tag" content="OPTIMIZED_SP_EXECUTESQL">
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+
+	<meta name="author" content="Lee Brownhill">
+	<meta property="og:description" content="Explore SQL Server 2025’s OPTIMIZED_SP_EXECUTESQL feature with a hands-on demo showing how it reduces plan cache bloat and boosts query performance.">
+	<meta property="og:image" content="http://localhost:1313/img/featured/SQL2025.png">
+	<meta property="og:image:type" content="img/png">
+
+	
+  	
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
+
+	<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "rtl5c4wqh1");
+	</script>
+
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	
+
+	<div class="container header__container">
+		
+	<div class="logo logo--mixed">
+		<a class="logo__link" href="/" title="Lee Brownhill&#39;s Blog" rel="home">
+			<div class="logo__item logo__imagebox">
+					<img class="logo__img" src="/img/avatar.png">
+				</div><div class="logo__item logo__text">
+					<div class="logo__title">Lee Brownhill&#39;s Blog</div>
+					<div class="logo__tagline">A blog about SQL Server, mostly</div>
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">blog</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/projects">
+				
+				<span class="menu__text">projects</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about">
+				
+				<span class="menu__text">about</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/contact">
+				
+				<span class="menu__text">contact</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+
+
+	
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Learning SQL Server 2025: Optimized sp_executesql</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<br>
+<h3 id="introduction">Introduction</h3>
+<p>I have finally started looking deeper into some of the new features of SQL Server 2025 and this post will cover the first of many planned posts around all that is new and shiny within SQL 2025.</p>
+<p>I just love it when there are new features to dive into and explore. For me, reading, interpreting and blogging is a great cycle of activity to use when learning new things. I mean, we all know the time you really get to learn about features is when you get to use them for real, against production workloads. But for now, let&rsquo;s get to it.</p>
+<br>
+<br>
+<h3 id="what-is-it">What Is It?</h3>
+<p><a href="https://learn.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-executesql-transact-sql?view=sql-server-ver17#optimized_sp_executesql">OPTIMIZED_SP_EXECUTESQL</a> is a new performance related feature within SQL 2025.
+It&rsquo;s a database level configuration which is, by default off and requires the user to explicitly enable it before you can utilise it.</p>
+<p>With OPTIMIZED_SP_EXECUTESQL enabled, SQL Server will change the way in which it processes requests using sp_executesql in a bid to do the following:</p>
+<ul>
+<li>Reduce unnecessary overhead on the SQL instance when identical batch requests are submitted via sp_executesql. This is demonstrated nicely <a href="https://youtu.be/YnhvfThUdDs?si=89jHpyvxYLa3j20U&amp;t=662">here</a>, in this <a href="https://learn.microsoft.com/en-us/shows/data-exposed/">Data() Exposed</a> video with Derek Wilson and Anna Hoffman.</li>
+<li>Reduce unnecessary plan cache bloat. For more information about what plan cache bloat actually is, check <a href="https://www.mssqltips.com/sqlservertip/8270/identify-and-clean-up-sql-server-plan-cache-bloat/">here</a>.</li>
+</ul>
+<br>
+<br>
+<h3 id="how-can-we-enable-it">How Can We Enable It?</h3>
+<p>Enabling the feature is pretty straightforward, however there is a recommendation provided by Microsoft before enabling the actual feature which I should point out here. <br>
+Microsoft recommends that if you wish to use the feature AND you have <a href="https://learn.microsoft.com/en-us/sql/relational-databases/statistics/statistics?view=sql-server-ver17#auto_update_statistics-option">automatic update statistics</a> enabled then you should ensure that ASYNC_STATS_UPDATE_WAIT_AT_LOW_PRIORITY is also enabled too.</p>
+<p>Here is a snippet from the <a href="https://learn.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-executesql-transact-sql?view=sql-server-ver17#optimized_sp_executesql">Microsoft Learn page</a>:</p>
+<p><a href="https://learn.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-executesql-transact-sql?view=sql-server-ver17#optimized_sp_executesql"> <img src="/posts/post_images/optimsed_spexecutesql_1.png" alt="Microsoft Learn Snippet"> </a></p>
+<br>
+<br>
+<p>So with that said, if you have automatic update statistics enabled, the way to turn on OPTIMIZED_SP_EXECUTESQL would be:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>USE StackOverflow<span style="color:#56b6c2">;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#7fbaf5">GO</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">DATABASE</span> SCOPED CONFIGURATION <span style="color:#7fbaf5">SET</span> ASYNC_STATS_UPDATE_WAIT_AT_LOW_PRIORITY <span style="color:#bc74c4">=</span> <span style="color:#7fbaf5">ON</span><span style="color:#56b6c2">;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#7fbaf5">GO</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span><span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">DATABASE</span> SCOPED CONFIGURATION <span style="color:#7fbaf5">SET</span> OPTIMIZED_SP_EXECUTESQL <span style="color:#bc74c4">=</span> <span style="color:#7fbaf5">ON</span><span style="color:#56b6c2">;</span>   
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span><span style="color:#7fbaf5">GO</span>
+</span></span></code></pre></div><br>
+<br>
+<br>
+<h3 id="lets-see-it-in-action">Let&rsquo;s See It In Action</h3>
+<p>For this small demo, we are going to illustrate the positive impact which this feature can have on the plan cache when thinking about &lsquo;bloat&rsquo;.
+We will be using the StackOverflow database and it is in Compatibility Level 170 (SQL 2025).</p>
+<br>
+<p><strong>Step 1 - Ensure the feature is off</strong>
+<br>In order to show &rsquo;normal&rsquo; behaviour, we will ensure the feature is off initially:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>USE StackOverflow<span style="color:#56b6c2">;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#7fbaf5">GO</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">DATABASE</span> SCOPED CONFIGURATION <span style="color:#7fbaf5">SET</span> ASYNC_STATS_UPDATE_WAIT_AT_LOW_PRIORITY <span style="color:#bc74c4">=</span> <span style="color:#7fbaf5">OFF</span><span style="color:#56b6c2">;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#7fbaf5">GO</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span><span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">DATABASE</span> SCOPED CONFIGURATION <span style="color:#7fbaf5">SET</span> OPTIMIZED_SP_EXECUTESQL <span style="color:#bc74c4">=</span> <span style="color:#7fbaf5">OFF</span><span style="color:#56b6c2">;</span>   
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span><span style="color:#7fbaf5">GO</span>
+</span></span></code></pre></div><br>
+<p><strong>Step 2 - Free the Procedure Cache</strong>
+<br>Let&rsquo;s free the plan cache to ensure a fair test:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>DBCC FREEPROCCACHE
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#7fbaf5">GO</span>
+</span></span></code></pre></div><br>
+<p><strong>Step 3 - Run a test query using SQLQueryStress</strong>
+<br>We&rsquo;re going to utilise the help of <a href="https://www.brentozar.com/archive/2015/05/how-to-fake-load-tests-with-sqlquerystress/">SQLQueryStress</a> for this step.
+The query we will run using SQLQueryStress is this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">DECLARE</span> <span style="color:#bc74c4">@</span><span style="color:#7fbaf5">sql</span> NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#7fbaf5">MAX</span><span style="color:#56b6c2">);</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#7fbaf5">SET</span> <span style="color:#bc74c4">@</span><span style="color:#7fbaf5">sql</span> <span style="color:#bc74c4">=</span> N<span style="color:#82cc6a">&#39;SELECT COUNT(*) FROM dbo.Posts WHERE PostTypeId = @PostTypeId AND Score &gt; @Score&#39;</span><span style="color:#56b6c2">;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#7fbaf5">DECLARE</span> <span style="color:#bc74c4">@</span><span style="color:#7fbaf5">Parameters</span> NVARCHAR<span style="color:#56b6c2">(</span><span style="color:#7fbaf5">MAX</span><span style="color:#56b6c2">)</span> <span style="color:#bc74c4">=</span> N<span style="color:#82cc6a">&#39;@PostTypeId INT, @Score INT&#39;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span><span style="color:#7fbaf5">EXEC</span> sys<span style="color:#56b6c2">.</span>sp_executesql <span style="color:#bc74c4">@</span><span style="color:#7fbaf5">sql</span><span style="color:#56b6c2">,</span> <span style="color:#bc74c4">@</span><span style="color:#7fbaf5">Parameters</span><span style="color:#56b6c2">,</span> <span style="color:#bc74c4">@</span>PostTypeId <span style="color:#bc74c4">=</span> <span style="color:#56b6c2">1</span><span style="color:#56b6c2">,</span> <span style="color:#bc74c4">@</span>Score <span style="color:#bc74c4">=</span> <span style="color:#56b6c2">2000</span><span style="color:#56b6c2">;</span>
+</span></span></code></pre></div><p>As shown above, we are using sys.sp_executesql to execute a dynamic string.</p>
+<br>
+<p>We will run this against our Stack Overflow database, using the following two options specified:</p>
+<ul>
+<li>Number of iterations = 1</li>
+<li>Number of threads = 100 (this is the number of concurrent connections running the query)</li>
+</ul>
+<img src="/posts/post_images/optimsed_spexecutesql_2.png" alt="SQL Query Stress Application">
+<br>
+<br>
+<br>
+<p><strong>Step 4 - Check the plan cache</strong>
+<br>Now let us check the plan cache, using the following query:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">SELECT</span> 
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    qs<span style="color:#56b6c2">.</span>plan_handle<span style="color:#56b6c2">,</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>    qs<span style="color:#56b6c2">.</span>sql_handle<span style="color:#56b6c2">,</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>    qs<span style="color:#56b6c2">.</span>creation_time<span style="color:#56b6c2">,</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>    qs<span style="color:#56b6c2">.</span>execution_count<span style="color:#56b6c2">,</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>    st<span style="color:#56b6c2">.</span><span style="color:#7fbaf5">text</span> <span style="color:#7fbaf5">AS</span> sql_text
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span><span style="color:#7fbaf5">FROM</span> sys<span style="color:#56b6c2">.</span>dm_exec_query_stats <span style="color:#7fbaf5">AS</span> qs
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span><span style="color:#7fbaf5">CROSS</span> APPLY sys<span style="color:#56b6c2">.</span>dm_exec_sql_text<span style="color:#56b6c2">(</span>qs<span style="color:#56b6c2">.</span>sql_handle<span style="color:#56b6c2">)</span> <span style="color:#7fbaf5">AS</span> st
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span><span style="color:#7fbaf5">ORDER</span> <span style="color:#7fbaf5">BY</span> st<span style="color:#56b6c2">.</span><span style="color:#7fbaf5">text</span> <span style="color:#7fbaf5">ASC</span><span style="color:#56b6c2">;</span>
+</span></span></code></pre></div><p>We can see that for our single query, we have 23 differing entries within the plan cache:</p>
+<a href="/posts/post_images/optimsed_spexecutesql_4.png" target="_blank">
+  <img src="/posts/post_images/optimsed_spexecutesql_4.png" alt="SQL Plan Cache">
+</a>
+<br>
+<br>
+<p>Above - from the plan cache we have <strong>23 different plan handles</strong>, for the <strong>same sql_handle</strong> (query). <br>
+Some may have been executed more than once (totalling 100), however, considering we ran the &lsquo;same&rsquo; query, 100 times, it&rsquo;s not exactly efficient and goes to show one way you can end up with &lsquo;plan cache bloat&rsquo;.</p>
+<br>
+<p><strong>Step 5 - Enabling the feature</strong>
+<br>We will now enable the feature, by executing the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>USE StackOverflow<span style="color:#56b6c2">;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#7fbaf5">GO</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">DATABASE</span> SCOPED CONFIGURATION <span style="color:#7fbaf5">SET</span> ASYNC_STATS_UPDATE_WAIT_AT_LOW_PRIORITY <span style="color:#bc74c4">=</span> <span style="color:#7fbaf5">ON</span><span style="color:#56b6c2">;</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#7fbaf5">GO</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span><span style="color:#7fbaf5">ALTER</span> <span style="color:#7fbaf5">DATABASE</span> SCOPED CONFIGURATION <span style="color:#7fbaf5">SET</span> OPTIMIZED_SP_EXECUTESQL <span style="color:#bc74c4">=</span> <span style="color:#7fbaf5">ON</span><span style="color:#56b6c2">;</span>   
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span><span style="color:#7fbaf5">GO</span>
+</span></span></code></pre></div><br>
+<p><strong>Step 6 - Reset the plan cache</strong>
+<br>To reset our test, we need to free the plan cache:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>DBCC FREEPROCCACHE
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#7fbaf5">GO</span>
+</span></span></code></pre></div><br>
+<p><strong>Step 7 - Run a test query using SQLQueryStress  (again)</strong></p>
+<img src="/posts/post_images/optimsed_spexecutesql_3.png" alt="SQL Query Stress Application">
+<br>
+<br>
+<br>
+<p><strong>Step 8 - Check the plan cache</strong>
+<br>Now let us check the plan cache, using the following query:</p>
+<div class="highlight"><pre tabindex="0" style="color:#c9c9c9;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#7fbaf5">SELECT</span> 
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    qs<span style="color:#56b6c2">.</span>plan_handle<span style="color:#56b6c2">,</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>    qs<span style="color:#56b6c2">.</span>sql_handle<span style="color:#56b6c2">,</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>    qs<span style="color:#56b6c2">.</span>creation_time<span style="color:#56b6c2">,</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>    qs<span style="color:#56b6c2">.</span>execution_count<span style="color:#56b6c2">,</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>    st<span style="color:#56b6c2">.</span><span style="color:#7fbaf5">text</span> <span style="color:#7fbaf5">AS</span> sql_text
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span><span style="color:#7fbaf5">FROM</span> sys<span style="color:#56b6c2">.</span>dm_exec_query_stats <span style="color:#7fbaf5">AS</span> qs
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span><span style="color:#7fbaf5">CROSS</span> APPLY sys<span style="color:#56b6c2">.</span>dm_exec_sql_text<span style="color:#56b6c2">(</span>qs<span style="color:#56b6c2">.</span>sql_handle<span style="color:#56b6c2">)</span> <span style="color:#7fbaf5">AS</span> st
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span><span style="color:#7fbaf5">ORDER</span> <span style="color:#7fbaf5">BY</span> st<span style="color:#56b6c2">.</span><span style="color:#7fbaf5">text</span> <span style="color:#7fbaf5">ASC</span><span style="color:#56b6c2">;</span>
+</span></span></code></pre></div><p>This time, the results of the plan cache are quite different. On this run, we only stored one plan within the plan cache, which got used 100 times:</p>
+<a href="/posts/post_images/optimsed_spexecutesql_5.png" target="_blank">
+  <img src="/posts/post_images/optimsed_spexecutesql_5.png" alt="SQL Plan Cache">
+</a>
+<br>
+<br>
+<br>
+<br>
+<h3 id="behind-the-scenes">Behind The Scenes</h3>
+<p>So how does this feature enable this change to happen? How does it go from generating many differing plans for one query, to just one?</p>
+<p>Reading the Microsoft Learn page for the feature:</p>
+<img src="/posts/post_images/optimsed_spexecutesql_6.png" alt="Microsoft Learn Snippet">
+<br>
+<br>
+<p>So, ultimately, enabling this feature makes it possible for executions using sp_executesql to behave in the same way a Stored Procedure would. <br>
+i.e. the first execution gets cached, other concurrent queries of a similar nature have to wait whilst that initial plan gets compiled.</p>
+<p>Now, the pending queries can then just use that one plan once it&rsquo;s available. Pretty neat huh?</p>
+<p>As mentioned earlier in the post, you can see a nice demonstration of this happening in the <a href="https://youtu.be/YnhvfThUdDs?si=89jHpyvxYLa3j20U&amp;t=662">Data() Exposed</a> video.</p>
+<br>
+<br>
+<h3 id="summary">Summary</h3>
+<p>Today we showed one of the ways in which the new SQL 2025 feature OPTIMIZED_SP_EXECUTESQL can help us when tackling the age-old problem of &lsquo;plan cache bloat&rsquo;.</p>
+<p>We took a basic query, executed it dynamically and saw the direct difference it made to the number of entries being stored within the plan cache for that one, identical query.</p>
+<p>Of course, we had a small demo, with a small, single query to demonstrate the feature, but just imagine how messy things can (and do) get when you have a seriously busy server, with thousands of dynamically generated queries getting executed per minute.</p>
+<p>Memory is arguably one of your most crucial resources when it comes to SQL Server (<em>it&rsquo;s not up for debate</em>). Do you really want it being used up unnecessarily by holding onto single-use plans, for the same query?
+No, I wouldn&rsquo;t either.</p>
+<p>Thanks for reading!</p>
+<br>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M4 0h8s2 0 4 2l15 15s2 2 0 4L21 31s-2 2-4 0L2 16s-2-2-2-4V3s0-3 4-3m3 10a3 3 0 0 0 0-6 3 3 0 0 0 0 6"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/sql2025/" rel="tag">SQL2025</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/performance/" rel="tag">Performance</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/sql/" rel="tag">SQL</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/optimized_sp_executesql/" rel="tag">OPTIMIZED_SP_EXECUTESQL</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Lee Brownhill avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">Author: Lee Brownhill</span>
+	</div>
+	<div class="authorbox__description">
+		Lee Brownhill is a SQL Server Professional. He enjoys making SQL Server go faster
+	</div>
+</div>
+
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2025 Lee Brownhill.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>
