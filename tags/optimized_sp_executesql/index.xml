@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>OPTIMIZED_SP_EXECUTESQL on Lee Brownhill&#39;s Blog</title>
-    <link>http://localhost:1313/tags/optimized_sp_executesql/</link>
+    <link>https://leebrownhill.github.io/tags/optimized_sp_executesql/</link>
     <description>Recent content in OPTIMIZED_SP_EXECUTESQL on Lee Brownhill&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 22 Sep 2025 05:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/optimized_sp_executesql/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 02 Oct 2025 05:00:00 +0000</lastBuildDate>
+    <atom:link href="https://leebrownhill.github.io/tags/optimized_sp_executesql/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Learning SQL Server 2025: Optimized sp_executesql</title>
-      <link>http://localhost:1313/posts/13_sql2025_optimized_sp_executesql/</link>
-      <pubDate>Mon, 22 Sep 2025 05:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/13_sql2025_optimized_sp_executesql/</guid>
+      <link>https://leebrownhill.github.io/posts/13_sql2025_optimized_sp_executesql/</link>
+      <pubDate>Thu, 02 Oct 2025 05:00:00 +0000</pubDate>
+      <guid>https://leebrownhill.github.io/posts/13_sql2025_optimized_sp_executesql/</guid>
       <description>&lt;br&gt; I have finally started looking deeper into some of the new features of SQL Server 2025 and this post will cover the first of many planned posts around all that is new and shiny within SQL 2025&#xA;&lt;br&gt;&lt;br&gt; I just love it when there are new features to dive into and explore&amp;hellip;</description>
     </item>
   </channel>
