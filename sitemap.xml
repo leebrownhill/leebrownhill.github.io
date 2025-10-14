@@ -5,12 +5,6 @@
     <loc>https://leebrownhill.github.io/</loc>
     <lastmod>2025-10-14T08:35:09+01:00</lastmod>
   </url><url>
-    <loc>https://leebrownhill.github.io/tags/something/</loc>
-    <lastmod>2025-10-14T08:35:09+01:00</lastmod>
-  </url><url>
-    <loc>https://leebrownhill.github.io/tags/</loc>
-    <lastmod>2025-10-14T08:35:09+01:00</lastmod>
-  </url><url>
     <loc>https://leebrownhill.github.io/talks/</loc>
     <lastmod>2025-10-14T08:35:09+01:00</lastmod>
   </url><url>
@@ -30,6 +24,9 @@
     <lastmod>2025-10-02T05:00:00+00:00</lastmod>
   </url><url>
     <loc>https://leebrownhill.github.io/tags/sql2025/</loc>
+    <lastmod>2025-10-02T05:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://leebrownhill.github.io/tags/</loc>
     <lastmod>2025-10-02T05:00:00+00:00</lastmod>
   </url><url>
     <loc>https://leebrownhill.github.io/tags/parameter-sniffing/</loc>
