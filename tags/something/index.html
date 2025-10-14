@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Something - Lee Brownhill&#39;s Blog</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="">
-		<meta property="og:url" content="http://localhost:1313/tags/something/">
+		<meta property="og:url" content="https://leebrownhill.github.io/tags/something/">
   <meta property="og:site_name" content="Lee Brownhill&#39;s Blog">
   <meta property="og:title" content="Something">
   <meta property="og:description" content="Lee Brownhill&#39;s Blog about mostly SQL Server">
@@ -24,16 +24,27 @@
 
 	<link rel="shortcut icon" href="/favicon.ico">
 		
+		
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
 
 	<meta name="author" content="map[avatar:img/avatar.png bio:Lee Brownhill is a SQL Server Professional. He enjoys making SQL Server go faster name:Lee Brownhill]">
 	<meta property="og:description" content="">
-	<meta property="og:image" content="http://localhost:1313/">
+	<meta property="og:image" content="https://leebrownhill.github.io/">
 	<meta property="og:image:type" content="img/png">
 
-</head>
-<body class="body">
-	<div class="container container--outer">
-		<header class="header">
 	
   	
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
@@ -50,6 +61,25 @@
           gtag('config', 'G-7983PDFMXQ');
         }
       </script>
+
+	<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "rtl5c4wqh1");
+	</script>
+
+
+	
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6435499912518262"
+     crossorigin="anonymous"></script>
+	 
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	
 
 	<div class="container header__container">
 		
@@ -77,9 +107,9 @@
 			</a>
 		</li>
 		<li class="menu__item">
-			<a class="menu__link" href="/projects">
+			<a class="menu__link" href="/talks">
 				
-				<span class="menu__text">projects</span>
+				<span class="menu__text">talks</span>
 				
 			</a>
 		</li>
@@ -114,25 +144,20 @@
 	</header><article class="list__item post">
 	
 	<figure class="list__thumbnail thumbnail">
-		<a class="thumbnail__link" href="/posts/7_parallelismproblemswithsqlserver/">
-		<img class="thumbnail__image" src="/img/featured/" alt="Parallelism Problems within SQL Server">
+		<a class="thumbnail__link" href="/talks/">
+		<img class="thumbnail__image" src="/img/featured/" alt="Talks">
 		</a>
 	</figure>
 	<header class="list__header">
 		<h2 class="list__title post__title">
-			<a href="/posts/7_parallelismproblemswithsqlserver/" rel="bookmark">
-			Parallelism Problems within SQL Server
+			<a href="/talks/" rel="bookmark">
+			Talks
 			</a>
 		</h2>
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
-		<br>
-<p>Some of the defaults in earlier versions of SQL Server are less than ideal, particularly <a href="https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configure-the-cost-threshold-for-parallelism-server-configuration-option?view=sql-server-ver17">Cost Threshold For Parallelism</a> (CTFP) and <a href="https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configure-the-max-degree-of-parallelism-server-configuration-option?view=sql-server-ver17">Max Degree Of Parallelism</a> (MAXDOP)</p>
-<p>Sure, things have improved in later versions. For example, since SQL Server 2019 the installer now prompts you to change MAXDOP.
-However, its still a problem for many workloads, I see this issue regularly across multiple client environments.
-<br></p>
-<p>One of the most common settings I see left at the defaults are CTFP and MAXDOP .</p>
+		details here
 	</div>
 </article>
 </main>
@@ -144,20 +169,18 @@ However, its still a problem for many workloads, I see this issue regularly acro
 	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
 		<input class="widget-search__field" type="search" placeholder="Search…" value="" name="q" aria-label="Search…">
 		<input class="widget-search__submit" type="submit" value="Search">
-		<input type="hidden" name="sitesearch" value="http://localhost:1313/">
+		<input type="hidden" name="sitesearch" value="https://leebrownhill.github.io/">
 	</form>
 </div>
 <div class="widget-recent widget">
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
-			<li class="widget__item"><a class="widget__link" href="/posts/7_parallelismproblemswithsqlserver/">Parallelism Problems within SQL Server</a></li>
-			<li class="widget__item"><a class="widget__link" href="/posts/6_sqloptimisationwhylessismore/">SQL Server Optimisation: Why Less Is More</a></li>
-			<li class="widget__item"><a class="widget__link" href="/posts/5_sqlunittestingpart5/">SQL Unit Testing Using tSQLt: Part 5</a></li>
-			<li class="widget__item"><a class="widget__link" href="/posts/4_sqlunittestingpart4/">SQL Unit Testing Using tSQLt: Part 4</a></li>
-			<li class="widget__item"><a class="widget__link" href="/posts/3_sqlunittestingpart3/">SQL Unit Testing Using tSQLt: Part 3</a></li>
-			<li class="widget__item"><a class="widget__link" href="/posts/2_sqlunittestingpart2/">SQL Unit Testing Using tSQLt: Part 2</a></li>
-			<li class="widget__item"><a class="widget__link" href="/posts/1_sqlunittestingpart1/">SQL Unit Testing Using tSQLt: Part 1</a></li>
+			<li class="widget__item"><a class="widget__link" href="/posts/13_sql2025_optimized_sp_executesql/">Learning SQL Server 2025: Optimized sp_executesql</a></li>
+			<li class="widget__item"><a class="widget__link" href="/posts/12_solvingparametersniffing/">Parameter Sniffing: Practical Fixes That Work</a></li>
+			<li class="widget__item"><a class="widget__link" href="/posts/11_paramsniffingsimpleexample/">Parameter Sniffing: A Simple Example</a></li>
+			<li class="widget__item"><a class="widget__link" href="/posts/10_sqlbits2025_helpingoutandhavingfun/">SQLBits 2025: Helping out and having fun</a></li>
+			<li class="widget__item"><a class="widget__link" href="/posts/9_podcasts-speaking-and-why-now/">Podcasts, Speaking, and Why I’m Doing This Now</a></li>
 		</ul>
 	</div>
 </div>
@@ -179,7 +202,13 @@ However, its still a problem for many workloads, I see this issue regularly acro
 		<div class="widget-social__item widget__item">
 			<a class="widget-social__link widget__link btn" title="Email" href="mailto:lbrownhill@live.co.uk">
 				<svg class="widget-social__link-icon icon icon-mail" width="24" height="24" viewBox="0 0 24 24"><path d="M0 3h24v18H0zm2 16h20V7l-10 6L2 7zM22 5H2l10 6z"/></svg>
-				<span>lbrownhill@live.co.uk</span>
+				<span>Email</span>
+			</a>
+		</div>
+		<div class="widget-social__item widget__item">
+			<a class="widget-social__link widget__link btn" title="coffee" rel="noopener noreferrer" href="https://www.buymeacoffee.com/leebrownhill" target="_blank">
+				<svg class="widget-social__link-icon icon icon-mail" width="24" height="24" viewBox="0 0 24 24"><path d="M4.55132 2.68377C4.68743 2.27543 5.06957 2 5.5 2H18.5C18.9304 2 19.3126 2.27543 19.4487 2.68377L20.2208 5H20.5C21.0523 5 21.5 5.44772 21.5 6C21.5 6.55228 21.0523 7 20.5 7H19.5H19.405L17.995 21.0995C17.9439 21.6107 17.5138 22 17 22H7C6.48625 22 6.05608 21.6107 6.00496 21.0995L4.59501 7H4.5H3.5C2.94772 7 2.5 6.55228 2.5 6C2.5 5.44772 2.94772 5 3.5 5H3.77924L4.55132 2.68377ZM6.60499 7L7.90499 20H16.095L17.395 7H6.60499ZM18.1126 5H5.88743L6.22076 4H17.7792L18.1126 5Z" fill="#ffffffff"/></svg>
+				<span>Buy Me A Coffee</span>
 			</a>
 		</div>
 
@@ -189,11 +218,25 @@ However, its still a problem for many workloads, I see this issue regularly acro
 <div class="widget-taglist widget">
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/community/" title="Community">Community</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/cxpacket/" title="CXPACKET">CXPACKET</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/data-community/" title="Data Community">Data Community</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/development/" title="Development">Development</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/events/" title="Events">Events</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/optimisation/" title="Optimisation">Optimisation</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/optimized_sp_executesql/" title="OPTIMIZED_SP_EXECUTESQL">OPTIMIZED_SP_EXECUTESQL</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/parallelism/" title="Parallelism">Parallelism</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/parameter-sniffing/" title="Parameter Sniffing">Parameter Sniffing</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/performance/" title="Performance">Performance</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/performance-tuning/" title="Performance Tuning">Performance Tuning</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/professional-growth/" title="Professional Growth">Professional Growth</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/redgate/" title="Redgate">Redgate</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/something/" title="Something">Something</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/speaking/" title="Speaking">Speaking</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/sql/" title="Sql">Sql</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/sql2025/" title="SQL2025">SQL2025</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/sqlbits/" title="SQLBits">SQLBits</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/sqlcop/" title="SQLCop">SQLCop</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/tsql/" title="Tsql">Tsql</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/unit-testing/" title="Unit Testing">Unit Testing</a>
 	</div>

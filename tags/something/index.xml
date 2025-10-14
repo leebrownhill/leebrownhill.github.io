@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Something on Lee Brownhill&#39;s Blog</title>
-    <link>http://localhost:1313/tags/something/</link>
+    <link>https://leebrownhill.github.io/tags/something/</link>
     <description>Recent content in Something on Lee Brownhill&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 01 Jun 2025 06:01:32 +0100</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/something/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 14 Oct 2025 08:35:09 +0100</lastBuildDate>
+    <atom:link href="https://leebrownhill.github.io/tags/something/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Parallelism Problems within SQL Server</title>
-      <link>http://localhost:1313/posts/7_parallelismproblemswithsqlserver/</link>
-      <pubDate>Sun, 01 Jun 2025 06:01:32 +0100</pubDate>
-      <guid>http://localhost:1313/posts/7_parallelismproblemswithsqlserver/</guid>
-      <description>&lt;br&gt;&#xA;&lt;p&gt;Some of the defaults in earlier versions of SQL Server are less than ideal, particularly &lt;a href=&#34;https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configure-the-cost-threshold-for-parallelism-server-configuration-option?view=sql-server-ver17&#34;&gt;Cost Threshold For Parallelism&lt;/a&gt; (CTFP) and &lt;a href=&#34;https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configure-the-max-degree-of-parallelism-server-configuration-option?view=sql-server-ver17&#34;&gt;Max Degree Of Parallelism&lt;/a&gt; (MAXDOP)&lt;/p&gt;&#xA;&lt;p&gt;Sure, things have improved in later versions. For example, since SQL Server 2019 the installer now prompts you to change MAXDOP.&#xA;However, its still a problem for many workloads, I see this issue regularly across multiple client environments.&#xA;&lt;br&gt;&lt;/p&gt;&#xA;&lt;p&gt;One of the most common settings I see left at the defaults are CTFP and MAXDOP .&lt;/p&gt;</description>
+      <title>Talks</title>
+      <link>https://leebrownhill.github.io/talks/</link>
+      <pubDate>Tue, 14 Oct 2025 08:35:09 +0100</pubDate>
+      <guid>https://leebrownhill.github.io/talks/</guid>
+      <description>details here</description>
     </item>
   </channel>
 </rss>
