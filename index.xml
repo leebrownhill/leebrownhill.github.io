@@ -6,8 +6,15 @@
     <description>Recent content on Lee Brownhill&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 02 Oct 2025 05:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 10 Nov 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://leebrownhill.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Privacy Policy</title>
+      <link>https://leebrownhill.github.io/privacy-policy/</link>
+      <pubDate>Mon, 10 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://leebrownhill.github.io/privacy-policy/</guid>
+      <description>&lt;br&gt;&#xD;&#xA;&lt;p&gt;At leebrownhill.com, your privacy is important to us. This policy outlines how we collect, use, and protect your information.&lt;/p&gt;&#xA;&lt;br&gt;&#xD;&#xA;&lt;h3 id=&#34;information-we-collect&#34;&gt;Information We Collect&lt;/h3&gt;&#xA;&lt;p&gt;We may collect personal data such as your name and email address when you contact us or subscribe to updates. We also use third-party services like Google AdSense and Google Analytics, which may collect anonymized data via cookies.&lt;/p&gt;&#xA;&lt;br&gt;&#xD;&#xA;&lt;h3 id=&#34;how-we-use-your-information&#34;&gt;How We Use Your Information&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;To respond to inquiries&lt;/li&gt;&#xA;&lt;li&gt;To improve site performance and content&lt;/li&gt;&#xA;&lt;li&gt;To serve relevant ads via Google AdSense&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;br&gt;&#xD;&#xA;&lt;h3 id=&#34;cookies&#34;&gt;Cookies&lt;/h3&gt;&#xA;&lt;p&gt;This site uses cookies to enhance your experience and deliver personalized ads. You can manage cookie preferences via your browser settings. A cookie consent banner is displayed on your first visit.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Learning SQL Server 2025: Optimized sp_executesql</title>
       <link>https://leebrownhill.github.io/posts/13_sql2025_optimized_sp_executesql/</link>

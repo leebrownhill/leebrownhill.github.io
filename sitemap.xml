@@ -2,10 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://leebrownhill.github.io/posts/13_sql2025_optimized_sp_executesql/</loc>
-    <lastmod>2025-10-02T05:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://leebrownhill.github.io/</loc>
+    <lastmod>2025-11-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://leebrownhill.github.io/privacy-policy/</loc>
+    <lastmod>2025-11-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://leebrownhill.github.io/posts/13_sql2025_optimized_sp_executesql/</loc>
     <lastmod>2025-10-02T05:00:00+00:00</lastmod>
   </url><url>
     <loc>https://leebrownhill.github.io/tags/optimized_sp_executesql/</loc>
