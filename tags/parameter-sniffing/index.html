@@ -263,17 +263,41 @@ A fair question&hellip;
 </div>
 </aside>
 		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright" style="flex: 1;">
-			&copy; 2025 Lee Brownhill.
-			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
-		</div>
-		<div class="footer__privacy" style="text-align: right;">
-			<a href="/privacy-policy" rel="noopener noreferrer">Privacy Policy</a>
-		</div>
-	</div>
+		<style>
+  .footer__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    text-align: left;
+    font-size: 0.75rem;  
+  }
+
+  @media (max-width: 600px) {
+    .footer__container {
+      font-size: 0.60rem;  
+    }
+  }
+
+  .footer__copyright {
+    flex: 1;
+  }
+
+  .footer__privacy {
+    text-align: right;
+  }
+</style>
+
+<footer class="footer">
+  <div class="container footer__container">
+    <div class="footer__copyright">
+      &copy; 2025 Lee Brownhill.
+      <span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+    </div>
+    <div class="footer__privacy">
+      <a href="/privacy-policy" rel="noopener noreferrer">Privacy Policy</a>
+    </div>
+  </div>
 </footer>
 	</div>
 <script async defer src="/js/menu.js"></script>
