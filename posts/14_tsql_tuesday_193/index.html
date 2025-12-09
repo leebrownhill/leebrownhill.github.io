@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>T-SQL Tuesday: Notes to Yourself From the Past and Future - Lee Brownhill&#39;s Blog</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Reflecting on 10 years in SQL Server, from imposter syndrome to growth, community, and life lessons that still drive curiosity today">
+		<meta property="og:url" content="https://leebrownhill.github.io/posts/14_tsql_tuesday_193/">
+  <meta property="og:site_name" content="Lee Brownhill&#39;s Blog">
+  <meta property="og:title" content="T-SQL Tuesday: Notes to Yourself From the Past and Future">
+  <meta property="og:description" content="Reflecting on 10 years in SQL Server, from imposter syndrome to growth, community, and life lessons that still drive curiosity today">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-12-06T05:00:00+00:00">
+    <meta property="article:modified_time" content="2025-12-06T05:00:00+00:00">
+    <meta property="article:tag" content="TSQL Tuesday">
+    <meta property="article:tag" content="Professional Growth">
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+		
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
+
+	<meta name="author" content="Lee Brownhill">
+	<meta property="og:description" content="Reflecting on 10 years in SQL Server, from imposter syndrome to growth, community, and life lessons that still drive curiosity today">
+	<meta property="og:image" content="https://leebrownhill.github.io/img/featured/tsql_tuesday.png">
+	<meta property="og:image:type" content="img/png">
+
+	
+
+
+
+
+
+
+	
+
+	<script src="/js/clarity.js"></script>
+	<script src="/js/ads.js"></script>
+
+
+
+
+	
+	
+
+
+
+
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	
+
+	<div class="container header__container">
+		
+	<div class="logo logo--mixed">
+		<a class="logo__link" href="/" title="Lee Brownhill&#39;s Blog" rel="home">
+			<div class="logo__item logo__imagebox">
+					<img class="logo__img" src="/img/avatar.png">
+				</div><div class="logo__item logo__text">
+					<div class="logo__title">Lee Brownhill&#39;s Blog</div>
+					<div class="logo__tagline">A blog about SQL Server, mostly</div>
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">blog</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/talks">
+				
+				<span class="menu__text">talks</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about">
+				
+				<span class="menu__text">about</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/contact">
+				
+				<span class="menu__text">contact</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+
+
+	
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">T-SQL Tuesday: Notes to Yourself From the Past and Future</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<br>
+<a href="https://straightpathsql.com/archives/2025/12/t-sql-tuesday-193-a-note-to-your-past-and-a-warning-from-your-future/">
+  <img src="/posts/post_images/tsql_tuesday.png" alt="T-SQL Tuesday Logo" style="display:block; margin:0 auto;">
+</a>
+<br>
+<br>
+<h3 id="introduction">Introduction</h3>
+<p>This month, <a href="https://straightpathsql.com/archives/2025/12/t-sql-tuesday-193-a-note-to-your-past-and-a-warning-from-your-future/">Mike Walsh</a> is hosting T-SQL Tuesday and has put forward a really inspiring topic for T-SQL Tuesday #193</p>
+<p>When I saw his post on <a href="https://www.linkedin.com/posts/mikepwalsh_t-sql-tuesday-193-a-note-to-your-past-activity-7401634789893840896--dUN?utm_source=share&amp;utm_medium=member_desktop&amp;rcm=ACoAAAD6WogBgCMffUigIZLZ6Za06qeruJJhBPI">LinkedIn</a> announcing the topic, I just knew I had to get involved because it stopped me in my tracks and made me go back to Lee 10 years ago and where he was in his career. A lot has changed since then.</p>
+<p>Roughly 10 years ago, I was working in general IT support, on the verge of getting my first DBA job.
+I was managing* the business&rsquo;s only SQL Server and desperately trying to figure out what that magical box did.
+SQL Server had truly gotten its claws into me and I knew this was something I wanted to do, for the foreseeable future.
+Shout out to Nik Jones back then who basically forced me to start using SQL for those SSRS reports and to Paul Rodgers who gave me my first chance at being a DBA, I was nowhere near ready to be a DBA, but you gave me a shot and I&rsquo;ll always appreciate that.</p>
+<p>*<em>Googling every day</em></p>
+<br>
+<br>
+<h3 id="a-message-to-10-years-ago-me">A message to “10-Years-Ago Me.”</h3>
+<p>Now, as much as I wanted to add an air of whimsy to this post and put something like &lsquo;I was most scared about missing a night&rsquo;s worth of index rebuilds&rsquo;, I will try to be an adult, for once.
+(everyone was telling me this with much passion and gusto back then, the more you know&hellip;)</p>
+<p>There is, dear reader, a more serious, important thing I was scared about - never being &lsquo;good enough&rsquo;.</p>
+<p>Back when I started my career with SQL Server, I didn&rsquo;t know what I didn&rsquo;t know. Each day I looked online to solve the latest issue and was astounded by the depth of knowledge some folks appeared to have out there regarding SQL. Quite frankly, it was bewildering and every, single, stressful day, there was an abundance of new things for me to learn. This was in equal measure, both exciting and terrifying.</p>
+<p>Imposter syndrome (even back then) had started to kick in. A little voice in my head was already clearing its throat, warming and limbering up to say &ldquo;you can&rsquo;t do this&rdquo; or &ldquo;you&rsquo;re not intelligent enough to understand this&rdquo;.
+That voice and I get on a little better these days, but hoo-boy it&rsquo;s still there, I now just understand it more.</p>
+<p>Looking back, I was naturally scared and unsure if I would ever be &lsquo;good enough&rsquo; to be a DBA. Sure,  I had a formal education (diploma and a degree) but that was easy and just took dedication at the end of the day.
+The folks talking about SQL online were like wizards to me who came from another planet, how could I ever compete with that?</p>
+<p>I still have these feelings from day to day, even in the year 2025, but now I know that this can be a good thing, if harnessed correctly. In fact, I never want that feeling to go away because it&rsquo;s what drives my curiosity which in turn focuses me on what to learn.</p>
+<p>I once heard somebody say &ldquo;I never want to be the smartest person in the room&rdquo; and it&rsquo;s been my ethos ever since.<br>
+Is it easy to live this way? Hell no. <br>
+Do I want some days that are pure rinse and repeat? Hell yes. <br>
+We&rsquo;re all human (ok, maybe not Itzik Ben-Gan) and we all have days where we just want to go the easy route. <br>
+However, I now know that without discomfort of some sort, there is little personal growth and <em><strong>that&rsquo;s</strong></em> the sort of stuff that keeps me awake at night.</p>
+<br>
+<br>
+<p>Looking back, I had a whole page of things I wish I’d taken more seriously.
+The one that resonates most now is not taking the SQL and Data Community seriously enough. I mean, I took it seriously but the thought of ever contributing had never crossed my mind. (Who, me? Nope, move along sir, I don&rsquo;t do that sort of thing)</p>
+<p>Only in the last couple of years have I started actively contributing to the amazing community that exists around SQL Server and it&rsquo;s been incredibly rewarding. I have met interesting people, have built meaningful connections and have learned <em><strong>so</strong></em> much.</p>
+<p>However, for the large majority of the past ten years, I had just been a lurker in the background. I would read and consume as much of the content out there as possible, but not once had I thrown my hat into the ring and had a go myself. Even my first blog was anonymised and had zero reference to me which looking back makes me sad -  I was just so scared of looking dumb, wrong or looking like I had ideas above my station.</p>
+<p>I would love to have a coffee with 2015 Lee and implore him to put himself out there earlier, it&rsquo;s so worth it and the Data/SQL community is one of the best around, no question.</p>
+<br>
+<br>
+<h3 id="a-message-from-2035-me">A message from “2035 Me.”</h3>
+<p>So far, this post has been mostly about the non-technical stuff and it&rsquo;s going to continue with this section.
+To a degree, I believe anyone can learn the technical side with dedication. But what interests me most now, as I get older, are the elements in between. Some might call them the &lsquo;soft skills&rsquo; but I prefer the term &rsquo;life skills&rsquo;.</p>
+<p>If I imagine myself as 2035 Lee, I’d like to believe he’d encourage me to keep doing the scary stuff, to keep saying yes to the things that initially unsettle me.
+These are the things which will help you grow more than anything else and will be so so so rewarding. <br>
+Within the professional world, try to never become comfortable with being comfortable, it&rsquo;s the curiosity killer and a world without curiosity is truly something to be scared of.</p>
+<p>Thanks for reading!
+<br>
+<br>
+<br></p>
+<hr>
+<p>If you’ve found this post helpful or would just like to support the work I do here, consider buying me a coffee.</p>
+<p><a href="https://www.buymeacoffee.com/leebrownhill" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/arial-green.png" alt="Buy Me A Coffee" style="height: 55px !important;width: 217px !important;" ></a></p>
+<br>
+<br>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M4 0h8s2 0 4 2l15 15s2 2 0 4L21 31s-2 2-4 0L2 16s-2-2-2-4V3s0-3 4-3m3 10a3 3 0 0 0 0-6 3 3 0 0 0 0 6"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/tsql-tuesday/" rel="tag">TSQL Tuesday</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/professional-growth/" rel="tag">Professional Growth</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Lee Brownhill avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">Author: Lee Brownhill</span>
+	</div>
+	<div class="authorbox__description">
+		Lee Brownhill is a SQL Server Professional. He enjoys making SQL Server go faster
+	</div>
+</div>
+
+
+
+			</div>
+			
+		</div>
+		<style>
+  .footer__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    text-align: left;
+    font-size: 0.75rem;  
+  }
+
+  @media (max-width: 600px) {
+    .footer__container {
+      font-size: 0.60rem;  
+    }
+  }
+
+  .footer__copyright {
+    flex: 1;
+  }
+
+  .footer__privacy {
+    text-align: right;
+  }
+</style>
+
+<footer class="footer">
+  <div class="container footer__container">
+    <div class="footer__copyright">
+      &copy; 2025 Lee Brownhill.
+      <span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+    </div>
+    <div class="footer__privacy">
+      <a href="/privacy-policy" rel="noopener noreferrer">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>

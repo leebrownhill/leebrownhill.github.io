@@ -31,35 +31,26 @@
 	<meta property="og:image:type" content="img/png">
 
 	
-  	
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
-      <script>
-        var doNotTrack = false;
-        if ( false ) {
-          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-          var doNotTrack = (dnt == "1" || dnt == "yes");
-        }
-        if (!doNotTrack) {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-7983PDFMXQ');
-        }
-      </script>
 
-	<script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "rtl5c4wqh1");
-	</script>
+
+
+
 
 
 	
-	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6435499912518262"
-     crossorigin="anonymous"></script>
-	 
+
+	<script src="/js/clarity.js"></script>
+	<script src="/js/ads.js"></script>
+
+
+
+
+	
+	
+
+
+
+
 </head>
 <body class="body">
 	<div class="container container--outer">
@@ -129,14 +120,14 @@
 	</header><article class="list__item post">
 	
 	<figure class="list__thumbnail thumbnail">
-		<a class="thumbnail__link" href="/talks/">
-		<img class="thumbnail__image" src="/img/featured/" alt="Talks">
+		<a class="thumbnail__link" href="/posts/14_tsql_tuesday_193/">
+		<img class="thumbnail__image" src="/img/featured/tsql_tuesday.png" alt="14_TSQL_Tuesday_193">
 		</a>
 	</figure>
 	<header class="list__header">
 		<h2 class="list__title post__title">
-			<a href="/talks/" rel="bookmark">
-			Talks
+			<a href="/posts/14_tsql_tuesday_193/" rel="bookmark">
+			14_TSQL_Tuesday_193
 			</a>
 		</h2>
 		
@@ -161,11 +152,11 @@
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/posts/14_tsql_tuesday_193/">14_TSQL_Tuesday_193</a></li>
 			<li class="widget__item"><a class="widget__link" href="/posts/13_sql2025_optimized_sp_executesql/">Learning SQL Server 2025: Optimized sp_executesql</a></li>
 			<li class="widget__item"><a class="widget__link" href="/posts/12_solvingparametersniffing/">Parameter Sniffing: Practical Fixes That Work</a></li>
 			<li class="widget__item"><a class="widget__link" href="/posts/11_paramsniffingsimpleexample/">Parameter Sniffing: A Simple Example</a></li>
 			<li class="widget__item"><a class="widget__link" href="/posts/10_sqlbits2025_helpingoutandhavingfun/">SQLBits 2025: Helping out and having fun</a></li>
-			<li class="widget__item"><a class="widget__link" href="/posts/9_podcasts-speaking-and-why-now/">Podcasts, Speaking, and Why I’m Doing This Now</a></li>
 		</ul>
 	</div>
 </div>
@@ -228,14 +219,41 @@
 </div>
 </aside>
 		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy; 2025 Lee Brownhill.
-			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
-		</div>
-	</div>
+		<style>
+  .footer__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    text-align: left;
+    font-size: 0.75rem;  
+  }
+
+  @media (max-width: 600px) {
+    .footer__container {
+      font-size: 0.60rem;  
+    }
+  }
+
+  .footer__copyright {
+    flex: 1;
+  }
+
+  .footer__privacy {
+    text-align: right;
+  }
+</style>
+
+<footer class="footer">
+  <div class="container footer__container">
+    <div class="footer__copyright">
+      &copy; 2025 Lee Brownhill.
+      <span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+    </div>
+    <div class="footer__privacy">
+      <a href="/privacy-policy" rel="noopener noreferrer">Privacy Policy</a>
+    </div>
+  </div>
 </footer>
 	</div>
 <script async defer src="/js/menu.js"></script>
