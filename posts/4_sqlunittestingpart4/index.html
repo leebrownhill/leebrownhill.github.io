@@ -150,43 +150,43 @@ In the last post, we covered one of the many useful features of tSQLt, the Fake 
 <h3 id="the-setup---our-stored-procedure">The Setup - Our Stored Procedure</h3>
 <p>Once again, to demonstrate today&rsquo;s topic, we will complete a small demo. We&rsquo;re going to use the same procedure from the last post and build upon it slightly. As before, we will be using the StackOverflow2010 database.</p>
 <p>Here is the full stored procedure that we will be testing:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#cf222e">CREATE</span><span style="color:#fff"> </span><span style="color:#cf222e">OR</span><span style="color:#fff"> </span><span style="color:#cf222e">ALTER</span><span style="color:#fff"> </span><span style="color:#cf222e">PROCEDURE</span><span style="color:#fff"> </span><span style="color:#1f2328">[</span>dbo<span style="color:#1f2328">].[</span>GetUserDetail_LastYear<span style="color:#1f2328">]</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#0550ae">@</span>DisplayName<span style="color:#fff"> </span>NVARCHAR<span style="color:#1f2328">(</span><span style="color:#0550ae">100</span><span style="color:#1f2328">)</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">AS</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">BEGIN</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">    </span><span style="color:#cf222e">DECLARE</span><span style="color:#fff"> </span><span style="color:#0550ae">@</span>Now<span style="color:#fff">            </span>DATETIME<span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">    </span><span style="color:#cf222e">DECLARE</span><span style="color:#fff"> </span><span style="color:#0550ae">@</span>OneYearAgo<span style="color:#fff">     </span>DATETIME<span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">    </span><span style="color:#cf222e">SET</span><span style="color:#fff"> </span><span style="color:#0550ae">@</span>Now<span style="color:#fff">                </span><span style="color:#0550ae">=</span><span style="color:#fff"> </span>dbo<span style="color:#1f2328">.</span>DateTimeNow<span style="color:#1f2328">()</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">    </span><span style="color:#cf222e">SET</span><span style="color:#fff"> </span><span style="color:#0550ae">@</span>OneYearAgo<span style="color:#fff">         </span><span style="color:#0550ae">=</span><span style="color:#fff"> </span>DATEADD<span style="color:#1f2328">(</span><span style="color:#cf222e">YEAR</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span><span style="color:#0550ae">-</span><span style="color:#0550ae">1</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span><span style="color:#0550ae">@</span>Now<span style="color:#1f2328">)</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">    </span><span style="color:#cf222e">SELECT</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">        </span>u<span style="color:#1f2328">.</span>DisplayName<span style="color:#1f2328">,</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">        </span>u<span style="color:#1f2328">.</span><span style="color:#cf222e">Location</span><span style="color:#1f2328">,</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">        </span>u<span style="color:#1f2328">.</span>Reputation<span style="color:#1f2328">,</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">        </span><span style="color:#cf222e">COUNT</span><span style="color:#1f2328">(</span><span style="color:#cf222e">c</span><span style="color:#1f2328">.</span>Id<span style="color:#1f2328">)</span><span style="color:#fff"> </span><span style="color:#cf222e">AS</span><span style="color:#fff"> </span>CommentCount<span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">    </span><span style="color:#cf222e">FROM</span><span style="color:#fff"> </span>dbo<span style="color:#1f2328">.</span>Users<span style="color:#fff"> </span>u<span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">    </span><span style="color:#cf222e">INNER</span><span style="color:#fff"> </span><span style="color:#cf222e">JOIN</span><span style="color:#fff"> </span>dbo<span style="color:#1f2328">.</span>Comments<span style="color:#fff"> </span><span style="color:#cf222e">c</span><span style="color:#fff"> </span><span style="color:#cf222e">ON</span><span style="color:#fff"> </span>u<span style="color:#1f2328">.</span>Id<span style="color:#fff"> </span><span style="color:#0550ae">=</span><span style="color:#fff"> </span><span style="color:#cf222e">c</span><span style="color:#1f2328">.</span>UserId<span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">    </span><span style="color:#cf222e">WHERE</span><span style="color:#fff"> 
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">        </span>u<span style="color:#1f2328">.</span>DisplayName<span style="color:#fff"> </span><span style="color:#0550ae">=</span><span style="color:#fff"> </span><span style="color:#0550ae">@</span>DisplayName<span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">        </span><span style="color:#cf222e">AND</span><span style="color:#fff"> </span><span style="color:#cf222e">c</span><span style="color:#1f2328">.</span>CreationDate<span style="color:#fff"> </span><span style="color:#cf222e">BETWEEN</span><span style="color:#fff"> </span><span style="color:#0550ae">@</span>OneYearAgo<span style="color:#fff"> </span><span style="color:#cf222e">AND</span><span style="color:#fff"> </span><span style="color:#0550ae">@</span>Now<span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">    </span><span style="color:#cf222e">GROUP</span><span style="color:#fff"> </span><span style="color:#cf222e">BY</span><span style="color:#fff"> </span>u<span style="color:#1f2328">.</span>DisplayName<span style="color:#1f2328">,</span><span style="color:#fff"> </span>u<span style="color:#1f2328">.</span><span style="color:#cf222e">Location</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span>u<span style="color:#1f2328">.</span>Reputation<span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">    </span><span style="color:#57606a">/* Capture Execution Data */</span><span style="color:#fff">    
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">    </span><span style="color:#cf222e">DECLARE</span><span style="color:#fff"> 
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">        </span><span style="color:#0550ae">@</span>Proc<span style="color:#fff">   </span>NVARCHAR<span style="color:#1f2328">(</span><span style="color:#0550ae">100</span><span style="color:#1f2328">)</span><span style="color:#fff">   </span><span style="color:#0550ae">=</span><span style="color:#fff"> </span>OBJECT_NAME<span style="color:#1f2328">(</span><span style="color:#0550ae">@@</span>PROCID<span style="color:#1f2328">),</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">        </span><span style="color:#0550ae">@</span>Who<span style="color:#fff">    </span>NVARCHAR<span style="color:#1f2328">(</span><span style="color:#0550ae">300</span><span style="color:#1f2328">)</span><span style="color:#fff">   </span><span style="color:#0550ae">=</span><span style="color:#fff"> </span>SUSER_NAME<span style="color:#1f2328">(),</span><span style="color:#fff"> 
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">        </span><span style="color:#0550ae">@</span><span style="color:#cf222e">When</span><span style="color:#fff">   </span>DATETIME<span style="color:#fff">        </span><span style="color:#0550ae">=</span><span style="color:#fff"> </span>GETDATE<span style="color:#1f2328">()</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">    </span><span style="color:#cf222e">EXEC</span><span style="color:#fff"> </span>dbo<span style="color:#1f2328">.</span>AddToAuditLog<span style="color:#fff"> </span><span style="color:#0550ae">@</span>Proc<span style="color:#1f2328">,</span><span style="color:#0550ae">@</span>Who<span style="color:#1f2328">,</span><span style="color:#0550ae">@</span><span style="color:#cf222e">When</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">END</span><span style="color:#fff">
-</span></span></span></code></pre></div><p>The only addition made to the procedure, since our last post, is the addition of a call to another stored procedure, dbo.AddToAuditLog. This procedure simply captures some metadata about the procedure&rsquo;s execution, such as the procedure name, user, and time.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">OR</span> <span style="color:#ff79c6">ALTER</span> <span style="color:#ff79c6">PROCEDURE</span> [dbo].[GetUserDetail_LastYear]
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">@</span>DisplayName NVARCHAR(<span style="color:#bd93f9">100</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">AS</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">BEGIN</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">DECLARE</span> <span style="color:#ff79c6">@</span>Now            DATETIME
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">DECLARE</span> <span style="color:#ff79c6">@</span>OneYearAgo     DATETIME
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">SET</span> <span style="color:#ff79c6">@</span>Now                <span style="color:#ff79c6">=</span> dbo.DateTimeNow()
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">SET</span> <span style="color:#ff79c6">@</span>OneYearAgo         <span style="color:#ff79c6">=</span> DATEADD(<span style="color:#ff79c6">YEAR</span>, <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>, <span style="color:#ff79c6">@</span>Now)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">SELECT</span>
+</span></span><span style="display:flex;"><span>        u.DisplayName,
+</span></span><span style="display:flex;"><span>        u.<span style="color:#ff79c6">Location</span>,
+</span></span><span style="display:flex;"><span>        u.Reputation,
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">COUNT</span>(<span style="color:#ff79c6">c</span>.Id) <span style="color:#ff79c6">AS</span> CommentCount
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">FROM</span> dbo.Users u
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">INNER</span> <span style="color:#ff79c6">JOIN</span> dbo.Comments <span style="color:#ff79c6">c</span> <span style="color:#ff79c6">ON</span> u.Id <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">c</span>.UserId
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">WHERE</span> 
+</span></span><span style="display:flex;"><span>        u.DisplayName <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">@</span>DisplayName
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">c</span>.CreationDate <span style="color:#ff79c6">BETWEEN</span> <span style="color:#ff79c6">@</span>OneYearAgo <span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">@</span>Now
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">GROUP</span> <span style="color:#ff79c6">BY</span> u.DisplayName, u.<span style="color:#ff79c6">Location</span>, u.Reputation
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/* Capture Execution Data */</span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">DECLARE</span> 
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">@</span>Proc   NVARCHAR(<span style="color:#bd93f9">100</span>)   <span style="color:#ff79c6">=</span> OBJECT_NAME(<span style="color:#ff79c6">@@</span>PROCID),
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">@</span>Who    NVARCHAR(<span style="color:#bd93f9">300</span>)   <span style="color:#ff79c6">=</span> SUSER_NAME(), 
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">@</span><span style="color:#ff79c6">When</span>   DATETIME        <span style="color:#ff79c6">=</span> GETDATE()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">EXEC</span> dbo.AddToAuditLog <span style="color:#ff79c6">@</span>Proc,<span style="color:#ff79c6">@</span>Who,<span style="color:#ff79c6">@</span><span style="color:#ff79c6">When</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">END</span>
+</span></span></code></pre></div><p>The only addition made to the procedure, since our last post, is the addition of a call to another stored procedure, dbo.AddToAuditLog. This procedure simply captures some metadata about the procedure&rsquo;s execution, such as the procedure name, user, and time.</p>
 <p>When we execute our procedure like this:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#cf222e">EXEC</span><span style="color:#fff"> </span>dbo<span style="color:#1f2328">.</span>GetUserDetail_LastYear<span style="color:#fff"> </span><span style="color:#0550ae">@</span>DisplayName<span style="color:#fff"> </span><span style="color:#0550ae">=</span><span style="color:#fff"> </span><span style="color:#0a3069">&#39;Jon Skeet&#39;</span><span style="color:#fff">
-</span></span></span></code></pre></div><p>We get the following results:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXEC</span> dbo.GetUserDetail_LastYear <span style="color:#ff79c6">@</span>DisplayName <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Jon Skeet&#39;</span>
+</span></span></code></pre></div><p>We get the following results:</p>
 <img src="/posts/post_images/results_2.png" alt="tsqlt" style="width:538px; height:auto;">
 <br>
 <br>
@@ -199,72 +199,72 @@ In the last post, we covered one of the many useful features of tSQLt, the Fake 
 <h3 id="the-setup---our-unit-test">The Setup - Our Unit Test</h3>
 <p>Our unit test currently is identical to how we finished up on the last post. The latest addition to it was the introduction of the Fake Function option.
 Here is the full procedure as it currently stands:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#cf222e">CREATE</span><span style="color:#fff"> </span><span style="color:#cf222e">OR</span><span style="color:#fff"> </span><span style="color:#cf222e">ALTER</span><span style="color:#fff"> </span><span style="color:#cf222e">PROCEDURE</span><span style="color:#fff"> </span><span style="color:#1f2328">[</span>tests<span style="color:#1f2328">].[</span>test<span style="color:#fff"> </span>GetUserDetail_LastYear<span style="color:#1f2328">]</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">AS</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">BEGIN</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">DECLARE</span><span style="color:#fff"> 
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#0550ae">@</span>UserName<span style="color:#fff"> </span>NVARCHAR<span style="color:#1f2328">(</span><span style="color:#0550ae">100</span><span style="color:#1f2328">)</span><span style="color:#fff">	</span><span style="color:#0550ae">=</span><span style="color:#fff"> </span><span style="color:#0a3069">&#39;Jon Skeet&#39;</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#57606a">/* ASSEMBLE STAGE */</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">EXEC</span><span style="color:#fff"> </span>tSQLt<span style="color:#1f2328">.</span>FakeFunction<span style="color:#fff"> </span><span style="color:#0550ae">@</span>FunctionName<span style="color:#fff"> </span><span style="color:#0550ae">=</span><span style="color:#fff"> </span><span style="color:#0a3069">&#39;dbo.DateTimeNow&#39;</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span><span style="color:#0550ae">@</span>FakeFunctionName<span style="color:#fff"> </span><span style="color:#0550ae">=</span><span style="color:#fff"> </span><span style="color:#0a3069">&#39;Fake.DateTimeNow&#39;</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">EXEC</span><span style="color:#fff"> </span>tSQLt<span style="color:#1f2328">.</span>FakeTable<span style="color:#fff"> </span><span style="color:#0a3069">&#39;dbo.Users&#39;</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">INSERT</span><span style="color:#fff"> </span><span style="color:#cf222e">INTO</span><span style="color:#fff"> </span>dbo<span style="color:#1f2328">.</span>Users<span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#1f2328">(</span>Id<span style="color:#1f2328">,</span>DisplayName<span style="color:#1f2328">,</span><span style="color:#fff"> </span><span style="color:#cf222e">Location</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span>Reputation<span style="color:#1f2328">)</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">VALUES</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#1f2328">(</span><span style="color:#0550ae">22656</span><span style="color:#1f2328">,</span><span style="color:#fff">	</span><span style="color:#0a3069">&#39;Jon Skeet&#39;</span><span style="color:#fff">	    </span><span style="color:#1f2328">,</span><span style="color:#0a3069">&#39;Reading, United Kingdom&#39;</span><span style="color:#fff">	    </span><span style="color:#1f2328">,</span><span style="color:#0550ae">1047863</span><span style="color:#1f2328">),</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#1f2328">(</span><span style="color:#0550ae">22661</span><span style="color:#1f2328">,</span><span style="color:#fff">	</span><span style="color:#0a3069">&#39;Virne&#39;</span><span style="color:#fff">		    </span><span style="color:#1f2328">,</span><span style="color:#0a3069">&#39;Finland&#39;</span><span style="color:#fff">			            </span><span style="color:#1f2328">,</span><span style="color:#0550ae">1076</span><span style="color:#1f2328">),</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#1f2328">(</span><span style="color:#0550ae">22668</span><span style="color:#1f2328">,</span><span style="color:#fff">	</span><span style="color:#0a3069">&#39;Dickon Reed&#39;</span><span style="color:#fff">	</span><span style="color:#1f2328">,</span><span style="color:#0a3069">&#39;Cambridge, United Kingdom&#39;</span><span style="color:#fff">	</span><span style="color:#1f2328">,</span><span style="color:#0550ae">2237</span><span style="color:#1f2328">)</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">EXEC</span><span style="color:#fff"> </span>tSQLt<span style="color:#1f2328">.</span>FakeTable<span style="color:#fff"> </span><span style="color:#0a3069">&#39;dbo.Comments&#39;</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">INSERT</span><span style="color:#fff"> </span><span style="color:#cf222e">INTO</span><span style="color:#fff"> </span>dbo<span style="color:#1f2328">.</span>Comments<span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#1f2328">(</span>Id<span style="color:#1f2328">,</span><span style="color:#fff"> </span>UserId<span style="color:#1f2328">,</span>CreationDate<span style="color:#1f2328">)</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">VALUES</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#1f2328">(</span><span style="color:#0550ae">436275</span><span style="color:#fff">	</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span><span style="color:#0550ae">22661</span><span style="color:#fff"> </span><span style="color:#1f2328">,</span><span style="color:#fff"> </span><span style="color:#0a3069">&#39;2020-05-01 09:39:00.000&#39;</span><span style="color:#1f2328">),</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#1f2328">(</span><span style="color:#0550ae">197827</span><span style="color:#fff">	</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span><span style="color:#0550ae">22668</span><span style="color:#fff"> </span><span style="color:#1f2328">,</span><span style="color:#fff"> </span><span style="color:#0a3069">&#39;2024-09-26 16:35:51.177&#39;</span><span style="color:#1f2328">),</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#1f2328">(</span><span style="color:#0550ae">37360</span><span style="color:#fff">	</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span><span style="color:#0550ae">22656</span><span style="color:#fff">	</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span><span style="color:#0a3069">&#39;2024-09-26 16:35:51.177&#39;</span><span style="color:#1f2328">),</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#1f2328">(</span><span style="color:#0550ae">37585</span><span style="color:#fff">	</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span><span style="color:#0550ae">22656</span><span style="color:#fff">	</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span><span style="color:#0a3069">&#39;2025-01-26 16:35:17.310&#39;</span><span style="color:#1f2328">),</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#1f2328">(</span><span style="color:#0550ae">36000</span><span style="color:#fff">	</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span><span style="color:#0550ae">22656</span><span style="color:#fff">	</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span><span style="color:#0a3069">&#39;2022-08-26 19:21:42.357&#39;</span><span style="color:#1f2328">)</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">CREATE</span><span style="color:#fff"> </span><span style="color:#cf222e">TABLE</span><span style="color:#fff"> </span>dbo<span style="color:#1f2328">.</span>Expected<span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#1f2328">(</span>DisplayName<span style="color:#fff"> </span>NVARCHAR<span style="color:#1f2328">(</span><span style="color:#0550ae">100</span><span style="color:#1f2328">),</span><span style="color:#fff"> </span><span style="color:#cf222e">Location</span><span style="color:#fff"> </span>NVARCHAR<span style="color:#1f2328">(</span><span style="color:#0550ae">200</span><span style="color:#1f2328">),</span>Reputation<span style="color:#fff"> </span><span style="color:#6639ba">INT</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span>CommentCount<span style="color:#fff"> </span><span style="color:#6639ba">INT</span><span style="color:#1f2328">)</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">CREATE</span><span style="color:#fff"> </span><span style="color:#cf222e">TABLE</span><span style="color:#fff"> </span>dbo<span style="color:#1f2328">.</span>Actual<span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#1f2328">(</span>DisplayName<span style="color:#fff"> </span>NVARCHAR<span style="color:#1f2328">(</span><span style="color:#0550ae">100</span><span style="color:#1f2328">),</span><span style="color:#fff"> </span><span style="color:#cf222e">Location</span><span style="color:#fff"> </span>NVARCHAR<span style="color:#1f2328">(</span><span style="color:#0550ae">200</span><span style="color:#1f2328">),</span>Reputation<span style="color:#fff"> </span><span style="color:#6639ba">INT</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span>CommentCount<span style="color:#fff"> </span><span style="color:#6639ba">INT</span><span style="color:#1f2328">)</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">INSERT</span><span style="color:#fff"> </span><span style="color:#cf222e">INTO</span><span style="color:#fff"> </span>dbo<span style="color:#1f2328">.</span>Expected<span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#1f2328">(</span>DisplayName<span style="color:#1f2328">,</span><span style="color:#cf222e">Location</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span>Reputation<span style="color:#1f2328">,</span><span style="color:#fff"> </span>CommentCount<span style="color:#1f2328">)</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">VALUES</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#1f2328">(</span><span style="color:#0a3069">&#39;Jon Skeet&#39;</span><span style="color:#1f2328">,</span><span style="color:#fff">	</span><span style="color:#0a3069">&#39;Reading, United Kingdom&#39;</span><span style="color:#1f2328">,</span><span style="color:#fff">	</span><span style="color:#0550ae">1047863</span><span style="color:#1f2328">,</span><span style="color:#fff">	</span><span style="color:#0550ae">2</span><span style="color:#1f2328">)</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#57606a">/* ACT STAGE */</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">INSERT</span><span style="color:#fff"> </span><span style="color:#cf222e">INTO</span><span style="color:#fff"> </span>dbo<span style="color:#1f2328">.</span>Actual<span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">EXEC</span><span style="color:#fff"> </span><span style="color:#1f2328">[</span>dbo<span style="color:#1f2328">].[</span>GetUserDetail_LastYear<span style="color:#1f2328">]</span><span style="color:#fff"> 
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#0550ae">@</span>DisplayName<span style="color:#fff">	</span><span style="color:#0550ae">=</span><span style="color:#fff"> </span><span style="color:#0a3069">&#39;Jon Skeet&#39;</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#57606a">/* ASSERT STAGE */</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">EXEC</span><span style="color:#fff"> </span>tSQLt<span style="color:#1f2328">.</span>AssertEqualsTable<span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#0550ae">@</span>Expected<span style="color:#fff">	</span><span style="color:#0550ae">=</span><span style="color:#fff"> </span><span style="color:#0a3069">&#39;dbo.Expected&#39;</span><span style="color:#1f2328">,</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#0550ae">@</span>Actual<span style="color:#fff">		</span><span style="color:#0550ae">=</span><span style="color:#fff"> </span><span style="color:#0a3069">&#39;dbo.Actual&#39;</span><span style="color:#1f2328">,</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#0550ae">@</span>FailMsg<span style="color:#fff">	</span><span style="color:#0550ae">=</span><span style="color:#fff"> </span><span style="color:#0a3069">&#39;Our test failed!&#39;</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">END</span><span style="color:#fff">
-</span></span></span></code></pre></div><br>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">OR</span> <span style="color:#ff79c6">ALTER</span> <span style="color:#ff79c6">PROCEDURE</span> [tests].[test GetUserDetail_LastYear]
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">AS</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">BEGIN</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">DECLARE</span> 
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">@</span>UserName NVARCHAR(<span style="color:#bd93f9">100</span>)	<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Jon Skeet&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/* ASSEMBLE STAGE */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">EXEC</span> tSQLt.FakeFunction <span style="color:#ff79c6">@</span>FunctionName <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;dbo.DateTimeNow&#39;</span>, <span style="color:#ff79c6">@</span>FakeFunctionName <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Fake.DateTimeNow&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">EXEC</span> tSQLt.FakeTable <span style="color:#f1fa8c">&#39;dbo.Users&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">INSERT</span> <span style="color:#ff79c6">INTO</span> dbo.Users
+</span></span><span style="display:flex;"><span>(Id,DisplayName, <span style="color:#ff79c6">Location</span>, Reputation)
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">VALUES</span>
+</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">22656</span>,	<span style="color:#f1fa8c">&#39;Jon Skeet&#39;</span>	    ,<span style="color:#f1fa8c">&#39;Reading, United Kingdom&#39;</span>	    ,<span style="color:#bd93f9">1047863</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">22661</span>,	<span style="color:#f1fa8c">&#39;Virne&#39;</span>		    ,<span style="color:#f1fa8c">&#39;Finland&#39;</span>			            ,<span style="color:#bd93f9">1076</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">22668</span>,	<span style="color:#f1fa8c">&#39;Dickon Reed&#39;</span>	,<span style="color:#f1fa8c">&#39;Cambridge, United Kingdom&#39;</span>	,<span style="color:#bd93f9">2237</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">EXEC</span> tSQLt.FakeTable <span style="color:#f1fa8c">&#39;dbo.Comments&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">INSERT</span> <span style="color:#ff79c6">INTO</span> dbo.Comments
+</span></span><span style="display:flex;"><span>(Id, UserId,CreationDate)
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">VALUES</span>
+</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">436275</span>	, <span style="color:#bd93f9">22661</span> , <span style="color:#f1fa8c">&#39;2020-05-01 09:39:00.000&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">197827</span>	, <span style="color:#bd93f9">22668</span> , <span style="color:#f1fa8c">&#39;2024-09-26 16:35:51.177&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">37360</span>	, <span style="color:#bd93f9">22656</span>	, <span style="color:#f1fa8c">&#39;2024-09-26 16:35:51.177&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">37585</span>	, <span style="color:#bd93f9">22656</span>	, <span style="color:#f1fa8c">&#39;2025-01-26 16:35:17.310&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">36000</span>	, <span style="color:#bd93f9">22656</span>	, <span style="color:#f1fa8c">&#39;2022-08-26 19:21:42.357&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">TABLE</span> dbo.Expected
+</span></span><span style="display:flex;"><span>(DisplayName NVARCHAR(<span style="color:#bd93f9">100</span>), <span style="color:#ff79c6">Location</span> NVARCHAR(<span style="color:#bd93f9">200</span>),Reputation <span style="color:#8be9fd;font-style:italic">INT</span>, CommentCount <span style="color:#8be9fd;font-style:italic">INT</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">TABLE</span> dbo.Actual
+</span></span><span style="display:flex;"><span>(DisplayName NVARCHAR(<span style="color:#bd93f9">100</span>), <span style="color:#ff79c6">Location</span> NVARCHAR(<span style="color:#bd93f9">200</span>),Reputation <span style="color:#8be9fd;font-style:italic">INT</span>, CommentCount <span style="color:#8be9fd;font-style:italic">INT</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">INSERT</span> <span style="color:#ff79c6">INTO</span> dbo.Expected
+</span></span><span style="display:flex;"><span>(DisplayName,<span style="color:#ff79c6">Location</span>, Reputation, CommentCount)
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">VALUES</span>
+</span></span><span style="display:flex;"><span>	(<span style="color:#f1fa8c">&#39;Jon Skeet&#39;</span>,	<span style="color:#f1fa8c">&#39;Reading, United Kingdom&#39;</span>,	<span style="color:#bd93f9">1047863</span>,	<span style="color:#bd93f9">2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/* ACT STAGE */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">INSERT</span> <span style="color:#ff79c6">INTO</span> dbo.Actual
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">EXEC</span> [dbo].[GetUserDetail_LastYear] 
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">@</span>DisplayName	<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Jon Skeet&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/* ASSERT STAGE */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">EXEC</span> tSQLt.AssertEqualsTable
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">@</span>Expected	<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;dbo.Expected&#39;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">@</span>Actual		<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;dbo.Actual&#39;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">@</span>FailMsg	<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Our test failed!&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">END</span>
+</span></span></code></pre></div><br>
 <br>
 <h3 id="the-importance-of-unit-test-isolation">The importance of Unit Test isolation</h3>
 <p>So we have our updated procedure, which now contains that additional call to the procedure dbo.AddToAuditLog.
@@ -272,20 +272,20 @@ We also have our unit test to test the main procedure dbo.GetUserDetail_LastYear
 <p>Currently, everything runs well, and we are validating the functionality of our main stored procedure, each time we run our unit test. Great. However, there is still a potential issue and I&rsquo;ll show you why.</p>
 <p>Let&rsquo;s say that one day, somebody introduces a bug into our embedded procedure dbo.AddToAuditLog. (Zero changes are made to our main procedure)</p>
 <p>Let us simulate that &lsquo;bug&rsquo; now within our embedded procedure. As shown below, we will simply add a RAISERROR to the procedure, dbo.AddToAuditLog:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#cf222e">CREATE</span><span style="color:#fff"> </span><span style="color:#cf222e">OR</span><span style="color:#fff"> </span><span style="color:#cf222e">ALTER</span><span style="color:#fff"> </span><span style="color:#cf222e">PROCEDURE</span><span style="color:#fff"> </span><span style="color:#1f2328">[</span>dbo<span style="color:#1f2328">].[</span>AddToAuditLog<span style="color:#1f2328">]</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#0550ae">@</span>ProcName<span style="color:#fff">		</span>NVARCHAR<span style="color:#1f2328">(</span><span style="color:#0550ae">100</span><span style="color:#1f2328">),</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#0550ae">@</span>Who<span style="color:#fff">			</span>NVARCHAR<span style="color:#1f2328">(</span><span style="color:#0550ae">300</span><span style="color:#1f2328">),</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#0550ae">@</span><span style="color:#cf222e">When</span><span style="color:#fff">			</span>DATETIME<span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">AS</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">BEGIN</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#cf222e">INSERT</span><span style="color:#fff"> </span><span style="color:#cf222e">INTO</span><span style="color:#fff"> </span>dbo<span style="color:#1f2328">.</span>AuditLog<span style="color:#fff"> </span><span style="color:#1f2328">(</span>ProcName<span style="color:#1f2328">,</span>Who<span style="color:#1f2328">,[</span><span style="color:#cf222e">When</span><span style="color:#1f2328">])</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#cf222e">VALUES</span><span style="color:#fff"> </span><span style="color:#1f2328">(</span><span style="color:#0550ae">@</span>ProcName<span style="color:#1f2328">,</span><span style="color:#0550ae">@</span>Who<span style="color:#1f2328">,</span><span style="color:#0550ae">@</span><span style="color:#cf222e">When</span><span style="color:#1f2328">)</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff">	</span><span style="color:#57606a">-- Our Fake Bug Here
-</span></span></span><span style="display:flex;"><span><span style="color:#57606a"></span><span style="color:#fff">	</span>RAISERROR<span style="color:#1f2328">(</span><span style="color:#0a3069">&#39;Fake Bug&#39;</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span><span style="color:#0550ae">16</span><span style="color:#1f2328">,</span><span style="color:#fff"> </span><span style="color:#0550ae">1</span><span style="color:#1f2328">)</span><span style="color:#fff">
-</span></span></span><span style="display:flex;"><span><span style="color:#fff"></span><span style="color:#cf222e">END</span><span style="color:#fff">
-</span></span></span></code></pre></div><br>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">OR</span> <span style="color:#ff79c6">ALTER</span> <span style="color:#ff79c6">PROCEDURE</span> [dbo].[AddToAuditLog]
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">@</span>ProcName		NVARCHAR(<span style="color:#bd93f9">100</span>),
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">@</span>Who			NVARCHAR(<span style="color:#bd93f9">300</span>),
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">@</span><span style="color:#ff79c6">When</span>			DATETIME
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">AS</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">BEGIN</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">INSERT</span> <span style="color:#ff79c6">INTO</span> dbo.AuditLog (ProcName,Who,[<span style="color:#ff79c6">When</span>])
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">VALUES</span> (<span style="color:#ff79c6">@</span>ProcName,<span style="color:#ff79c6">@</span>Who,<span style="color:#ff79c6">@</span><span style="color:#ff79c6">When</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#6272a4">-- Our Fake Bug Here
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	RAISERROR(<span style="color:#f1fa8c">&#39;Fake Bug&#39;</span>, <span style="color:#bd93f9">16</span>, <span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">END</span>
+</span></span></code></pre></div><br>
 <p>The next time we run our unsuspecting unit test, <strong>[tests].[test GetUserDetail_LastYear]</strong>, we will see this:</p>
 <img src="/posts/post_images/messages_2.png" alt="tsqlt">
 <p><em>Bug&rsquo;s Life</em></p>
@@ -307,8 +307,8 @@ Consider a scenario where our main stored procedure interacts with numerous othe
 <br>
 <p>At its very basic functionality, Spy Procedure allows us to simply &lsquo;ignore&rsquo; a particular procedure call, and that&rsquo;s how we&rsquo;re going to utilise it today.</p>
 <p>So, we&rsquo;re going to add the following line of code:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#cf222e">EXEC</span><span style="color:#fff"> </span>tSQLt<span style="color:#1f2328">.</span>SpyProcedure<span style="color:#fff"> </span><span style="color:#0550ae">@</span>ProcedureName<span style="color:#fff"> </span><span style="color:#0550ae">=</span><span style="color:#fff"> </span><span style="color:#0a3069">&#39;dbo.AddToAuditLog&#39;</span><span style="color:#fff">
-</span></span></span></code></pre></div><p>This tells tSQLt to simply ignore any references (or calls), to our audit log procedure. As you can see below, we have added the Spy Procedure call within our Assemble stage:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXEC</span> tSQLt.SpyProcedure <span style="color:#ff79c6">@</span>ProcedureName <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;dbo.AddToAuditLog&#39;</span>
+</span></span></code></pre></div><p>This tells tSQLt to simply ignore any references (or calls), to our audit log procedure. As you can see below, we have added the Spy Procedure call within our Assemble stage:</p>
 <img src="/posts/post_images/tsqlt_1.png" alt="tsqlt">
 <br>
 <br>
