@@ -2,19 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://leebrownhill.github.io/posts/15_sql2025_dop_feedback/</loc>
+    <lastmod>2025-12-19T08:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://leebrownhill.github.io/</loc>
-    <lastmod>2025-12-09T06:00:00+00:00</lastmod>
+    <lastmod>2025-12-19T08:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://leebrownhill.github.io/tags/parallelism/</loc>
+    <lastmod>2025-12-19T08:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://leebrownhill.github.io/tags/performance/</loc>
+    <lastmod>2025-12-19T08:00:00+00:00</lastmod>
   </url><url>
     <loc>https://leebrownhill.github.io/posts/</loc>
-    <lastmod>2025-12-09T06:00:00+00:00</lastmod>
+    <lastmod>2025-12-19T08:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://leebrownhill.github.io/tags/sql2025/</loc>
+    <lastmod>2025-12-19T08:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://leebrownhill.github.io/tags/</loc>
+    <lastmod>2025-12-19T08:00:00+00:00</lastmod>
   </url><url>
     <loc>https://leebrownhill.github.io/tags/professional-growth/</loc>
     <lastmod>2025-12-09T06:00:00+00:00</lastmod>
   </url><url>
     <loc>https://leebrownhill.github.io/posts/14_tsql_tuesday_193/</loc>
-    <lastmod>2025-12-09T06:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://leebrownhill.github.io/tags/</loc>
     <lastmod>2025-12-09T06:00:00+00:00</lastmod>
   </url><url>
     <loc>https://leebrownhill.github.io/tags/tsql-tuesday/</loc>
@@ -29,13 +41,7 @@
     <loc>https://leebrownhill.github.io/tags/optimized_sp_executesql/</loc>
     <lastmod>2025-10-02T05:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://leebrownhill.github.io/tags/performance/</loc>
-    <lastmod>2025-10-02T05:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://leebrownhill.github.io/tags/sql/</loc>
-    <lastmod>2025-10-02T05:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://leebrownhill.github.io/tags/sql2025/</loc>
     <lastmod>2025-10-02T05:00:00+00:00</lastmod>
   </url><url>
     <loc>https://leebrownhill.github.io/tags/parameter-sniffing/</loc>
@@ -84,9 +90,6 @@
     <lastmod>2025-06-11T06:00:00+00:00</lastmod>
   </url><url>
     <loc>https://leebrownhill.github.io/tags/cxpacket/</loc>
-    <lastmod>2025-06-03T05:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://leebrownhill.github.io/tags/parallelism/</loc>
     <lastmod>2025-06-03T05:00:00+00:00</lastmod>
   </url><url>
     <loc>https://leebrownhill.github.io/posts/7_parallelismproblemswithsqlserver/</loc>

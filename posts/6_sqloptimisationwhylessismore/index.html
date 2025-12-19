@@ -166,110 +166,110 @@ Minimising the number of rows we need to work with as quickly as possible, as ea
 <p>Here we have an ugly query, it&rsquo;s joining up dataset to dataset, adding various conditional logic along the way too.
 Reading this type of query hurts, but I am trying to make a point here, and it&rsquo;s not &rsquo;that&rsquo; different to what I will commonly see out in the wild.
 You don&rsquo;t need to understand it all -  you don&rsquo;t even need to read it all. I just want you to be mindful of the number of joins, hops, spins arounds and touch the grounds we are doing throughout it.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>USE StackOverflow2013;
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">GO</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>USE StackOverflow2013;
+</span></span><span style="display:flex;"><span><span style="color:#719e07">GO</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">DROP</span> <span style="color:#ff79c6">TABLE</span> <span style="color:#ff79c6">IF</span> <span style="color:#ff79c6">EXISTS</span> <span style="color:#ff79c6">#</span>GetQuestionAndAnswers;
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">DROP</span> <span style="color:#ff79c6">TABLE</span> <span style="color:#ff79c6">IF</span> <span style="color:#ff79c6">EXISTS</span> <span style="color:#ff79c6">#</span>GetQuestionAndAnswers2;
+</span></span><span style="display:flex;"><span><span style="color:#719e07">DROP</span> <span style="color:#719e07">TABLE</span> <span style="color:#719e07">IF</span> <span style="color:#719e07">EXISTS</span> <span style="color:#719e07">#</span>GetQuestionAndAnswers;
+</span></span><span style="display:flex;"><span><span style="color:#719e07">DROP</span> <span style="color:#719e07">TABLE</span> <span style="color:#719e07">IF</span> <span style="color:#719e07">EXISTS</span> <span style="color:#719e07">#</span>GetQuestionAndAnswers2;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>;<span style="color:#ff79c6">WITH</span> GetQuestions <span style="color:#ff79c6">AS</span>
+</span></span><span style="display:flex;"><span>;<span style="color:#719e07">WITH</span> GetQuestions <span style="color:#719e07">AS</span>
 </span></span><span style="display:flex;"><span>(
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SELECT</span> 
-</span></span><span style="display:flex;"><span>		<span style="color:#f1fa8c">&#39;Question&#39;</span> <span style="color:#ff79c6">AS</span> Q,
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SELECT</span> 
+</span></span><span style="display:flex;"><span>		<span style="color:#2aa198">&#39;Question&#39;</span> <span style="color:#719e07">AS</span> Q,
 </span></span><span style="display:flex;"><span>		p.Title,
 </span></span><span style="display:flex;"><span>		p.OwnerUserId
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">FROM</span> dbo.Posts p
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">WHERE</span> p.PostTypeId <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">EXISTS</span> (<span style="color:#ff79c6">SELECT</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">FROM</span> dbo.Users u <span style="color:#ff79c6">WHERE</span> p.OwnerUserId <span style="color:#ff79c6">=</span> u.Id <span style="color:#ff79c6">AND</span> u.WebsiteUrl <span style="color:#ff79c6">&lt;&gt;</span> <span style="color:#f1fa8c">&#39;&#39;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">FROM</span> dbo.Posts p
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">WHERE</span> p.PostTypeId <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">AND</span> <span style="color:#719e07">EXISTS</span> (<span style="color:#719e07">SELECT</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">FROM</span> dbo.Users u <span style="color:#719e07">WHERE</span> p.OwnerUserId <span style="color:#719e07">=</span> u.Id <span style="color:#719e07">AND</span> u.WebsiteUrl <span style="color:#719e07">&lt;&gt;</span> <span style="color:#2aa198">&#39;&#39;</span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>),
-</span></span><span style="display:flex;"><span>GetAnswers <span style="color:#ff79c6">AS</span>
+</span></span><span style="display:flex;"><span>GetAnswers <span style="color:#719e07">AS</span>
 </span></span><span style="display:flex;"><span>(
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SELECT</span> 
-</span></span><span style="display:flex;"><span>		<span style="color:#f1fa8c">&#39;Answer&#39;</span> <span style="color:#ff79c6">AS</span> A,
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SELECT</span> 
+</span></span><span style="display:flex;"><span>		<span style="color:#2aa198">&#39;Answer&#39;</span> <span style="color:#719e07">AS</span> A,
 </span></span><span style="display:flex;"><span>		p.Title,
 </span></span><span style="display:flex;"><span>		p.OwnerUserId
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">FROM</span> dbo.Posts p
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">WHERE</span> p.PostTypeId <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">EXISTS</span> (<span style="color:#ff79c6">SELECT</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">FROM</span> dbo.Users u <span style="color:#ff79c6">WHERE</span> p.OwnerUserId <span style="color:#ff79c6">=</span> u.Id <span style="color:#ff79c6">AND</span> u.WebsiteUrl <span style="color:#ff79c6">&lt;&gt;</span> <span style="color:#f1fa8c">&#39;&#39;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">FROM</span> dbo.Posts p
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">WHERE</span> p.PostTypeId <span style="color:#719e07">=</span> <span style="color:#2aa198">2</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">AND</span> <span style="color:#719e07">EXISTS</span> (<span style="color:#719e07">SELECT</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">FROM</span> dbo.Users u <span style="color:#719e07">WHERE</span> p.OwnerUserId <span style="color:#719e07">=</span> u.Id <span style="color:#719e07">AND</span> u.WebsiteUrl <span style="color:#719e07">&lt;&gt;</span> <span style="color:#2aa198">&#39;&#39;</span>)
 </span></span><span style="display:flex;"><span>),
-</span></span><span style="display:flex;"><span>GetQuestionAndAnswers <span style="color:#ff79c6">AS</span>
+</span></span><span style="display:flex;"><span>GetQuestionAndAnswers <span style="color:#719e07">AS</span>
 </span></span><span style="display:flex;"><span>(
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SELECT</span> 
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SELECT</span> 
 </span></span><span style="display:flex;"><span>		GetQuestions.Q,
 </span></span><span style="display:flex;"><span>		GetQuestions.Title,
 </span></span><span style="display:flex;"><span>		GetQuestions.OwnerUserId 
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">FROM</span> GetQuestions
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">UNION</span> <span style="color:#ff79c6">ALL</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SELECT</span> 
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">FROM</span> GetQuestions
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">UNION</span> <span style="color:#719e07">ALL</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SELECT</span> 
 </span></span><span style="display:flex;"><span>		GetAnswers.A,
 </span></span><span style="display:flex;"><span>		GetAnswers.Title,
 </span></span><span style="display:flex;"><span>		GetAnswers.OwnerUserId 
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">FROM</span> GetAnswers
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">FROM</span> GetAnswers
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">SELECT</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SUM</span>(<span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> qa.Q <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Question&#39;</span> <span style="color:#ff79c6">THEN</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">END</span>) <span style="color:#ff79c6">AS</span> TotalQuestions,
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SUM</span>(<span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> qa.Q <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Answer&#39;</span>	<span style="color:#ff79c6">THEN</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">END</span>) <span style="color:#ff79c6">AS</span> TotalAnswers
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">INTO</span> <span style="color:#ff79c6">#</span>GetQuestionAndAnswers
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span> GetQuestionAndAnswers qa
+</span></span><span style="display:flex;"><span><span style="color:#719e07">SELECT</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SUM</span>(<span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> qa.Q <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;Question&#39;</span> <span style="color:#719e07">THEN</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">ELSE</span> <span style="color:#2aa198">0</span> <span style="color:#719e07">END</span>) <span style="color:#719e07">AS</span> TotalQuestions,
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SUM</span>(<span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> qa.Q <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;Answer&#39;</span>	<span style="color:#719e07">THEN</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">ELSE</span> <span style="color:#2aa198">0</span> <span style="color:#719e07">END</span>) <span style="color:#719e07">AS</span> TotalAnswers
+</span></span><span style="display:flex;"><span><span style="color:#719e07">INTO</span> <span style="color:#719e07">#</span>GetQuestionAndAnswers
+</span></span><span style="display:flex;"><span><span style="color:#719e07">FROM</span> GetQuestionAndAnswers qa
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>;<span style="color:#ff79c6">WITH</span> GetQuestions2 <span style="color:#ff79c6">AS</span>
+</span></span><span style="display:flex;"><span>;<span style="color:#719e07">WITH</span> GetQuestions2 <span style="color:#719e07">AS</span>
 </span></span><span style="display:flex;"><span>(
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SELECT</span> 
-</span></span><span style="display:flex;"><span>		<span style="color:#f1fa8c">&#39;Question&#39;</span> <span style="color:#ff79c6">AS</span> Q,
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SELECT</span> 
+</span></span><span style="display:flex;"><span>		<span style="color:#2aa198">&#39;Question&#39;</span> <span style="color:#719e07">AS</span> Q,
 </span></span><span style="display:flex;"><span>		p.Title,
 </span></span><span style="display:flex;"><span>		p.OwnerUserId
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">FROM</span> dbo.Posts p
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">WHERE</span> p.PostTypeId <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">EXISTS</span> (<span style="color:#ff79c6">SELECT</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">FROM</span> dbo.Users u <span style="color:#ff79c6">WHERE</span> p.OwnerUserId <span style="color:#ff79c6">=</span> u.Id <span style="color:#ff79c6">AND</span> u.WebsiteUrl <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&#39;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">FROM</span> dbo.Posts p
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">WHERE</span> p.PostTypeId <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">AND</span> <span style="color:#719e07">EXISTS</span> (<span style="color:#719e07">SELECT</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">FROM</span> dbo.Users u <span style="color:#719e07">WHERE</span> p.OwnerUserId <span style="color:#719e07">=</span> u.Id <span style="color:#719e07">AND</span> u.WebsiteUrl <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;&#39;</span>)
 </span></span><span style="display:flex;"><span>),
-</span></span><span style="display:flex;"><span>GetAnswers2 <span style="color:#ff79c6">AS</span>
+</span></span><span style="display:flex;"><span>GetAnswers2 <span style="color:#719e07">AS</span>
 </span></span><span style="display:flex;"><span>(
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SELECT</span> 
-</span></span><span style="display:flex;"><span>		<span style="color:#f1fa8c">&#39;Answer&#39;</span> <span style="color:#ff79c6">AS</span> A,
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SELECT</span> 
+</span></span><span style="display:flex;"><span>		<span style="color:#2aa198">&#39;Answer&#39;</span> <span style="color:#719e07">AS</span> A,
 </span></span><span style="display:flex;"><span>		p.Title,
 </span></span><span style="display:flex;"><span>		p.OwnerUserId
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">FROM</span> dbo.Posts p
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">WHERE</span> p.PostTypeId <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">EXISTS</span> (<span style="color:#ff79c6">SELECT</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">FROM</span> dbo.Users u <span style="color:#ff79c6">WHERE</span> p.OwnerUserId <span style="color:#ff79c6">=</span> u.Id <span style="color:#ff79c6">AND</span> u.WebsiteUrl <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&#39;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">FROM</span> dbo.Posts p
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">WHERE</span> p.PostTypeId <span style="color:#719e07">=</span> <span style="color:#2aa198">2</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">AND</span> <span style="color:#719e07">EXISTS</span> (<span style="color:#719e07">SELECT</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">FROM</span> dbo.Users u <span style="color:#719e07">WHERE</span> p.OwnerUserId <span style="color:#719e07">=</span> u.Id <span style="color:#719e07">AND</span> u.WebsiteUrl <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;&#39;</span>)
 </span></span><span style="display:flex;"><span>),
-</span></span><span style="display:flex;"><span>GetQuestionAndAnswers2 <span style="color:#ff79c6">AS</span>
+</span></span><span style="display:flex;"><span>GetQuestionAndAnswers2 <span style="color:#719e07">AS</span>
 </span></span><span style="display:flex;"><span>(
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SELECT</span> 
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SELECT</span> 
 </span></span><span style="display:flex;"><span>		GetQuestions2.Q,
 </span></span><span style="display:flex;"><span>		GetQuestions2.Title,
 </span></span><span style="display:flex;"><span>		GetQuestions2.OwnerUserId 
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">FROM</span> GetQuestions2
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">UNION</span> <span style="color:#ff79c6">ALL</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SELECT</span> 
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">FROM</span> GetQuestions2
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">UNION</span> <span style="color:#719e07">ALL</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SELECT</span> 
 </span></span><span style="display:flex;"><span>		GetAnswers2.A,
 </span></span><span style="display:flex;"><span>		GetAnswers2.Title,
 </span></span><span style="display:flex;"><span>		GetAnswers2.OwnerUserId 
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">FROM</span> GetAnswers2
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">FROM</span> GetAnswers2
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">SELECT</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SUM</span>(<span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> qa.Q <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Question&#39;</span> <span style="color:#ff79c6">THEN</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">END</span>) <span style="color:#ff79c6">AS</span> TotalQuestions,
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SUM</span>(<span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> qa.Q <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Answer&#39;</span>	<span style="color:#ff79c6">THEN</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">END</span>) <span style="color:#ff79c6">AS</span> TotalAnswers
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">INTO</span> <span style="color:#ff79c6">#</span>GetQuestionAndAnswers2
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span> GetQuestionAndAnswers2 qa
+</span></span><span style="display:flex;"><span><span style="color:#719e07">SELECT</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SUM</span>(<span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> qa.Q <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;Question&#39;</span> <span style="color:#719e07">THEN</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">ELSE</span> <span style="color:#2aa198">0</span> <span style="color:#719e07">END</span>) <span style="color:#719e07">AS</span> TotalQuestions,
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SUM</span>(<span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> qa.Q <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;Answer&#39;</span>	<span style="color:#719e07">THEN</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">ELSE</span> <span style="color:#2aa198">0</span> <span style="color:#719e07">END</span>) <span style="color:#719e07">AS</span> TotalAnswers
+</span></span><span style="display:flex;"><span><span style="color:#719e07">INTO</span> <span style="color:#719e07">#</span>GetQuestionAndAnswers2
+</span></span><span style="display:flex;"><span><span style="color:#719e07">FROM</span> GetQuestionAndAnswers2 qa
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>;<span style="color:#ff79c6">WITH</span> AllTogether <span style="color:#ff79c6">AS</span>
+</span></span><span style="display:flex;"><span>;<span style="color:#719e07">WITH</span> AllTogether <span style="color:#719e07">AS</span>
 </span></span><span style="display:flex;"><span>(
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SELECT</span> <span style="color:#f1fa8c">&#39;Users With Website&#39;</span> <span style="color:#ff79c6">AS</span> [Category], 		<span style="color:#ff79c6">*</span> <span style="color:#ff79c6">FROM</span> <span style="color:#ff79c6">#</span>GetQuestionAndAnswers
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">UNION</span> <span style="color:#ff79c6">ALL</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SELECT</span> <span style="color:#f1fa8c">&#39;Users Without Website&#39;</span> <span style="color:#ff79c6">AS</span> [Category], 	<span style="color:#ff79c6">*</span> <span style="color:#ff79c6">FROM</span> <span style="color:#ff79c6">#</span>GetQuestionAndAnswers2
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SELECT</span> <span style="color:#2aa198">&#39;Users With Website&#39;</span> <span style="color:#719e07">AS</span> [Category], 		<span style="color:#719e07">*</span> <span style="color:#719e07">FROM</span> <span style="color:#719e07">#</span>GetQuestionAndAnswers
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">UNION</span> <span style="color:#719e07">ALL</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SELECT</span> <span style="color:#2aa198">&#39;Users Without Website&#39;</span> <span style="color:#719e07">AS</span> [Category], 	<span style="color:#719e07">*</span> <span style="color:#719e07">FROM</span> <span style="color:#719e07">#</span>GetQuestionAndAnswers2
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">SELECT</span> 
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">MAX</span>(<span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> Category <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Users With Website&#39;</span>		<span style="color:#ff79c6">THEN</span> TotalQuestions <span style="color:#ff79c6">END</span>)	<span style="color:#ff79c6">AS</span> TotalQuestionsWithURL,
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">MAX</span>(<span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> Category <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Users With Website&#39;</span>		<span style="color:#ff79c6">THEN</span> TotalAnswers <span style="color:#ff79c6">END</span>)		<span style="color:#ff79c6">AS</span> TotalAnswersWithURL,
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">MAX</span>(<span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> Category <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Users Without Website&#39;</span>	<span style="color:#ff79c6">THEN</span> TotalQuestions <span style="color:#ff79c6">END</span>)	<span style="color:#ff79c6">AS</span> TotalQuestionWithoutURL,
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">MAX</span>(<span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> Category <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Users Without Website&#39;</span>	<span style="color:#ff79c6">THEN</span> TotalAnswers <span style="color:#ff79c6">END</span>)		<span style="color:#ff79c6">AS</span> TotalAnswersWithoutURL
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span> AllTogether a;
+</span></span><span style="display:flex;"><span><span style="color:#719e07">SELECT</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">MAX</span>(<span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> Category <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;Users With Website&#39;</span>		<span style="color:#719e07">THEN</span> TotalQuestions <span style="color:#719e07">END</span>)	<span style="color:#719e07">AS</span> TotalQuestionsWithURL,
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">MAX</span>(<span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> Category <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;Users With Website&#39;</span>		<span style="color:#719e07">THEN</span> TotalAnswers <span style="color:#719e07">END</span>)		<span style="color:#719e07">AS</span> TotalAnswersWithURL,
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">MAX</span>(<span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> Category <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;Users Without Website&#39;</span>	<span style="color:#719e07">THEN</span> TotalQuestions <span style="color:#719e07">END</span>)	<span style="color:#719e07">AS</span> TotalQuestionWithoutURL,
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">MAX</span>(<span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> Category <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;Users Without Website&#39;</span>	<span style="color:#719e07">THEN</span> TotalAnswers <span style="color:#719e07">END</span>)		<span style="color:#719e07">AS</span> TotalAnswersWithoutURL
+</span></span><span style="display:flex;"><span><span style="color:#719e07">FROM</span> AllTogether a;
 </span></span></code></pre></div><br>
 <h3 id="demo-we-can-do-better">Demo: We Can Do Better</h3>
 <p>As you have seen, we have a long messy query which utilises all the things along the way.</p>
@@ -282,20 +282,20 @@ You don&rsquo;t need to understand it all -  you don&rsquo;t even need to read i
 <br>
 <h4 id="1-accessing-the-dbousers-table---many-times">1 Accessing the dbo.Users table - many times</h4>
 <p>We are repeatedly accessing the dbo.Users table to check that if corresponding post has a user with or without a website:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#6272a4">-- Example 1
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">EXISTS</span> (<span style="color:#ff79c6">SELECT</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">FROM</span> dbo.Users u <span style="color:#ff79c6">WHERE</span> p.OwnerUserId <span style="color:#ff79c6">=</span> u.Id <span style="color:#ff79c6">AND</span> u.WebsiteUrl <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&#39;</span>)
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#586e75">-- Example 1
+</span></span></span><span style="display:flex;"><span><span style="color:#586e75"></span><span style="color:#719e07">AND</span> <span style="color:#719e07">EXISTS</span> (<span style="color:#719e07">SELECT</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">FROM</span> dbo.Users u <span style="color:#719e07">WHERE</span> p.OwnerUserId <span style="color:#719e07">=</span> u.Id <span style="color:#719e07">AND</span> u.WebsiteUrl <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;&#39;</span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">-- Example 2
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">EXISTS</span> (<span style="color:#ff79c6">SELECT</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">FROM</span> dbo.Users u <span style="color:#ff79c6">WHERE</span> p.OwnerUserId <span style="color:#ff79c6">=</span> u.Id <span style="color:#ff79c6">AND</span> u.WebsiteUrl <span style="color:#ff79c6">&lt;&gt;</span> <span style="color:#f1fa8c">&#39;&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#586e75">-- Example 2
+</span></span></span><span style="display:flex;"><span><span style="color:#586e75"></span><span style="color:#719e07">AND</span> <span style="color:#719e07">EXISTS</span> (<span style="color:#719e07">SELECT</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">FROM</span> dbo.Users u <span style="color:#719e07">WHERE</span> p.OwnerUserId <span style="color:#719e07">=</span> u.Id <span style="color:#719e07">AND</span> u.WebsiteUrl <span style="color:#719e07">&lt;&gt;</span> <span style="color:#2aa198">&#39;&#39;</span>)
 </span></span></code></pre></div><p>Sure, I have amplified this aspect of the query somewhat for demonstration purposes. But it&rsquo;s not that dissimilar to the things I will often see out in the wild. I understand how it can easily happen too. You have time-pushed, stressed developers, tacking on things over time and you end up with unnecessary work being done.</p>
 <p>So how do we correct this issue? We &lsquo;materialise&rsquo; a dataset early on within the query. Instead of querying the dbo.Users table four times, all we need to do is this, <em><strong>once</strong></em>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">INSERT</span> <span style="color:#ff79c6">INTO</span> <span style="color:#ff79c6">#</span>UserDetail
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#719e07">INSERT</span> <span style="color:#719e07">INTO</span> <span style="color:#719e07">#</span>UserDetail
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">SELECT</span> 
+</span></span><span style="display:flex;"><span><span style="color:#719e07">SELECT</span> 
 </span></span><span style="display:flex;"><span>    u.Id,
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> u.WebsiteUrl <span style="color:#ff79c6">&lt;&gt;</span> <span style="color:#f1fa8c">&#39;&#39;</span> <span style="color:#ff79c6">THEN</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">END</span> <span style="color:#ff79c6">AS</span> WebExists,
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> u.WebsiteUrl <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&#39;</span>  <span style="color:#ff79c6">THEN</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">END</span> <span style="color:#ff79c6">AS</span> WebDoesNotExist
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span> dbo.Users u;
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> u.WebsiteUrl <span style="color:#719e07">&lt;&gt;</span> <span style="color:#2aa198">&#39;&#39;</span> <span style="color:#719e07">THEN</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">ELSE</span> <span style="color:#2aa198">0</span> <span style="color:#719e07">END</span> <span style="color:#719e07">AS</span> WebExists,
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> u.WebsiteUrl <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;&#39;</span>  <span style="color:#719e07">THEN</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">ELSE</span> <span style="color:#2aa198">0</span> <span style="color:#719e07">END</span> <span style="color:#719e07">AS</span> WebDoesNotExist
+</span></span><span style="display:flex;"><span><span style="color:#719e07">FROM</span> dbo.Users u;
 </span></span></code></pre></div><p>We are materialising the dataset into a Temporary Table. This is a simple but important concept because:</p>
 <ul>
 <li>We only need to access the dbo.Users table once. One pass through it, and we have everything we need for the rest of the query</li>
@@ -307,57 +307,57 @@ You don&rsquo;t need to understand it all -  you don&rsquo;t even need to read i
 <p>In a similar vein to the issue with the Users table, we are rendering information from the dbo.Posts table. We have multiple CTEs rendering Posts information, based on whether it&rsquo;s a question or answer.
 Further down, we reassemble this collected information using a UNION to bring the multiple datasets back together.</p>
 <p><strong>Issue 1 : Repeated dataset renders for questions and answers</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#6272a4">-- Example 1
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">WITH</span> GetQuestions <span style="color:#ff79c6">AS</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#586e75">-- Example 1
+</span></span></span><span style="display:flex;"><span><span style="color:#586e75"></span><span style="color:#719e07">WITH</span> GetQuestions <span style="color:#719e07">AS</span>
 </span></span><span style="display:flex;"><span>(
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SELECT</span> 
-</span></span><span style="display:flex;"><span>		<span style="color:#f1fa8c">&#39;Question&#39;</span> <span style="color:#ff79c6">AS</span> Q,
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SELECT</span> 
+</span></span><span style="display:flex;"><span>		<span style="color:#2aa198">&#39;Question&#39;</span> <span style="color:#719e07">AS</span> Q,
 </span></span><span style="display:flex;"><span>		p.Title,
 </span></span><span style="display:flex;"><span>		p.OwnerUserId
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">FROM</span> dbo.Posts p
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">WHERE</span> p.PostTypeId <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">EXISTS</span> (<span style="color:#ff79c6">SELECT</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">FROM</span> dbo.Users u <span style="color:#ff79c6">WHERE</span> p.OwnerUserId <span style="color:#ff79c6">=</span> u.Id <span style="color:#ff79c6">AND</span> u.WebsiteUrl <span style="color:#ff79c6">&lt;&gt;</span> <span style="color:#f1fa8c">&#39;&#39;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">FROM</span> dbo.Posts p
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">WHERE</span> p.PostTypeId <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">AND</span> <span style="color:#719e07">EXISTS</span> (<span style="color:#719e07">SELECT</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">FROM</span> dbo.Users u <span style="color:#719e07">WHERE</span> p.OwnerUserId <span style="color:#719e07">=</span> u.Id <span style="color:#719e07">AND</span> u.WebsiteUrl <span style="color:#719e07">&lt;&gt;</span> <span style="color:#2aa198">&#39;&#39;</span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">-- Example 2
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>GetAnswers <span style="color:#ff79c6">AS</span>
+</span></span><span style="display:flex;"><span><span style="color:#586e75">-- Example 2
+</span></span></span><span style="display:flex;"><span><span style="color:#586e75"></span>GetAnswers <span style="color:#719e07">AS</span>
 </span></span><span style="display:flex;"><span>(
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SELECT</span> 
-</span></span><span style="display:flex;"><span>		<span style="color:#f1fa8c">&#39;Answer&#39;</span> <span style="color:#ff79c6">AS</span> A,
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SELECT</span> 
+</span></span><span style="display:flex;"><span>		<span style="color:#2aa198">&#39;Answer&#39;</span> <span style="color:#719e07">AS</span> A,
 </span></span><span style="display:flex;"><span>		p.Title,
 </span></span><span style="display:flex;"><span>		p.OwnerUserId
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">FROM</span> dbo.Posts p
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">WHERE</span> p.PostTypeId <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">EXISTS</span> (<span style="color:#ff79c6">SELECT</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">FROM</span> dbo.Users u <span style="color:#ff79c6">WHERE</span> p.OwnerUserId <span style="color:#ff79c6">=</span> u.Id <span style="color:#ff79c6">AND</span> u.WebsiteUrl <span style="color:#ff79c6">&lt;&gt;</span> <span style="color:#f1fa8c">&#39;&#39;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">FROM</span> dbo.Posts p
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">WHERE</span> p.PostTypeId <span style="color:#719e07">=</span> <span style="color:#2aa198">2</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">AND</span> <span style="color:#719e07">EXISTS</span> (<span style="color:#719e07">SELECT</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">FROM</span> dbo.Users u <span style="color:#719e07">WHERE</span> p.OwnerUserId <span style="color:#719e07">=</span> u.Id <span style="color:#719e07">AND</span> u.WebsiteUrl <span style="color:#719e07">&lt;&gt;</span> <span style="color:#2aa198">&#39;&#39;</span>)
 </span></span><span style="display:flex;"><span>)
 </span></span></code></pre></div><p><strong>Issue 2 : Unnecessary dataset combining</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>	<span style="color:#ff79c6">SELECT</span> 
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>	<span style="color:#719e07">SELECT</span> 
 </span></span><span style="display:flex;"><span>		GetQuestions.Q,
 </span></span><span style="display:flex;"><span>		GetQuestions.Title,
 </span></span><span style="display:flex;"><span>		GetQuestions.OwnerUserId 
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">FROM</span> GetQuestions
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">UNION</span> <span style="color:#ff79c6">ALL</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SELECT</span> 
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">FROM</span> GetQuestions
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">UNION</span> <span style="color:#719e07">ALL</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SELECT</span> 
 </span></span><span style="display:flex;"><span>		GetAnswers.A,
 </span></span><span style="display:flex;"><span>		GetAnswers.Title,
 </span></span><span style="display:flex;"><span>		GetAnswers.OwnerUserId 
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">FROM</span> GetAnswers
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">FROM</span> GetAnswers
 </span></span></code></pre></div><p>Once again, I have been a scamp here and have overdone it slightly to prove a point.
 However, it&rsquo;s really not uncommon to see this type of process in the real world. I have often stared at my screen, reviewing somebody&rsquo;s code, thinking &ldquo;But&hellip;why?&rdquo;
 (<em>More worryingly, sometimes I realise it&rsquo;s my own code</em>)</p>
 <p>Despite having those six CTEs (each rendering information from the dbo.Posts table) all we ultimately need to get the same output is the following:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">SELECT</span> 
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">SUM</span>(<span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> p.PostTypeId <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">AND</span> u.WebExists <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">THEN</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">END</span>) <span style="color:#ff79c6">AS</span> TotalQuestionsWithURL,
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">SUM</span>(<span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> p.PostTypeId <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">AND</span> u.WebExists <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">THEN</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">END</span>) <span style="color:#ff79c6">AS</span> TotalAnswersWithURL,
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">SUM</span>(<span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> p.PostTypeId <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">AND</span> u.WebDoesNotExist <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">THEN</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">END</span>) <span style="color:#ff79c6">AS</span> TotalQuestionWithoutURL,
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">SUM</span>(<span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> p.PostTypeId <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">AND</span> u.WebDoesNotExist <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">THEN</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">END</span>) <span style="color:#ff79c6">AS</span> TotalAnswersWithoutURL
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span> dbo.Posts p
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">INNER</span> <span style="color:#ff79c6">JOIN</span> <span style="color:#ff79c6">#</span>UserDetail u <span style="color:#ff79c6">ON</span> p.OwnerUserId <span style="color:#ff79c6">=</span> u.UserId
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#719e07">SELECT</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">SUM</span>(<span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> p.PostTypeId <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">AND</span> u.WebExists <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#719e07">THEN</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">ELSE</span> <span style="color:#2aa198">0</span> <span style="color:#719e07">END</span>) <span style="color:#719e07">AS</span> TotalQuestionsWithURL,
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">SUM</span>(<span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> p.PostTypeId <span style="color:#719e07">=</span> <span style="color:#2aa198">2</span> <span style="color:#719e07">AND</span> u.WebExists <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#719e07">THEN</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">ELSE</span> <span style="color:#2aa198">0</span> <span style="color:#719e07">END</span>) <span style="color:#719e07">AS</span> TotalAnswersWithURL,
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">SUM</span>(<span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> p.PostTypeId <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">AND</span> u.WebDoesNotExist <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#719e07">THEN</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">ELSE</span> <span style="color:#2aa198">0</span> <span style="color:#719e07">END</span>) <span style="color:#719e07">AS</span> TotalQuestionWithoutURL,
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">SUM</span>(<span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> p.PostTypeId <span style="color:#719e07">=</span> <span style="color:#2aa198">2</span> <span style="color:#719e07">AND</span> u.WebDoesNotExist <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#719e07">THEN</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">ELSE</span> <span style="color:#2aa198">0</span> <span style="color:#719e07">END</span>) <span style="color:#719e07">AS</span> TotalAnswersWithoutURL
+</span></span><span style="display:flex;"><span><span style="color:#719e07">FROM</span> dbo.Posts p
+</span></span><span style="display:flex;"><span><span style="color:#719e07">INNER</span> <span style="color:#719e07">JOIN</span> <span style="color:#719e07">#</span>UserDetail u <span style="color:#719e07">ON</span> p.OwnerUserId <span style="color:#719e07">=</span> u.UserId
 </span></span></code></pre></div><p>Key points about the above:</p>
 <ul>
 <li>We are able to make one pass of the dbo.Posts table</li>
@@ -365,37 +365,37 @@ However, it&rsquo;s really not uncommon to see this type of process in the real 
 <li>We have finally joined against the temporary table #UserDetail</li>
 </ul>
 <p>By rewriting the original query, we have reduced it from ~106 lines of code to just ~30.  This is the final improved query:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>USE StackOverflow2013;
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">GO</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>USE StackOverflow2013;
+</span></span><span style="display:flex;"><span><span style="color:#719e07">GO</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">DROP</span> <span style="color:#ff79c6">TABLE</span> <span style="color:#ff79c6">IF</span> <span style="color:#ff79c6">EXISTS</span> <span style="color:#ff79c6">#</span>UserDetail;
+</span></span><span style="display:flex;"><span><span style="color:#719e07">DROP</span> <span style="color:#719e07">TABLE</span> <span style="color:#719e07">IF</span> <span style="color:#719e07">EXISTS</span> <span style="color:#719e07">#</span>UserDetail;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">TABLE</span> <span style="color:#ff79c6">#</span>UserDetail
+</span></span><span style="display:flex;"><span><span style="color:#719e07">CREATE</span> <span style="color:#719e07">TABLE</span> <span style="color:#719e07">#</span>UserDetail
 </span></span><span style="display:flex;"><span>(
-</span></span><span style="display:flex;"><span>    UserId <span style="color:#8be9fd;font-style:italic">INT</span>,
-</span></span><span style="display:flex;"><span>    WebExists <span style="color:#8be9fd;font-style:italic">BIT</span>,
-</span></span><span style="display:flex;"><span>    WebDoesNotExist <span style="color:#8be9fd;font-style:italic">BIT</span>
+</span></span><span style="display:flex;"><span>    UserId <span style="color:#b58900">INT</span>,
+</span></span><span style="display:flex;"><span>    WebExists <span style="color:#b58900">BIT</span>,
+</span></span><span style="display:flex;"><span>    WebDoesNotExist <span style="color:#b58900">BIT</span>
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">INSERT</span> <span style="color:#ff79c6">INTO</span> <span style="color:#ff79c6">#</span>UserDetail
+</span></span><span style="display:flex;"><span><span style="color:#719e07">INSERT</span> <span style="color:#719e07">INTO</span> <span style="color:#719e07">#</span>UserDetail
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">SELECT</span> 
+</span></span><span style="display:flex;"><span><span style="color:#719e07">SELECT</span> 
 </span></span><span style="display:flex;"><span>    u.Id,
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> u.WebsiteUrl <span style="color:#ff79c6">&lt;&gt;</span> <span style="color:#f1fa8c">&#39;&#39;</span> <span style="color:#ff79c6">THEN</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">END</span> <span style="color:#ff79c6">AS</span> WebExists,
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> u.WebsiteUrl <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&#39;</span>  <span style="color:#ff79c6">THEN</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">END</span> <span style="color:#ff79c6">AS</span> WebDoesNotExist
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span> dbo.Users u;
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> u.WebsiteUrl <span style="color:#719e07">&lt;&gt;</span> <span style="color:#2aa198">&#39;&#39;</span> <span style="color:#719e07">THEN</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">ELSE</span> <span style="color:#2aa198">0</span> <span style="color:#719e07">END</span> <span style="color:#719e07">AS</span> WebExists,
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> u.WebsiteUrl <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;&#39;</span>  <span style="color:#719e07">THEN</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">ELSE</span> <span style="color:#2aa198">0</span> <span style="color:#719e07">END</span> <span style="color:#719e07">AS</span> WebDoesNotExist
+</span></span><span style="display:flex;"><span><span style="color:#719e07">FROM</span> dbo.Users u;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">SELECT</span> 
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">SUM</span>(<span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> p.PostTypeId <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">AND</span> u.WebExists <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">THEN</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">END</span>) <span style="color:#ff79c6">AS</span> TotalQuestionsWithURL,
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">SUM</span>(<span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> p.PostTypeId <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">AND</span> u.WebExists <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">THEN</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">END</span>) <span style="color:#ff79c6">AS</span> TotalAnswersWithURL,
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">SUM</span>(<span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> p.PostTypeId <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">AND</span> u.WebDoesNotExist <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">THEN</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">END</span>) <span style="color:#ff79c6">AS</span> TotalQuestionWithoutURL,
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">SUM</span>(<span style="color:#ff79c6">CASE</span> <span style="color:#ff79c6">WHEN</span> p.PostTypeId <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">AND</span> u.WebDoesNotExist <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">THEN</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">END</span>) <span style="color:#ff79c6">AS</span> TotalAnswersWithoutURL
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span> dbo.Posts p
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">INNER</span> <span style="color:#ff79c6">JOIN</span> <span style="color:#ff79c6">#</span>UserDetail u <span style="color:#ff79c6">ON</span> p.OwnerUserId <span style="color:#ff79c6">=</span> u.UserId
+</span></span><span style="display:flex;"><span><span style="color:#719e07">SELECT</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">SUM</span>(<span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> p.PostTypeId <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">AND</span> u.WebExists <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#719e07">THEN</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">ELSE</span> <span style="color:#2aa198">0</span> <span style="color:#719e07">END</span>) <span style="color:#719e07">AS</span> TotalQuestionsWithURL,
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">SUM</span>(<span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> p.PostTypeId <span style="color:#719e07">=</span> <span style="color:#2aa198">2</span> <span style="color:#719e07">AND</span> u.WebExists <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#719e07">THEN</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">ELSE</span> <span style="color:#2aa198">0</span> <span style="color:#719e07">END</span>) <span style="color:#719e07">AS</span> TotalAnswersWithURL,
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">SUM</span>(<span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> p.PostTypeId <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">AND</span> u.WebDoesNotExist <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#719e07">THEN</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">ELSE</span> <span style="color:#2aa198">0</span> <span style="color:#719e07">END</span>) <span style="color:#719e07">AS</span> TotalQuestionWithoutURL,
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">SUM</span>(<span style="color:#719e07">CASE</span> <span style="color:#719e07">WHEN</span> p.PostTypeId <span style="color:#719e07">=</span> <span style="color:#2aa198">2</span> <span style="color:#719e07">AND</span> u.WebDoesNotExist <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#719e07">THEN</span> <span style="color:#2aa198">1</span> <span style="color:#719e07">ELSE</span> <span style="color:#2aa198">0</span> <span style="color:#719e07">END</span>) <span style="color:#719e07">AS</span> TotalAnswersWithoutURL
+</span></span><span style="display:flex;"><span><span style="color:#719e07">FROM</span> dbo.Posts p
+</span></span><span style="display:flex;"><span><span style="color:#719e07">INNER</span> <span style="color:#719e07">JOIN</span> <span style="color:#719e07">#</span>UserDetail u <span style="color:#719e07">ON</span> p.OwnerUserId <span style="color:#719e07">=</span> u.UserId
 </span></span></code></pre></div><br>
 <p>Sure, you will just have to take my word for it here (<em>or do the demo yourself</em>), but just for completeness, here are the outputs of query 1 and 2:</p>
 <p>Query 1 Output - <br></p>

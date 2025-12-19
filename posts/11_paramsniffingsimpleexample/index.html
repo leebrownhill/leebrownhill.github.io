@@ -153,20 +153,20 @@ A fair question.</p>
 <br>
 <h3 id="setting-things-up">Setting things up</h3>
 <p>For this demo, we will use the large StackOverflow database (207Gb). We will create ourselves a Stored Procedure called dbo.Rincewind:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">OR</span> <span style="color:#ff79c6">ALTER</span> <span style="color:#ff79c6">PROCEDURE</span> dbo.Rincewind
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">@</span>Badge <span style="color:#ff79c6">AS</span> NVARCHAR(<span style="color:#bd93f9">40</span>)
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">AS</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">BEGIN</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#719e07">CREATE</span> <span style="color:#719e07">OR</span> <span style="color:#719e07">ALTER</span> <span style="color:#719e07">PROCEDURE</span> dbo.Rincewind
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">@</span>Badge <span style="color:#719e07">AS</span> NVARCHAR(<span style="color:#2aa198">40</span>)
+</span></span><span style="display:flex;"><span><span style="color:#719e07">AS</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">BEGIN</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">SELECT</span>
-</span></span><span style="display:flex;"><span>	b.Name <span style="color:#ff79c6">AS</span> [BadgeName],
-</span></span><span style="display:flex;"><span>	b.UserId <span style="color:#ff79c6">AS</span> [UserId],
-</span></span><span style="display:flex;"><span>	b.<span style="color:#8be9fd;font-style:italic">Date</span> <span style="color:#ff79c6">AS</span> [DateAwarded]
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span> dbo.Badges b
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">WHERE</span> b.Name <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">@</span>Badge
+</span></span><span style="display:flex;"><span><span style="color:#719e07">SELECT</span>
+</span></span><span style="display:flex;"><span>	b.Name <span style="color:#719e07">AS</span> [BadgeName],
+</span></span><span style="display:flex;"><span>	b.UserId <span style="color:#719e07">AS</span> [UserId],
+</span></span><span style="display:flex;"><span>	b.<span style="color:#b58900">Date</span> <span style="color:#719e07">AS</span> [DateAwarded]
+</span></span><span style="display:flex;"><span><span style="color:#719e07">FROM</span> dbo.Badges b
+</span></span><span style="display:flex;"><span><span style="color:#719e07">WHERE</span> b.Name <span style="color:#719e07">=</span> <span style="color:#719e07">@</span>Badge
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">END</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">GO</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">END</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">GO</span>
 </span></span></code></pre></div><p>The simple Stored Procedure does the following:</p>
 <ul>
 <li>Takes Badge name as an input parameter</li>
@@ -190,7 +190,7 @@ Looking at the distribution in the dbo.Badges table, some badge names have a lar
 <br>
 <h3 id="executing-the-procedure---1">Executing the Procedure - 1</h3>
 <p>Now let&rsquo;s execute our procedure with the first chosen value:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXEC</span> dbo.Rincewind <span style="color:#ff79c6">@</span>Badge <span style="color:#ff79c6">=</span> N<span style="color:#f1fa8c">&#39;Popular Question&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#719e07">EXEC</span> dbo.Rincewind <span style="color:#719e07">@</span>Badge <span style="color:#719e07">=</span> N<span style="color:#2aa198">&#39;Popular Question&#39;</span>
 </span></span></code></pre></div><p>For this run, SQL did 578,098 logical reads:</p>
 <img src="/posts/post_images/parametersniffing_1.1.png" alt="Execution Time">
 <br>
@@ -204,7 +204,7 @@ Looking at the distribution in the dbo.Badges table, some badge names have a lar
 <br>
 <h3 id="executing-the-procedure---2">Executing the Procedure - 2</h3>
 <p>Next, we are going to execute the same procedure, with our other chosen input value of &lsquo;powerpoint&rsquo;:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXEC</span> dbo.Rincewind <span style="color:#ff79c6">@</span>Badge <span style="color:#ff79c6">=</span> N<span style="color:#f1fa8c">&#39;powerpoint&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#719e07">EXEC</span> dbo.Rincewind <span style="color:#719e07">@</span>Badge <span style="color:#719e07">=</span> N<span style="color:#2aa198">&#39;powerpoint&#39;</span>
 </span></span></code></pre></div><p>For this run, SQL did 583,641 logical reads:</p>
 <img src="/posts/post_images/parametersniffing_3.1.png" alt="Execution Time">
 <br>
@@ -225,11 +225,11 @@ Looking at the distribution in the dbo.Badges table, some badge names have a lar
 <p>But what happens when we run the procedure with the scenarios in the opposite order? Let’s find out…</p>
 <br>
 <p>First, let’s reset things by marking the procedure for recompile. This will remove any cached plans that exist within the procedure cache, for dbo.Rincewind:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXEC</span> sys.sp_recompile <span style="color:#ff79c6">@</span>objname <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;dbo.Rincewind&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#719e07">EXEC</span> sys.sp_recompile <span style="color:#719e07">@</span>objname <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;dbo.Rincewind&#39;</span>
 </span></span></code></pre></div><p><em>Note: In theory, this simulates a server or service restart. Cached plans can (and will) be removed for other reasons, such as memory pressure</em></p>
 <br>
 <p>Now, let&rsquo;s run our procedure with the &lsquo;small&rsquo; input parameter:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXEC</span> dbo.Rincewind <span style="color:#ff79c6">@</span>Badge <span style="color:#ff79c6">=</span> N<span style="color:#f1fa8c">&#39;powerpoint&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#719e07">EXEC</span> dbo.Rincewind <span style="color:#719e07">@</span>Badge <span style="color:#719e07">=</span> N<span style="color:#2aa198">&#39;powerpoint&#39;</span>
 </span></span></code></pre></div><p>For this run, SQL did 44 logical reads:</p>
 <img src="/posts/post_images/parametersniffing_5.1.png" alt="Execution Time">
 <br>
@@ -246,7 +246,7 @@ Looking at the distribution in the dbo.Badges table, some badge names have a lar
 <br>
 <br>
 <p>Continuing on, we will now run the procedure with the parameter that we know matches a lot more records:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXEC</span> dbo.Rincewind <span style="color:#ff79c6">@</span>Badge <span style="color:#ff79c6">=</span> N<span style="color:#f1fa8c">&#39;Popular Question&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#719e07">EXEC</span> dbo.Rincewind <span style="color:#719e07">@</span>Badge <span style="color:#719e07">=</span> N<span style="color:#2aa198">&#39;Popular Question&#39;</span>
 </span></span></code></pre></div><p>Well, this is odd - the execution this run did a whopping 31,241,807 reads. That&rsquo;s a 5,303% increase! Additionally, the run-time almost doubled
 compared to the first time we ran this scenario:</p>
 <img src="/posts/post_images/parametersniffing_8.1.png" alt="Execution Time">

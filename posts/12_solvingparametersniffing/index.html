@@ -158,36 +158,36 @@ However, if it’s a stored procedure that runs just a handful of times per minu
 <p>Two ways of implementing this query hint are either at the <strong>procedure level</strong> or <strong>statement level</strong>:</p>
 <br>
 <h5 id="at-procedure-level">At procedure level</h5>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">OR</span> <span style="color:#ff79c6">ALTER</span> <span style="color:#ff79c6">PROCEDURE</span> dbo.Rincewind
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">@</span>Badge <span style="color:#ff79c6">AS</span> NVARCHAR(<span style="color:#bd93f9">40</span>)
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">WITH</span> RECOMPILE
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">AS</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">BEGIN</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#719e07">CREATE</span> <span style="color:#719e07">OR</span> <span style="color:#719e07">ALTER</span> <span style="color:#719e07">PROCEDURE</span> dbo.Rincewind
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">@</span>Badge <span style="color:#719e07">AS</span> NVARCHAR(<span style="color:#2aa198">40</span>)
+</span></span><span style="display:flex;"><span><span style="color:#719e07">WITH</span> RECOMPILE
+</span></span><span style="display:flex;"><span><span style="color:#719e07">AS</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">BEGIN</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">SELECT</span>
-</span></span><span style="display:flex;"><span>	b.Name <span style="color:#ff79c6">AS</span> [BadgeName],
-</span></span><span style="display:flex;"><span>	b.UserId <span style="color:#ff79c6">AS</span> [UserId],
-</span></span><span style="display:flex;"><span>	b.<span style="color:#8be9fd;font-style:italic">Date</span> <span style="color:#ff79c6">AS</span> [DateAwarded]
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span> dbo.Badges b
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">WHERE</span> b.Name <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">@</span>Badge
+</span></span><span style="display:flex;"><span><span style="color:#719e07">SELECT</span>
+</span></span><span style="display:flex;"><span>	b.Name <span style="color:#719e07">AS</span> [BadgeName],
+</span></span><span style="display:flex;"><span>	b.UserId <span style="color:#719e07">AS</span> [UserId],
+</span></span><span style="display:flex;"><span>	b.<span style="color:#b58900">Date</span> <span style="color:#719e07">AS</span> [DateAwarded]
+</span></span><span style="display:flex;"><span><span style="color:#719e07">FROM</span> dbo.Badges b
+</span></span><span style="display:flex;"><span><span style="color:#719e07">WHERE</span> b.Name <span style="color:#719e07">=</span> <span style="color:#719e07">@</span>Badge
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">END</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">GO</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">END</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">GO</span>
 </span></span></code></pre></div><br>
 <h5 id="at-statement-level">At statement level</h5>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">OR</span> <span style="color:#ff79c6">ALTER</span> <span style="color:#ff79c6">PROCEDURE</span> dbo.Rincewind
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">@</span>Badge <span style="color:#ff79c6">AS</span> NVARCHAR(<span style="color:#bd93f9">40</span>)
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">AS</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">BEGIN</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#719e07">CREATE</span> <span style="color:#719e07">OR</span> <span style="color:#719e07">ALTER</span> <span style="color:#719e07">PROCEDURE</span> dbo.Rincewind
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">@</span>Badge <span style="color:#719e07">AS</span> NVARCHAR(<span style="color:#2aa198">40</span>)
+</span></span><span style="display:flex;"><span><span style="color:#719e07">AS</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">BEGIN</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">SELECT</span>
-</span></span><span style="display:flex;"><span>	b.Name <span style="color:#ff79c6">AS</span> [BadgeName],
-</span></span><span style="display:flex;"><span>	b.UserId <span style="color:#ff79c6">AS</span> [UserId],
-</span></span><span style="display:flex;"><span>	b.<span style="color:#8be9fd;font-style:italic">Date</span> <span style="color:#ff79c6">AS</span> [DateAwarded]
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span> dbo.Badges b
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">WHERE</span> b.Name <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">@</span>Badge <span style="color:#ff79c6">OPTION</span> (RECOMPILE)
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">END</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">GO</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">SELECT</span>
+</span></span><span style="display:flex;"><span>	b.Name <span style="color:#719e07">AS</span> [BadgeName],
+</span></span><span style="display:flex;"><span>	b.UserId <span style="color:#719e07">AS</span> [UserId],
+</span></span><span style="display:flex;"><span>	b.<span style="color:#b58900">Date</span> <span style="color:#719e07">AS</span> [DateAwarded]
+</span></span><span style="display:flex;"><span><span style="color:#719e07">FROM</span> dbo.Badges b
+</span></span><span style="display:flex;"><span><span style="color:#719e07">WHERE</span> b.Name <span style="color:#719e07">=</span> <span style="color:#719e07">@</span>Badge <span style="color:#719e07">OPTION</span> (RECOMPILE)
+</span></span><span style="display:flex;"><span><span style="color:#719e07">END</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">GO</span>
 </span></span></code></pre></div><p>Personally, I prefer adding the query hint at the statement level. This ensures that key metrics are still stored regarding the procedure.</p>
 <p>For example - adding it at the procedure level will mean that key metrics about the procedure, such as &rsquo;number of executions&rsquo;, will no longer be recorded or present for the procedure. For this reason, I always prefer adding it at the statement level. This ensures all the metrics are still recorded and retained (you never know when you might need them).</p>
 <br>
@@ -195,19 +195,19 @@ However, if it’s a stored procedure that runs just a handful of times per minu
 <h3 id="option-optimize-for-unknown">Option Optimize for Unknown</h3>
 <p>Another choice we could make is to use the <a href="https://learn.microsoft.com/en-us/sql/t-sql/queries/hints-transact-sql-query?view=sql-server-ver17#optimize-for-unknown">OPTIMIZE FOR UNKNOWN</a> query hint.</p>
 <p>Example usage:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">OR</span> <span style="color:#ff79c6">ALTER</span> <span style="color:#ff79c6">PROCEDURE</span> dbo.Rincewind
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">@</span>Badge <span style="color:#ff79c6">AS</span> NVARCHAR(<span style="color:#bd93f9">40</span>)
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">AS</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">BEGIN</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#719e07">CREATE</span> <span style="color:#719e07">OR</span> <span style="color:#719e07">ALTER</span> <span style="color:#719e07">PROCEDURE</span> dbo.Rincewind
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">@</span>Badge <span style="color:#719e07">AS</span> NVARCHAR(<span style="color:#2aa198">40</span>)
+</span></span><span style="display:flex;"><span><span style="color:#719e07">AS</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">BEGIN</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">SELECT</span>
-</span></span><span style="display:flex;"><span>	b.Name <span style="color:#ff79c6">AS</span> [BadgeName],
-</span></span><span style="display:flex;"><span>	b.UserId <span style="color:#ff79c6">AS</span> [UserId],
-</span></span><span style="display:flex;"><span>	b.<span style="color:#8be9fd;font-style:italic">Date</span> <span style="color:#ff79c6">AS</span> [DateAwarded]
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span> dbo.Badges b
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">WHERE</span> b.Name <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">@</span>Badge <span style="color:#ff79c6">OPTION</span> (OPTIMIZE <span style="color:#ff79c6">FOR</span> <span style="color:#ff79c6">UNKNOWN</span>) 
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">END</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">GO</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">SELECT</span>
+</span></span><span style="display:flex;"><span>	b.Name <span style="color:#719e07">AS</span> [BadgeName],
+</span></span><span style="display:flex;"><span>	b.UserId <span style="color:#719e07">AS</span> [UserId],
+</span></span><span style="display:flex;"><span>	b.<span style="color:#b58900">Date</span> <span style="color:#719e07">AS</span> [DateAwarded]
+</span></span><span style="display:flex;"><span><span style="color:#719e07">FROM</span> dbo.Badges b
+</span></span><span style="display:flex;"><span><span style="color:#719e07">WHERE</span> b.Name <span style="color:#719e07">=</span> <span style="color:#719e07">@</span>Badge <span style="color:#719e07">OPTION</span> (OPTIMIZE <span style="color:#719e07">FOR</span> <span style="color:#719e07">UNKNOWN</span>) 
+</span></span><span style="display:flex;"><span><span style="color:#719e07">END</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">GO</span>
 </span></span></code></pre></div><br>
 <p>This option is an interesting one because it will ultimately change how (or specifically what) SQL uses to predict the number of records it will encounter when executing the query.
 This query hint tells SQL to optimise for the average value passed via the parameter. To understand this concept, we&rsquo;re going to have to look at <a href="https://learn.microsoft.com/en-us/sql/relational-databases/statistics/statistics?view=sql-server-ver17">statistics</a> for a second.</p>
@@ -239,19 +239,19 @@ This query hint tells SQL to optimise for the average value passed via the param
 <h3 id="option-optimize-for-value">Option Optimize for Value</h3>
 <p>As you would expect, the query hint <a href="https://learn.microsoft.com/en-us/sql/t-sql/queries/hints-transact-sql-query?view=sql-server-ver17#b-use-optimize-for">OPTIMIZE FOR @value</a> does exactly what you think. It tells SQL Server to generate a plan for a specific parameter value.</p>
 <p>Example usage:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">OR</span> <span style="color:#ff79c6">ALTER</span> <span style="color:#ff79c6">PROCEDURE</span> dbo.Rincewind
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">@</span>Badge <span style="color:#ff79c6">AS</span> NVARCHAR(<span style="color:#bd93f9">40</span>)
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">AS</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">BEGIN</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#719e07">CREATE</span> <span style="color:#719e07">OR</span> <span style="color:#719e07">ALTER</span> <span style="color:#719e07">PROCEDURE</span> dbo.Rincewind
+</span></span><span style="display:flex;"><span>    <span style="color:#719e07">@</span>Badge <span style="color:#719e07">AS</span> NVARCHAR(<span style="color:#2aa198">40</span>)
+</span></span><span style="display:flex;"><span><span style="color:#719e07">AS</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">BEGIN</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">SELECT</span>
-</span></span><span style="display:flex;"><span>	b.Name <span style="color:#ff79c6">AS</span> [BadgeName],
-</span></span><span style="display:flex;"><span>	b.UserId <span style="color:#ff79c6">AS</span> [UserId],
-</span></span><span style="display:flex;"><span>	b.<span style="color:#8be9fd;font-style:italic">Date</span> <span style="color:#ff79c6">AS</span> [DateAwarded]
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span> dbo.Badges b
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">WHERE</span> b.Name <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">@</span>Badge <span style="color:#ff79c6">OPTION</span> (OPTIMIZE <span style="color:#ff79c6">FOR</span> (<span style="color:#ff79c6">@</span>Badge <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Popular Question&#39;</span>)) 
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">END</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">GO</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">SELECT</span>
+</span></span><span style="display:flex;"><span>	b.Name <span style="color:#719e07">AS</span> [BadgeName],
+</span></span><span style="display:flex;"><span>	b.UserId <span style="color:#719e07">AS</span> [UserId],
+</span></span><span style="display:flex;"><span>	b.<span style="color:#b58900">Date</span> <span style="color:#719e07">AS</span> [DateAwarded]
+</span></span><span style="display:flex;"><span><span style="color:#719e07">FROM</span> dbo.Badges b
+</span></span><span style="display:flex;"><span><span style="color:#719e07">WHERE</span> b.Name <span style="color:#719e07">=</span> <span style="color:#719e07">@</span>Badge <span style="color:#719e07">OPTION</span> (OPTIMIZE <span style="color:#719e07">FOR</span> (<span style="color:#719e07">@</span>Badge <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;Popular Question&#39;</span>)) 
+</span></span><span style="display:flex;"><span><span style="color:#719e07">END</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">GO</span>
 </span></span></code></pre></div><p>The above would instruct SQL to always create the best plan it can for the input parameter of &lsquo;Popular Question&rsquo;.</p>
 <p>This can be a good solution &lsquo;if&rsquo; you know your data very well and you are confident that your data is rarely changing. Hardcoding such business logic into your code is generally a bad idea. It adds technical debt to your operation and becomes yet another thing to keep tabs on and maintain over time.</p>
 <p>With that said, however, in the right scenario it can be a good fit. For example, using our demo, we know that the plan for &lsquo;Popular Question&rsquo; works well enough for both parameter values &lsquo;Popular Question&rsquo; and &lsquo;powerpoint&rsquo;, and in this isolated scenario, having the ability to say &ldquo;always give me the plan suited for large dataset&rdquo; is actually pretty useful.</p>

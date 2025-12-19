@@ -175,105 +175,105 @@ You guessed it, we’re diving into a demo.</p>
 <li>Checks the @featureflag variable and creates a temporary table when necessary</li>
 </ul>
 <p>Here is the code:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">OR</span> <span style="color:#ff79c6">ALTER</span> <span style="color:#ff79c6">PROCEDURE</span> [dbo].[GetUsersWithMostBadges]
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">@</span>featureflag <span style="color:#8be9fd;font-style:italic">BIT</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">AS</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">BEGIN</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#719e07">CREATE</span> <span style="color:#719e07">OR</span> <span style="color:#719e07">ALTER</span> <span style="color:#719e07">PROCEDURE</span> [dbo].[GetUsersWithMostBadges]
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">@</span>featureflag <span style="color:#b58900">BIT</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">AS</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">BEGIN</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>;<span style="color:#ff79c6">WITH</span> GetTop3 <span style="color:#ff79c6">AS</span>
+</span></span><span style="display:flex;"><span>;<span style="color:#719e07">WITH</span> GetTop3 <span style="color:#719e07">AS</span>
 </span></span><span style="display:flex;"><span>(
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">SELECT</span> TOP (<span style="color:#bd93f9">3</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">SELECT</span> TOP (<span style="color:#2aa198">3</span>)
 </span></span><span style="display:flex;"><span>		b.UserId,
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">COUNT</span>(b.Name) <span style="color:#ff79c6">AS</span> [NumberOfBadges]
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">FROM</span> dbo.Badges b
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">GROUP</span> <span style="color:#ff79c6">BY</span> b.UserId
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">ORDER</span> <span style="color:#ff79c6">BY</span> <span style="color:#ff79c6">COUNT</span>(b.Name) <span style="color:#ff79c6">DESC</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#719e07">COUNT</span>(b.Name) <span style="color:#719e07">AS</span> [NumberOfBadges]
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">FROM</span> dbo.Badges b
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">GROUP</span> <span style="color:#719e07">BY</span> b.UserId
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">ORDER</span> <span style="color:#719e07">BY</span> <span style="color:#719e07">COUNT</span>(b.Name) <span style="color:#719e07">DESC</span>
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">SELECT</span> 
+</span></span><span style="display:flex;"><span><span style="color:#719e07">SELECT</span> 
 </span></span><span style="display:flex;"><span>	u.DisplayName,
 </span></span><span style="display:flex;"><span>	t.NumberOfBadges
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span> GetTop3 t
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">INNER</span> <span style="color:#ff79c6">JOIN</span> dbo.Users u <span style="color:#ff79c6">ON</span> t.UserID <span style="color:#ff79c6">=</span> u.Id
+</span></span><span style="display:flex;"><span><span style="color:#719e07">FROM</span> GetTop3 t
+</span></span><span style="display:flex;"><span><span style="color:#719e07">INNER</span> <span style="color:#719e07">JOIN</span> dbo.Users u <span style="color:#719e07">ON</span> t.UserID <span style="color:#719e07">=</span> u.Id
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">IF</span> <span style="color:#ff79c6">@</span>featureflag	<span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">BEGIN</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">TABLE</span> <span style="color:#ff79c6">#</span>logging (id <span style="color:#8be9fd;font-style:italic">INT</span>)
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">END</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">IF</span> <span style="color:#719e07">@</span>featureflag	<span style="color:#719e07">=</span> <span style="color:#2aa198">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">BEGIN</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">CREATE</span> <span style="color:#719e07">TABLE</span> <span style="color:#719e07">#</span>logging (id <span style="color:#b58900">INT</span>)
+</span></span><span style="display:flex;"><span><span style="color:#719e07">END</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">END</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">GO</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">END</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">GO</span>
 </span></span></code></pre></div><br>
 <h3 id="setup---the-unit-test">Setup - The Unit Test</h3>
 <p>For the accompanying unit test, we have [tests].[test GetUsersWithMostBadges]. This test verifies that the stored procedure returns the top three users based on badge count correctly:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">OR</span> <span style="color:#ff79c6">ALTER</span> <span style="color:#ff79c6">PROCEDURE</span> [tests].[test GetUsersWithMostBadges]
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">AS</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">BEGIN</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#719e07">CREATE</span> <span style="color:#719e07">OR</span> <span style="color:#719e07">ALTER</span> <span style="color:#719e07">PROCEDURE</span> [tests].[test GetUsersWithMostBadges]
+</span></span><span style="display:flex;"><span><span style="color:#719e07">AS</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">BEGIN</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">/* ASSEMBLE STAGE */</span>
+</span></span><span style="display:flex;"><span><span style="color:#586e75">/* ASSEMBLE STAGE */</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">EXEC</span> tSQLt.FakeTable <span style="color:#f1fa8c">&#39;dbo.Badges&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">EXEC</span> tSQLt.FakeTable <span style="color:#2aa198">&#39;dbo.Badges&#39;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">INSERT</span> <span style="color:#ff79c6">INTO</span> dbo.Badges
+</span></span><span style="display:flex;"><span><span style="color:#719e07">INSERT</span> <span style="color:#719e07">INTO</span> dbo.Badges
 </span></span><span style="display:flex;"><span>	(UserId, Name)
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">VALUES</span>
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">10</span>,	<span style="color:#f1fa8c">&#39;Nice Answer&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">8</span>,		<span style="color:#f1fa8c">&#39;Nice Answer&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">10</span>,	<span style="color:#f1fa8c">&#39;Guru&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">10</span>,	<span style="color:#f1fa8c">&#39;Nice Answer&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">10</span>,	<span style="color:#f1fa8c">&#39;Nice Answer&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">10</span>,	<span style="color:#f1fa8c">&#39;.net&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">10</span>,	<span style="color:#f1fa8c">&#39;Good Answer&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">8</span>,		<span style="color:#f1fa8c">&#39;c#&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">8</span>,		<span style="color:#f1fa8c">&#39;Stellar Question&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">10</span>,	<span style="color:#f1fa8c">&#39;.net&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">10</span>,	<span style="color:#f1fa8c">&#39;.net&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">100</span>,	<span style="color:#f1fa8c">&#39;agile&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">8</span>,		<span style="color:#f1fa8c">&#39;c#&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">10</span>,	<span style="color:#f1fa8c">&#39;.net&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">6</span>,		<span style="color:#f1fa8c">&#39;vb.net&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">6</span>,		<span style="color:#f1fa8c">&#39;visual-studio&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">6</span>,		<span style="color:#f1fa8c">&#39;vb.net&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#719e07">VALUES</span>
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">10</span>,	<span style="color:#2aa198">&#39;Nice Answer&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">8</span>,		<span style="color:#2aa198">&#39;Nice Answer&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">10</span>,	<span style="color:#2aa198">&#39;Guru&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">10</span>,	<span style="color:#2aa198">&#39;Nice Answer&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">10</span>,	<span style="color:#2aa198">&#39;Nice Answer&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">10</span>,	<span style="color:#2aa198">&#39;.net&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">10</span>,	<span style="color:#2aa198">&#39;Good Answer&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">8</span>,		<span style="color:#2aa198">&#39;c#&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">8</span>,		<span style="color:#2aa198">&#39;Stellar Question&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">10</span>,	<span style="color:#2aa198">&#39;.net&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">10</span>,	<span style="color:#2aa198">&#39;.net&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">100</span>,	<span style="color:#2aa198">&#39;agile&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">8</span>,		<span style="color:#2aa198">&#39;c#&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">10</span>,	<span style="color:#2aa198">&#39;.net&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">6</span>,		<span style="color:#2aa198">&#39;vb.net&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">6</span>,		<span style="color:#2aa198">&#39;visual-studio&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">6</span>,		<span style="color:#2aa198">&#39;vb.net&#39;</span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">EXEC</span> tSQLt.FakeTable <span style="color:#f1fa8c">&#39;dbo.Users&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">EXEC</span> tSQLt.FakeTable <span style="color:#2aa198">&#39;dbo.Users&#39;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">INSERT</span> <span style="color:#ff79c6">INTO</span> dbo.Users
+</span></span><span style="display:flex;"><span><span style="color:#719e07">INSERT</span> <span style="color:#719e07">INTO</span> dbo.Users
 </span></span><span style="display:flex;"><span>	(Id, DisplayName)
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">VALUES</span>
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">10</span>,	<span style="color:#f1fa8c">&#39;Jon Skeet&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">8</span>,		<span style="color:#f1fa8c">&#39;Marc Gravell&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">6</span>,		<span style="color:#f1fa8c">&#39;JaredPar&#39;</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#bd93f9">100</span>,	<span style="color:#f1fa8c">&#39;Lee Brownhill&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#719e07">VALUES</span>
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">10</span>,	<span style="color:#2aa198">&#39;Jon Skeet&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">8</span>,		<span style="color:#2aa198">&#39;Marc Gravell&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">6</span>,		<span style="color:#2aa198">&#39;JaredPar&#39;</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">100</span>,	<span style="color:#2aa198">&#39;Lee Brownhill&#39;</span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">TABLE</span> dbo.Expected
-</span></span><span style="display:flex;"><span>(DisplayName NVARCHAR(<span style="color:#bd93f9">40</span>),NumberOfBadges <span style="color:#8be9fd;font-style:italic">INT</span>)
+</span></span><span style="display:flex;"><span><span style="color:#719e07">CREATE</span> <span style="color:#719e07">TABLE</span> dbo.Expected
+</span></span><span style="display:flex;"><span>(DisplayName NVARCHAR(<span style="color:#2aa198">40</span>),NumberOfBadges <span style="color:#b58900">INT</span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">TABLE</span> dbo.Actual
-</span></span><span style="display:flex;"><span>(DisplayName NVARCHAR(<span style="color:#bd93f9">40</span>),NumberOfBadges <span style="color:#8be9fd;font-style:italic">INT</span>)
+</span></span><span style="display:flex;"><span><span style="color:#719e07">CREATE</span> <span style="color:#719e07">TABLE</span> dbo.Actual
+</span></span><span style="display:flex;"><span>(DisplayName NVARCHAR(<span style="color:#2aa198">40</span>),NumberOfBadges <span style="color:#b58900">INT</span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">INSERT</span> <span style="color:#ff79c6">INTO</span> dbo.Expected
+</span></span><span style="display:flex;"><span><span style="color:#719e07">INSERT</span> <span style="color:#719e07">INTO</span> dbo.Expected
 </span></span><span style="display:flex;"><span>(DisplayName,NumberOfBadges)
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">VALUES</span>
-</span></span><span style="display:flex;"><span>	(<span style="color:#f1fa8c">&#39;Jon Skeet&#39;</span>,		<span style="color:#bd93f9">9</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#f1fa8c">&#39;Marc Gravell&#39;</span>,	<span style="color:#bd93f9">4</span>),
-</span></span><span style="display:flex;"><span>	(<span style="color:#f1fa8c">&#39;JaredPar&#39;</span>,		<span style="color:#bd93f9">3</span>)
+</span></span><span style="display:flex;"><span><span style="color:#719e07">VALUES</span>
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">&#39;Jon Skeet&#39;</span>,		<span style="color:#2aa198">9</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">&#39;Marc Gravell&#39;</span>,	<span style="color:#2aa198">4</span>),
+</span></span><span style="display:flex;"><span>	(<span style="color:#2aa198">&#39;JaredPar&#39;</span>,		<span style="color:#2aa198">3</span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">/* ACT STAGE */</span>
+</span></span><span style="display:flex;"><span><span style="color:#586e75">/* ACT STAGE */</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">INSERT</span> <span style="color:#ff79c6">INTO</span> dbo.Actual
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">EXEC</span> dbo.GetUsersWithMostBadges <span style="color:#ff79c6">@</span>featureflag <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">INSERT</span> <span style="color:#719e07">INTO</span> dbo.Actual
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">EXEC</span> dbo.GetUsersWithMostBadges <span style="color:#719e07">@</span>featureflag <span style="color:#719e07">=</span> <span style="color:#2aa198">0</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">/* ASSERT STAGE */</span>
+</span></span><span style="display:flex;"><span><span style="color:#586e75">/* ASSERT STAGE */</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">EXEC</span> tSQLt.AssertEqualsTable
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">@</span>Expected <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;dbo.Expected&#39;</span>,
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">@</span>Actual <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;dbo.Actual&#39;</span>,
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">@</span>FailMsg <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Our test failed!&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">EXEC</span> tSQLt.AssertEqualsTable
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">@</span>Expected <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;dbo.Expected&#39;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">@</span>Actual <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;dbo.Actual&#39;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">@</span>FailMsg <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;Our test failed!&#39;</span>
 </span></span></code></pre></div><br>
 <br>
 <h3 id="using-redgate-sql-test---navigation">Using Redgate SQL Test - Navigation</h3>
@@ -313,7 +313,7 @@ You guessed it, we’re diving into a demo.</p>
 <br>
 <p>A green tick confirms the unit test has passed.
 This process mirrors how we&rsquo;ve been executing tests previously:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXEC</span> tsqlt.Run <span style="color:#ff79c6">@</span>TestName <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;[tests].[test GetUsersWithMostBadges]&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#719e07">EXEC</span> tsqlt.Run <span style="color:#719e07">@</span>TestName <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;[tests].[test GetUsersWithMostBadges]&#39;</span>
 </span></span></code></pre></div><br>
 <p>The Test Output window provides additional details, including execution results and diagnostic messages:</p>
 <img src="/posts/post_images/sqltest_4.png" alt="sql test" style="border: 2px solid black;">
@@ -348,17 +348,17 @@ The green-highlighted lines indicate code executed as part of the associated uni
 <p>However, we can see that one line - CREATE TABLE #logging (id INT) - is not covered by the associated unit test.
 This aligns with the previous screenshot, where SQL Test showed that three statements exist, but only two are covered by our test.</p>
 <p>As you may have noticed, the missing &lsquo;CREATE TABLE&rsquo; statement isn&rsquo;t executed because our unit test runs the procedure with <strong>@featureflag = 0</strong>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#6272a4">/* ACT STAGE */</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#586e75">/* ACT STAGE */</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">INSERT</span> <span style="color:#ff79c6">INTO</span> dbo.Actual
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">EXEC</span> dbo.GetUsersWithMostBadges <span style="color:#ff79c6">@</span>featureflag <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">INSERT</span> <span style="color:#719e07">INTO</span> dbo.Actual
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">EXEC</span> dbo.GetUsersWithMostBadges <span style="color:#719e07">@</span>featureflag <span style="color:#719e07">=</span> <span style="color:#2aa198">0</span>
 </span></span></code></pre></div><p>So we need to create a new version of the unit test that calls the procedure with @featureflag = 1.</p>
 <p>Let&rsquo;s create and deploy a new unit test named &rsquo;test_GetUsersWithMostBadges2&rsquo;. In the Act stage, we&rsquo;ll call the procedure with <strong>@featureflag = 1</strong>. <br>
 Here&rsquo;s a snippet of the new unit test:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#6272a4">/* ACT STAGE */</span>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#586e75">/* ACT STAGE */</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">INSERT</span> <span style="color:#ff79c6">INTO</span> dbo.Actual
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">EXEC</span> dbo.GetUsersWithMostBadges <span style="color:#ff79c6">@</span>featureflag <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">INSERT</span> <span style="color:#719e07">INTO</span> dbo.Actual
+</span></span><span style="display:flex;"><span>	<span style="color:#719e07">EXEC</span> dbo.GetUsersWithMostBadges <span style="color:#719e07">@</span>featureflag <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span>
 </span></span></code></pre></div><br>
 <p>Once deployed, we can refresh the &rsquo;tests&rsquo; schema in SQL Test to view our new test GetUsersWithMostBadges2:</p>
 <img src="/posts/post_images/sqltest_7.png" alt="sql test" style="border: 2px solid black;">

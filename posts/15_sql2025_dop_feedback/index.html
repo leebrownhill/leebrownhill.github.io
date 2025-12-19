@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Learning SQL Server 2025: DOP Feedback - Lee Brownhill&#39;s Blog</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Discover SQL Server 2025 DOP Feedback, how it optimizes query parallelism, improves performance, and why Microsoft enabled it by default.">
+		<meta property="og:url" content="https://leebrownhill.github.io/posts/15_sql2025_dop_feedback/">
+  <meta property="og:site_name" content="Lee Brownhill&#39;s Blog">
+  <meta property="og:title" content="Learning SQL Server 2025: DOP Feedback">
+  <meta property="og:description" content="Discover SQL Server 2025 DOP Feedback, how it optimizes query parallelism, improves performance, and why Microsoft enabled it by default.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-12-19T08:00:00+00:00">
+    <meta property="article:modified_time" content="2025-12-19T08:00:00+00:00">
+    <meta property="article:tag" content="SQL2025">
+    <meta property="article:tag" content="Performance">
+    <meta property="article:tag" content="Parallelism">
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+		
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7983PDFMXQ"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7983PDFMXQ');
+        }
+      </script>
+
+	<meta name="author" content="Lee Brownhill">
+	<meta property="og:description" content="Discover SQL Server 2025 DOP Feedback, how it optimizes query parallelism, improves performance, and why Microsoft enabled it by default.">
+	<meta property="og:image" content="https://leebrownhill.github.io/img/featured/SQL2025.png">
+	<meta property="og:image:type" content="img/png">
+
+	
+
+
+
+
+
+
+	
+
+	<script src="/js/clarity.js"></script>
+	<script src="/js/ads.js"></script>
+
+
+
+
+	
+	
+
+
+
+
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	
+
+	<div class="container header__container">
+		
+	<div class="logo logo--mixed">
+		<a class="logo__link" href="/" title="Lee Brownhill&#39;s Blog" rel="home">
+			<div class="logo__item logo__imagebox">
+					<img class="logo__img" src="/img/avatar.png">
+				</div><div class="logo__item logo__text">
+					<div class="logo__title">Lee Brownhill&#39;s Blog</div>
+					<div class="logo__tagline">A blog about SQL Server, mostly</div>
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">
+				
+				<span class="menu__text">blog</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/talks">
+				
+				<span class="menu__text">talks</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about">
+				
+				<span class="menu__text">about</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/contact">
+				
+				<span class="menu__text">contact</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+
+
+	
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Learning SQL Server 2025: DOP Feedback</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<br>
+<h3 id="introduction">Introduction</h3>
+<p>SQL Server 2025 is out at last and we are continuing our journey into some of the new features this version brings.</p>
+<p>The latest version of SQL Server continues to evolve some of the features we first saw in SQL 2022 and one of those features is <a href="https://learn.microsoft.com/en-us/sql/relational-databases/performance/intelligent-query-processing-degree-parallelism-feedback?view=sql-server-ver17#degree-of-parallelism-dop-feedback-avoids-excess-parallelism">&lsquo;DOP Feedback&rsquo;</a> (Degree of Parallelism Feedback).
+This database-level feature was first introduced in SQL 2022, but was off by default and had to be explicitly enabled. <br>
+Boldly, SQL 2025 has this turned on by <a href="https://learn.microsoft.com/en-us/sql/sql-server/what-s-new-in-sql-server-2025?view=sql-server-ver17">default</a>, which I think shows the confidence Microsoft now has in this feature.</p>
+<p>To check the status of this feature in your environment, run the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#719e07">SELECT</span> name, value, is_value_default <span style="color:#719e07">FROM</span> sys.database_scoped_configurations
+</span></span><span style="display:flex;"><span><span style="color:#719e07">WHERE</span> name <span style="color:#719e07">=</span> <span style="color:#2aa198">&#39;DOP_FEEDBACK&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">GO</span>
+</span></span></code></pre></div><p>So, although not a <em>new</em> feature in SQL 2025, it is now enabled by default in SQL 2025, so I thought we should take a look at what it actually is and how it can help us.</p>
+<br>
+<br>
+<br>
+<h3 id="what-does-it-do">What does it do?</h3>
+<p>In my experience, parallelism waits are quite a common occurrence across OLTP instances. This could be due to a number of factors.
+Getting the <em>correct</em> configuration for MAXDOP can be tricky on busy workloads. There are so many factors to contend with and differing sizes of queries going through the instance.</p>
+<p>The DOP Feedback feature attempts to eliminate parallelism inefficiencies for common queries by dynamically adjusting the Degree of Parallelism (DOP) at the query level.
+But what does &ldquo;<em>eliminate parallelism inefficiencies</em>&rdquo; actually mean, I hear you ask? <br>
+A simple example of this would be a query running at DOP 12 each time it is executed. However, lowering the DOP of this query to say, 4, might actually improve its performance. Yes - believe it or not folks, running across as many cores as possible is not always best for your query performance (TWL - today we learned).</p>
+<p>This feature will identify suitable queries, assess any potential improvements that could be gained by adjusting the DOP, and take action where applicable.</p>
+<p>This is achieved by utilising the following feedback loop:</p>
+<p><img src="/posts/post_images/dop_feedback_loop.png" alt="DOP Feedback Loop" style="border: 0px solid black;width: 600px; height: auto;display:block; margin:0 auto;"> <br>
+Image credit: <a href="https://techcommunity.microsoft.com/blog/sqlserver/smarter-parallelism-degree-of-parallelism-feedback-in-sql-server-2025/4431318">Microsoft</a></p>
+<br>
+<br>
+<br>
+<h3 id="feature-pre-requisites">Feature Pre-requisites</h3>
+<p>There are a number of prerequisites you need to be aware of in order to use this feature:</p>
+<ul>
+<li>SQL 2022 or higher is required (but as discussed, it is now on by default in SQL 2025)</li>
+<li>DOP Feedback is available for queries that operate at database compatibility level 160</li>
+<li>Query Store needs to be enabled on the database and it needs to be in READ/WRITE mode</li>
+</ul>
+<br>
+<br>
+<br>
+<h3 id="seeing-it-in-action">Seeing it in action</h3>
+<p>In order to demo this feature, there are a number of factors I need to make you aware of regarding my setup. Getting it working as I wanted took a bit of noodling™️.</p>
+<ul>
+<li>My host has been limited 8 CPUs</li>
+<li>My host has 32Gb RAM with 24Gb accessible by the SQL instance</li>
+<li>My host has fast storage utilising an NVMe solid-state drive</li>
+<li>MAXDOP on the instance has been set to 0</li>
+<li>Query Store has been enabled and is in READ/WRITE operation mode</li>
+<li>An Extended Event Session is running to capture the DOP Feedback events that occur</li>
+<li>The StackOverflow table Posts has been modified in terms of record count</li>
+</ul>
+<p>The query I will use to show the feature is a simple procedure running within the StackOverflow2013 database:</p>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#719e07">CREATE</span> <span style="color:#719e07">PROCEDURE</span> [dbo].[Percy] <span style="color:#719e07">@</span>CommentCount <span style="color:#b58900">int</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">AS</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">BEGIN</span>
+</span></span><span style="display:flex;"><span><span style="color:#719e07">SELECT</span> 
+</span></span><span style="display:flex;"><span>    [Id], 
+</span></span><span style="display:flex;"><span>    CommentCount, 
+</span></span><span style="display:flex;"><span>    Body, 
+</span></span><span style="display:flex;"><span>    LastEditorUserId, 
+</span></span><span style="display:flex;"><span>    PostTypeId
+</span></span><span style="display:flex;"><span><span style="color:#719e07">FROM</span> dbo.Posts p
+</span></span><span style="display:flex;"><span><span style="color:#719e07">WHERE</span> CommentCount <span style="color:#719e07">=</span> <span style="color:#719e07">@</span>CommentCount
+</span></span><span style="display:flex;"><span><span style="color:#719e07">ORDER</span> <span style="color:#719e07">BY</span> Body;
+</span></span><span style="display:flex;"><span><span style="color:#719e07">END</span>;
+</span></span><span style="display:flex;"><span><span style="color:#719e07">GO</span>
+</span></span></code></pre></div><p>I will run this stored procedure multiple times using OSTRESS. This is the command being executed:</p>
+<pre tabindex="0"><code>&#34;c:\Program Files\Microsoft Corporation\RMLUtils\ostress&#34; -S&#34;Cecil\SQL2022&#34; -E -Q&#34;EXEC dbo.Percy @CommentCount = 4;&#34; -n3 -r75 -q -dStackOverflow2013 -T146
+</code></pre><p>Noteworthy settings used for OSTRESS:</p>
+<ul>
+<li>n = the number of concurrent connections being used is 3</li>
+<li>r = each connection will run the procedure 75 times</li>
+<li>T = trace flag 146 is used to ensure the connection does not attempt to encrypt data transmitted between the client and SQL Server</li>
+</ul>
+<br>
+<br>
+<br>
+<h3 id="the-results">The Results</h3>
+<p>In order to see what is happening during execution, we are going to view the live data from our Extended Event session.</p>
+<p>This is the output from that session, with the session sorted by timestamp (ascending):</p>
+<img src="/posts/post_images/query_store_results.png" alt="Query Store Results">
+<br>
+<br>
+<br>
+<p>Now, I am going to say DOP a lot in the next paragraph or two, do forgive me, but it is easier than saying &lsquo;<em>degree of parallelism</em>&rsquo; each time.
+The timeline of events is interesting, and shows the DOP Feedback feature in action.</p>
+<br>
+<p><strong>The stages are:</strong></p>
+<p>1 = Query is chosen as an eligible query for DOP Feedback and is currently DOP 8 <br>
+2 = DOP Feedback is provided and 6 is chosen as a candidate to try <br>
+3 = DOP 6 is validated twice and is finally deemed stable <br>
+4 = DOP Feedback is provided again, this time it is 4 <br>
+5 = DOP 4 is once again validated several times <br>
+6 = However, the query regressed at a DOP of 4 <br>
+7 = DOP Feedback stabilises at 6 and the process stops there <br></p>
+<p>I think this is pretty cool. SQL is looking for queries that are eligible and proactively initiating that feedback loop we discussed earlier in the post. The query became faster with each DOP change, until it reached DOP 4 which caused some regression.</p>
+<br>
+<p><strong>At a high level, the timeline of events:</strong></p>
+<p>1. Eligible query chosen <br>
+2. New DOP chosen <br>
+3. New DOP verified several times - did it perform better or worse? <br>
+4. New DOP outcome - stable or regressed <br>
+5. If stable - attempt a new DOP. If regressed - remain at the current DOP <br></p>
+<p>Looking in Query Store we can see, even in this short demo, the execution times improved by adjusting the DOP dynamically:</p>
+<img src="/posts/post_images/query_store_results_2.png" alt="Query Store Results">
+<br>
+<br>
+<br>
+<p>I just love how SQL is choosing a new DOP and validating it several times before taking action on it. This feedback loop feels pretty robust to me, and I can see why Microsoft has decided to enable it by default in SQL Server 2025. I am hopeful this is going to work well (<em>crosses fingers, turns around and touches the ground</em>).</p>
+<br>
+<br>
+<br>
+<h3 id="wrapping-up">Wrapping Up</h3>
+<p>Setting the <em>correct</em> MAXDOP across busy OLTP environments has frequently been a challenge in my experience. Many of the environments I see out in the field are so varied in terms of the queries running on them.
+Each part of the business will have different needs and requirements when accessing that data, and this shows in the types of queries that can run on a single instance. For example, huge reporting queries may benefit from having all the cores at their disposal, whereas other small ad hoc queries could make do with a fraction of the resources available.</p>
+<p>Will this feature work as well as I hope it does in production? So far, I am hopeful.
+Seeing this feature in action on a busy production workload is going to be fascinating and I hope people give it a go and provide feedback on it, if you will pardon the pun.</p>
+<p>This feature, along with others, makes me excited to start working with SQL Server 2025.</p>
+<p>Thanks for reading!
+<br>
+<br>
+<br></p>
+<hr>
+<p>If you’ve found this post helpful or would just like to support the work I do here, consider buying me a coffee.</p>
+<p><a href="https://www.buymeacoffee.com/leebrownhill" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/arial-green.png" alt="Buy Me A Coffee" style="height: 55px !important;width: 217px !important;" ></a></p>
+<br>
+<br>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M4 0h8s2 0 4 2l15 15s2 2 0 4L21 31s-2 2-4 0L2 16s-2-2-2-4V3s0-3 4-3m3 10a3 3 0 0 0 0-6 3 3 0 0 0 0 6"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/sql2025/" rel="tag">SQL2025</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/performance/" rel="tag">Performance</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/parallelism/" rel="tag">Parallelism</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Lee Brownhill avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">Author: Lee Brownhill</span>
+	</div>
+	<div class="authorbox__description">
+		Lee Brownhill is a SQL Server Professional. He enjoys making SQL Server go faster
+	</div>
+</div>
+
+
+
+			</div>
+			
+		</div>
+		<style>
+  .footer__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    text-align: left;
+    font-size: 0.75rem;  
+  }
+
+  @media (max-width: 600px) {
+    .footer__container {
+      font-size: 0.60rem;  
+    }
+  }
+
+  .footer__copyright {
+    flex: 1;
+  }
+
+  .footer__privacy {
+    text-align: right;
+  }
+</style>
+
+<footer class="footer">
+  <div class="container footer__container">
+    <div class="footer__copyright">
+      &copy; 2025 Lee Brownhill.
+      <span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+    </div>
+    <div class="footer__privacy">
+      <a href="/privacy-policy" rel="noopener noreferrer">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+</body>
+</html>
